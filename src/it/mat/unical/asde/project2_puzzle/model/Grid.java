@@ -2,51 +2,45 @@ package it.mat.unical.asde.project2_puzzle.model;
 
 import java.util.ArrayList;
 
-public class Grid {
+public class Grid{
+    ArrayList<String> nameImages;
+    String subjectName;
+    String difficulty;
 
-	ArrayList<String> nameImages;
-	String subjectName;
-	String difficulty;
+    public Grid(int difficulty,String subjectName){
+        // TODO generate randomly indexes
+        nameImages = new ArrayList<>();
+        this.subjectName = subjectName;
+        int cols = 5;
+        if (difficulty > 0) {
+            cols = 10;
+        }
+        PuzzleUtilities pu=new PuzzleUtilities(cols);
+        pu.createGrid(nameImages);
+        this.difficulty = (difficulty > 0) ? "dieci" : "cinque";
+    }
 
-	public Grid(int difficulty, String subjectName) {
-		// TODO generate randomly indexes
-		nameImages = new ArrayList<>();
-		this.subjectName = subjectName;
-		int cols = 5;
-		if (difficulty > 0) {
-			cols = 10;
-		}
+    public ArrayList<String> getNameImages(){
+        return nameImages;
+    }
 
-		for (int i = 0; i < cols; i++)
-			for (int j = 0; j < cols; j++) {
-				nameImages.add(j + "-" + i);
-			}
+    public void setNameImages(ArrayList<String> nameImages){
+        this.nameImages = nameImages;
+    }
 
-		this.difficulty = (difficulty > 0) ? "dieci" : "cinque";
-	}
+    public String getSubjectName(){
+        return subjectName;
+    }
 
-	public ArrayList<String> getNameImages() {
-		return nameImages;
-	}
+    public void setSubjectName(String subjectName){
+        this.subjectName = subjectName;
+    }
 
-	public void setNameImages(ArrayList<String> nameImages) {
-		this.nameImages = nameImages;
-	}
+    public String getDifficulty(){
+        return difficulty;
+    }
 
-	public String getSubjectName() {
-		return subjectName;
-	}
-
-	public void setSubjectName(String subjectName) {
-		this.subjectName = subjectName;
-	}
-
-	public String getDifficulty() {
-		return difficulty;
-	}
-
-	public void setDifficulty(String difficulty) {
-		this.difficulty = difficulty;
-	}
-
+    public void setDifficulty(String difficulty){
+        this.difficulty = difficulty;
+    }
 }
