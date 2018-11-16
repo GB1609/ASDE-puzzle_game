@@ -42,7 +42,6 @@ public class DispatcherConfiguration implements WebMvcConfigurer{
         try {
             lsfb.afterPropertiesSet();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return lsfb.getObject();
