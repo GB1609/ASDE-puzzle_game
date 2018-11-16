@@ -15,8 +15,12 @@ public class Grid{
         if (difficulty > 0) {
             cols = 10;
         }
-        PuzzleUtilities pu=new PuzzleUtilities(cols);
+        PuzzleUtilities pu = new PuzzleUtilities(cols);
         pu.createGrid(nameImages);
+//        for (int i = 0; i < cols; i++)
+//            for (int j = 0; j < cols; j++) {
+//                nameImages.add(j + "-" + i);
+//            }
         this.difficulty = (difficulty > 0) ? "dieci" : "cinque";
     }
 

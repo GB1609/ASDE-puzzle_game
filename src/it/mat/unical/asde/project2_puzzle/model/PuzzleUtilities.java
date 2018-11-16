@@ -15,26 +15,44 @@ public class PuzzleUtilities{
         this.matrix = new int[this.width][this.height];
         for (int i = 0; i < this.width; i++)
             for (int k = 0; k < this.height; k++)
-                this.matrix[i][k] = 0;
+                this.matrix[i][k] = -1;
     }
 
-    public boolean check(){
+    private int convertInputToNumber(String s){
+        int x = Integer.parseInt(s.substring(0, 1));
+        int y = Integer.parseInt(s.substring(s.length() - 1));
+        return pairToCell(x, y);
+    }
+
+    public void updateMatrix(String moved,String movedOn){
+        int pieceMoved = convertInputToNumber(moved);
+        int pieceMovedOn = convertInputToNumber(movedOn);
+    }
+
+    public boolean checkPuzzleTermination(){
+        int a = 0;
+        for (int i = 0; i < this.height; i++)
+            for (int k = 0; k < this.width; k++) {
+                if (this.matrix[i][k] != a)
+                    return false;
+                a++;
+            }
         return true;
     }
 
     public void insertPiece(int x){
         int i = (int) (Math.random() * this.width);
         int k = (int) (Math.random() * this.height);
-        if (this.matrix[i][k] == 0)
+        if (this.matrix[i][k] == -1)
             this.matrix[i][k] = x;
         else
             this.insertPiece(x);
     }
 
     public Point cellToPair(int c){
-        int colonna = c / width;
-        int riga = c - (colonna * width);
-        return new Point(colonna, riga);
+        int riga = c / width;
+        int colonna = c - (riga * width);
+        return new Point(riga, colonna);
     }
 
     int pairToCell(int colonna,int riga){

@@ -23,7 +23,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <!-- <link href="resources/style.css" rel="stylesheet">
 <script type="text/javascript" src="resources/game.js"></script> -->
-<title>Insert title here</title>
+<title>Game Page</title>
 <style type="text/css">
 #view {
 	min-height: 100vh;
