@@ -11,13 +11,9 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<!--Main Menu File-->
-<link rel="stylesheet" type="text/css" media="all" href="resources/css/webslidemenu.css" />
-<script type="text/javascript" src="resources/js/webslidemenu.js"></script>
-<!--Main Menu File-->
-
 <!-- font awesome -->
 <link rel="stylesheet" href="resources/font-awesome/css/font-awesome.min.css" />
 <!-- font awesome -->
 
-<link rel="stylesheet" type="text/css" media="all" href="resources/css/demo.css" />
+<link rel="stylesheet" type="text/css" media="all" href="resources/css/style_navbar.css" />
+<link rel="stylesheet" type="text/css" media="all" href="resources/css/style_game.css" />
