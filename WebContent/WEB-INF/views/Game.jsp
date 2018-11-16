@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,15 +26,24 @@
   min-height: 100vh;
   padding: 1em;
 }
-.soil {
+.myGrid{
   display: grid;
-  grid-template-columns: 20% 20% 20% 20% 20%;
-  grid-template-rows: 20% 20% 20% 20% 20%;
   position: absolute;
-  top: 0;
+	top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+
+}
+.cinque {
+
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: 20% 20% 20% 20% 20%;
+  
+}
+.dieci{
+	grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+  	grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
 }
 .board{
 position: relative;
@@ -66,21 +77,21 @@ span:hover {
 }
 </style>
 <script type="text/javascript">
-$( document ).ready(function() {
-    console.log( "ready!" );
-
-var linkToFocus = document.getElementById('try');
-linkToFocus.focus();
-});
+$(document).ready(function(){
+	 //$('#base').addClass($('#base').attr('value'));
+	});
 </script>
 </head>
 <body>
 
 <div id="view" class="row justify-content-center">
       <div class="board col-md-auto">
-        <div id="" class="soil">
-          <span id="try" class="box_piece"><img  class="piece" src="resources/images/prova.jpg" /></span>
-	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
+        <div id="base" class="myGrid ${randomGrid.difficulty}">
+         <c:forEach items="${randomGrid.nameImages}" var="piece">
+         <span class="box_piece"><img id="${piece}" class="piece" src="resources/images/${randomGrid.subjectName}/${randomGrid.difficulty}/${piece }.png " /></span>
+         </c:forEach>
+          
+	<!--  <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
           <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
 	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
 	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
@@ -103,11 +114,11 @@ linkToFocus.focus();
 	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
 	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
 	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
-	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
+	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span> -->
         </div>
       </div>
       <div class="board col-md-auto offset-md-1">
-        <div id="" class="soil">
+        <div id="" class="myGrid cinque">
           <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
 	 <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
           <span class="box_piece"><img class="piece" src="resources/images/prova.jpg" /></span>
