@@ -30,12 +30,14 @@
 </script>
 <script>
 	function allowDrop(ev) {
-		//va messo qua il controllo che sia vuoto la cella e non ci sia gia un immagien
-		ev.preventDefault();
+		if (!ev.target.hasChildNodes()) {
+			ev.preventDefault();
+		}
 	}
 
 	function drag(ev) {
 		ev.dataTransfer.setData("pieceMoved", ev.target.id);
+		
 	}
 
 	function drop(ev) {
@@ -51,7 +53,8 @@
 		<div class="board col-md-auto">
 			<div id="base" class="myGrid ${randomGrid.difficulty}">
 				<c:forEach items="${randomGrid.nameImages}" var="piece">
-					<span class="box_piece" ondrop="drop(event)" ondragover="allowDrop(event)"><img draggable="true"
+					<span class="box_piece" ondrop="drop(event)"
+						ondragover="allowDrop(event)"><img draggable="true"
 						ondragstart="drag(event)" id="${piece}" class="piece"
 						src="resources/images/${randomGrid.subjectName}/${randomGrid.difficulty}/${piece }.png " /></span>
 				</c:forEach>
@@ -60,11 +63,11 @@
 		<div class="board col-md-auto offset-md-1">
 			<div id="" class="myGrid cinque">
 				<c:forEach items="${randomGrid.nameImages}" var="piece">
-					<span class="box_piece"
-					ondrop="drop(event)" ondragover="allowDrop(event)"></span>
+					<span class="box_piece" ondrop="drop(event)"
+						ondragover="allowDrop(event)"></span>
 				</c:forEach>
-			
-			<!-- 
+
+				<!-- 
 				<span class="box_piece"></span> <span class="box_piece"></span> <span
 					class="box_piece"></span> <span class="box_piece"
 					ondrop="drop(event)" ></span> <span
