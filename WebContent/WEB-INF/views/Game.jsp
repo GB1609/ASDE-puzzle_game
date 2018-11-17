@@ -30,14 +30,15 @@
 </script>
 <script>
 	function allowDrop(ev) {
-		if (!ev.target.hasChildNodes()) {
+		if (!ev.target.hasChildNodes()
+				&& ev.target.getAttribute("class") == "box_piece") {
 			ev.preventDefault();
 		}
 	}
 
 	function drag(ev) {
 		ev.dataTransfer.setData("pieceMoved", ev.target.id);
-		
+
 	}
 
 	function drop(ev) {
