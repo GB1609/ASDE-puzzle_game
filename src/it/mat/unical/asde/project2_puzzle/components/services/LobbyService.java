@@ -1,7 +1,8 @@
 package it.mat.unical.asde.project2_puzzle.components.services;
 
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -12,18 +13,31 @@ import it.mat.unical.asde.project2_puzzle.model.Lobby;
 @Service
 public class LobbyService {
 
-	List<Lobby> lobbies;
+	Set<Lobby> lobbies;
 	
 	@PostConstruct
 	public void init() {
-		lobbies = new LinkedList<Lobby>();
-		for(int i = 0; i <= 15; i++) {
+		lobbies = new HashSet<Lobby>();
+		/*for(int i = 0; i <= 15; i++) {
 			lobbies.add(new Lobby("Lobby numero "+(i+1),"user "+(int)(Math.random()*100),""));
-		}
+		}*/
 	}
 
-	public List<Lobby> getLobbies() {
+	public Set<Lobby> getLobbies() {
 		return lobbies;
 	}
+	
+	public boolean addLobby(Lobby newLobby) {
+		return lobbies.add(newLobby);
+	}
 
+	//Return the lobby with the given name, null otherwise
+	public Lobby findLobbyByName(String name) {
+		for (Lobby lobby : lobbies) {
+			if(lobby.getName().equals(name)){
+				return lobby;
+			}
+		}
+		return null;
+	}
 }

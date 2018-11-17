@@ -9,13 +9,13 @@ import it.mat.unical.asde.project2_puzzle.components.services.GameService;
 
 @Controller
 public class GameController {
-	@Autowired
+	/*@Autowired
 	GameService gameService;
 
 	@GetMapping("/")
 	public String goToGame(Model m) {
 		m.addAttribute("randomGrid", gameService.getRandomGrid());
 			return "Game";
-	}
+	}*/
 
 }

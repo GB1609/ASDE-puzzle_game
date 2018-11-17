@@ -30,5 +30,24 @@ public class Lobby {
 		this.user2 = user2;
 	}
 	
+	@Override
+	public String toString() {
+		return "Lobby [name=" + name + ", user1=" + user1 + ", user2=" + user2 + "]";
+	}
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		//Two lobbies are equals if they have the same "name"
+		//In this way a user can search lobbies by "name"
+		return name.equals(((Lobby)obj).getName());
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	
 	
 }
