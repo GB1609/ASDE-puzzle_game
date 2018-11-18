@@ -7,75 +7,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <%@include file="includes/includes.jsp"%>
-
-<!-- Latest compiled and minified CSS 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
-<!-- jQuery library->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<!-- Popper JS ->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-
-<!-- Latest compiled JavaScript ->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<!-- <link href="resources/style.css" rel="stylesheet">
-<script type="text/javascript" src="resources/game.js"></script> -->
+<script src="resources/js/Game.js"></script>
 <title>Game Page</title>
-<script type="text/javascript">
-	$(document).ready(function() {
-		//$('#base').addClass($('#base').attr('value'));
-	});
-</script>
-<script>
-	function allowDrop(ev) {
-		if (!ev.target.hasChildNodes()
-				&& ev.target.getAttribute("class") == "box_piece") {
-			ev.preventDefault();
-		}
-	}
-
-	function drag(ev) {
-		ev.dataTransfer.setData("pieceMoved", ev.target.id);
-		ev.dataTransfer.setData("old", ev.target.parentElement.parentElement.id);
-		
-
-
-	}
-
-	function drop(ev) {
-		ev.preventDefault();
-		var data = ev.dataTransfer.getData("pieceMoved");
-		var old=ev.dataTransfer.getData("old");
-		ev.target.appendChild(document.getElementById(data));
-		
-		$.ajax({
-			url: "move_piece",
-	     	type: "POST",
-			data: ({
-				"new_location": ev.target.parentElement.getAttribute("id"),
-				"old_location": old,
-				"piece": data,
-				"new_position": $(ev.target).prevAll(".box_piece").length
-	           }),
-			success: function(resultData){
-						console.log("ok"+resultData);
-			          },
-		    error : function(e) {
-					 	  alert(
-								"new_location   "+ev.target.parentElement.getAttribute("id")+"\n"+
-								"old_location   "+ old+"\n"+
-								"piece  "+ data+"\n"+
-								"new_position   "+$(ev.target).prevAll(".box_piece").length
-					         );
-					       alert(e.responseText);
-					
-					console.log("ERROR: ", e);
-					}
-				});		
-
-	}
-</script>
 </head>
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>

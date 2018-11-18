@@ -8,6 +8,22 @@ public class PuzzleUtilities{
     private int height;
     private int width;
 
+    public int getHeight(){
+        return height;
+    }
+
+    public void setHeight(int height){
+        this.height = height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public void setWidth(int width){
+        this.width = width;
+    }
+
     public PuzzleUtilities(int dim){
         super();
         this.height = dim;
@@ -21,12 +37,9 @@ public class PuzzleUtilities{
     private int convertInputToNumber(String s){
         int x = Integer.parseInt(s.substring(0, 1));
         int y = Integer.parseInt(s.substring(s.length() - 1));
+//        System.out.println("X===" + x + " e Y====" + y);
         return pairToCell(x, y);
-    }
-
-    public void updateMatrix(String moved,String movedOn){
-        int pieceMoved = convertInputToNumber(moved);
-        int pieceMovedOn = convertInputToNumber(movedOn);
+        // CHECK, IT WORKS
     }
 
     public boolean checkPuzzleTermination(){
@@ -40,13 +53,13 @@ public class PuzzleUtilities{
         return true;
     }
 
-    public void insertPiece(int x){
+    public void insert_random_number(int x){
         int i = (int) (Math.random() * this.width);
         int k = (int) (Math.random() * this.height);
         if (this.matrix[i][k] == -1)
             this.matrix[i][k] = x;
         else
-            this.insertPiece(x);
+            this.insert_random_number(x);
     }
 
     public Point cellToPair(int c){
@@ -55,15 +68,62 @@ public class PuzzleUtilities{
         return new Point(riga, colonna);
     }
 
-    int pairToCell(int colonna,int riga){
-        return riga * width + colonna;
+    int pairToCell(int a,int b){
+        return (b * width) + a;
     }
 
-    public void createGrid(ArrayList<String> nameImages){
+    public void create_random_grid(ArrayList<String> nameImages){
         for (int a = 0; a < width * height; a++)
-            insertPiece(a);
+            insert_random_number(a);
         for (int a = 0; a < width; a++)
             for (int b = 0; b < width; b++)
                 nameImages.add(cellToPair(matrix[a][b]).x + "-" + cellToPair(matrix[a][b]).y);
+    }
+
+    public void print_matrix(){
+        for (int a = 0; a < width; a++) {
+            for (int b = 0; b < width; b++)
+                System.out.print(" | " + matrix[a][b] + " | ");
+            System.out.println();
+        }
+    }
+
+    public void shuffle(String piece,int new_position){
+        int p = convertInputToNumber(piece);
+        resetCell(p);
+        int pos = 0;
+        for (int a = 0; a < width; a++)
+            for (int b = 0; b < width; b++)
+                if (pos == new_position) {
+                    matrix[a][b] = p;
+                    return;
+                } else
+                    pos++;
+    }
+
+    public void insert_in_matrix(String piece,int new_position){
+//        System.out.println("INSERT: " + piece + "     in         " + new_position);
+        int p = convertInputToNumber(piece);
+//        System.out.println("PEZZO DA INSERIRE=" + p);
+        int pos = 0;
+        for (int a = 0; a < width; a++)
+            for (int b = 0; b < width; b++)
+                if (pos == new_position) {
+                    matrix[a][b] = p;
+                    return;
+                } else
+                    pos++;
+    }
+
+    private void resetCell(int p){
+        for (int a = 0; a < width; a++)
+            for (int b = 0; b < width; b++)
+                if (matrix[a][b] == p)
+                    matrix[a][b] = -1;
+    }
+
+    public void remove_from_matrix(String piece,int new_position){
+        int p = convertInputToNumber(piece);
+        resetCell(p);
     }
 }

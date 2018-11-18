@@ -3,24 +3,29 @@ package it.mat.unical.asde.project2_puzzle.model;
 import java.util.ArrayList;
 
 public class Grid{
-    ArrayList<String> nameImages;
-    String subjectName;
-    String difficulty;
+    private ArrayList<String> nameImages;
+    private String subjectName;
+    private String difficulty;
+    private int dim;
+
+    public int getDim(){
+        return dim;
+    }
+
+    public void setDim(int dim){
+        this.dim = dim;
+    }
 
     public Grid(int difficulty,String subjectName){
         // TODO generate randomly indexes
         nameImages = new ArrayList<>();
         this.subjectName = subjectName;
-        int cols = 5;
+        int dim = 5;
         if (difficulty > 0) {
-            cols = 10;
+            dim = 10;
         }
-        PuzzleUtilities pu = new PuzzleUtilities(cols);
-        pu.createGrid(nameImages);
-//        for (int i = 0; i < cols; i++)
-//            for (int j = 0; j < cols; j++) {
-//                nameImages.add(j + "-" + i);
-//            }
+        PuzzleUtilities pu = new PuzzleUtilities(dim);
+        pu.create_random_grid(nameImages);
         this.difficulty = (difficulty > 0) ? "dieci" : "cinque";
     }
 
