@@ -62,6 +62,7 @@
 						console.log("ok"+resultData);
 			          },
 		    error : function(e) {
+		    	
 					 	  alert(
 								"new_location   "+ev.target.parentElement.getAttribute("id")+"\n"+
 								"old_location   "+ old+"\n"+
