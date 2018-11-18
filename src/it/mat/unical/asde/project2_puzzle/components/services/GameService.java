@@ -1,47 +1,48 @@
 package it.mat.unical.asde.project2_puzzle.components.services;
 
 import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Service;
+
 import it.mat.unical.asde.project2_puzzle.model.Grid;
 import it.mat.unical.asde.project2_puzzle.model.PuzzleUtilities;
 
 @Service
-public class GameService{
-    Grid grid;
-    PuzzleUtilities matrixToComplete;
+public class GameService {
+	Grid grid;
+	PuzzleUtilities matrixToComplete;
 
-    @PostConstruct
-    public void init(){
-        grid = new Grid(0, "Gatto");
-        matrixToComplete = new PuzzleUtilities(/* grid.getDim() */5);
-    }
+	@PostConstruct
+	public void init() {
+		grid = new Grid(0, "Gatto");
+		matrixToComplete = new PuzzleUtilities(/* grid.getDim() */5);
+	}
 
-    public Grid getRandomGrid(){
-        return grid;
-    }
+	public Grid getRandomGrid() {
+		return grid;
+	}
 
-    public void updateInitialMatrix(){
-    }
+	public boolean check_completation() {
+		return matrixToComplete.checkPuzzleTermination();
+	}
 
-    public void shuffle_matrix_toComplete(String piece,int new_position){
-        matrixToComplete.shuffle(piece, new_position);
-    }
+	// TODO delete after testing
+	public void printToComplete() {
+		System.out.println("MATRIX TO COMPLETE:");
+		matrixToComplete.printMatrix();
+		System.out.println("END MATRIX TO COMPLETE");
+	}
 
-    public boolean check_completation(){
-        return matrixToComplete.checkPuzzleTermination();
-    }
+	public void updateStateGame(String old_location, int old_position, String new_location, int new_position,
+			String piece) {
 
-    public void printToComplete(){
-        System.out.println("MATRIX TO COMPLETE:");
-        matrixToComplete.print_matrix();
-        System.out.println("END MATRIX TO COMPLETE");
-    }
+		if (old_location.equals("to_complete"))
+			matrixToComplete.removePiece(piece, old_position);
+		if (new_location.equals("to_complete"))
+			matrixToComplete.insertPiece(piece, new_position);
+		printToComplete(); // TODO delete after testing
+		if (check_completation())
+			System.out.println("WIN");
 
-    public void insert_in_matrix_toComplete(String piece,int new_position){
-        matrixToComplete.insert_in_matrix(piece, new_position);
-    }
-
-    public void remove_from_matrix(String piece,int new_position){
-        matrixToComplete.remove_from_matrix(piece, new_position);
-    }
+	}
 }

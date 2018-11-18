@@ -21,20 +21,11 @@ public class GameController {
 		return "Game";
 	}
 
-	@PostMapping("/move_piece") // le richieste ajax solitamente sono in get
-	@ResponseBody // per dire che ciò che restituisce non è il nome della view ma il risultato
-					// della richiesta ajax
+	@PostMapping("move_piece")
+	@ResponseBody
 	public void movePiece(@RequestParam String old_location, @RequestParam int old_position,
 			@RequestParam String new_location, @RequestParam int new_position, @RequestParam String piece) {
 		System.out.println(old_position);
-		if (new_location.equals(old_location) && new_location.equals("to_complete")) {
-			gameService.shuffle_matrix_toComplete(piece, new_position);
-		} else if (new_location.equals("to_complete") && !new_location.equals(old_location))
-			gameService.insert_in_matrix_toComplete(piece, new_position);
-		else if (!new_location.equals("to_complete") && old_location.equals("to_complete"))
-			gameService.remove_from_matrix(piece, new_position);
-//        gameService.printToComplete();
-		if (gameService.check_completation())
-			System.out.println("WIN");
+		gameService.updateStateGame(old_location, old_position, new_location, new_position, piece);
 	}
 }
