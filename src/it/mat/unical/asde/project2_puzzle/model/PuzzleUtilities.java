@@ -121,4 +121,9 @@ public class PuzzleUtilities{
                 if (matrix[a][b] == p)
                     matrix[a][b] = -1;
     }
+
+    public void remove_from_matrix(String piece,int new_position){
+        int p = convertInputToNumber(piece);
+        resetCell(p);
+    }
 }

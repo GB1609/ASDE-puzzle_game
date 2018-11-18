@@ -40,4 +40,8 @@ public class GameService{
     public void insert_in_matrix_toComplete(String piece,int new_position){
         matrixToComplete.insert_in_matrix(piece, new_position);
     }
+
+    public void remove_from_matrix(String piece,int new_position){
+        matrixToComplete.remove_from_matrix(piece, new_position);
+    }
 }
