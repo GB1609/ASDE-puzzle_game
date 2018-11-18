@@ -22,7 +22,6 @@
 <!-- <link href="resources/style.css" rel="stylesheet">
 <script type="text/javascript" src="resources/game.js"></script> -->
 <title>Game Page</title>
-
 <script type="text/javascript">
 	$(document).ready(function() {
 		//$('#base').addClass($('#base').attr('value'));
@@ -38,13 +37,43 @@
 
 	function drag(ev) {
 		ev.dataTransfer.setData("pieceMoved", ev.target.id);
+		ev.dataTransfer.setData("old", ev.target.parentElement.parentElement.id);
+		
+
 
 	}
 
 	function drop(ev) {
 		ev.preventDefault();
 		var data = ev.dataTransfer.getData("pieceMoved");
+		var old=ev.dataTransfer.getData("old");
 		ev.target.appendChild(document.getElementById(data));
+		
+		$.ajax({
+			url: "move_piece",
+	     	type: "POST",
+			data: ({
+				"new_location": ev.target.parentElement.getAttribute("id"),
+				"old_location": old,
+				"piece": data,
+				"new_position": $(ev.target).prevAll(".box_piece").length
+	           }),
+			success: function(resultData){
+						console.log("ok"+resultData);
+			          },
+		    error : function(e) {
+					 	  alert(
+								"new_location   "+ev.target.parentElement.getAttribute("id")+"\n"+
+								"old_location   "+ old+"\n"+
+								"piece  "+ data+"\n"+
+								"new_position   "+$(ev.target).prevAll(".box_piece").length
+					         );
+					       alert(e.responseText);
+					
+					console.log("ERROR: ", e);
+					}
+				});		
+
 	}
 </script>
 </head>
@@ -52,7 +81,7 @@
 	<%@include file="includes/navbar.jsp"%>
 	<div id="view" class="row justify-content-center">
 		<div class="board col-md-auto">
-			<div id="base" class="myGrid ${randomGrid.difficulty}">
+			<div id="initial_location" class="myGrid ${randomGrid.difficulty}">
 				<c:forEach items="${randomGrid.nameImages}" var="piece">
 					<span class="box_piece" ondrop="drop(event)"
 						ondragover="allowDrop(event)"><img draggable="true"
@@ -62,41 +91,14 @@
 			</div>
 		</div>
 		<div class="board col-md-auto offset-md-1">
-			<div id="" class="myGrid cinque">
+			<div id="to_complete" class="myGrid cinque">
 				<c:forEach items="${randomGrid.nameImages}" var="piece">
 					<span class="box_piece" ondrop="drop(event)"
 						ondragover="allowDrop(event)"></span>
 				</c:forEach>
-
-				<!-- 
-				<span class="box_piece"></span> <span class="box_piece"></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)" ></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)" ></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)"></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)" ></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)" ></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)"></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)" ></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)"></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)" ></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)" ></span> <span
-					class="box_piece"></span> <span class="box_piece"
-					ondrop="drop(event)" ></span> <span
-					class="box_piece"></span> -->
 			</div>
 		</div>
 	</div>
-
 
 </body>
 </html>

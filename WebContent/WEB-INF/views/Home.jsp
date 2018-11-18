@@ -7,8 +7,7 @@
 <title>Home Puzzle Game</title>
 </head>
 <body>
-	<div class="py-5 text-center"
-		style="background-image: url("images/bg01.jpg"); background-size: cover;">
+	<div class="py-5 text-center wsmenucontainer">
 		<div class="container">
 			<div class="row">
 				<div class="bg-white p-5 mx-auto col-md-8 col-10">

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark myNav" style="background-color: rgba(0,0,0,0.3);">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#"><img alt="Logo" src="../../resources/images/logo.png"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
