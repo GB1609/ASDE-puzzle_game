@@ -29,6 +29,8 @@ public class GameController{
             gameService.shuffle_matrix_toComplete(piece, new_position);
         } else if (new_location.equals("to_complete") && !new_location.equals(old_location))
             gameService.insert_in_matrix_toComplete(piece, new_position);
+        else if (!new_location.equals("to_complete") && old_location.equals("to_complete"))
+            gameService.remove_from_matrix(piece, new_position);
 //        gameService.printToComplete();
         if (gameService.check_completation())
             System.out.println("WIN");
