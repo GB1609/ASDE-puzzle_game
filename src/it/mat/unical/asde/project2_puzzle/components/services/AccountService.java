@@ -1,4 +1,4 @@
-package it.mat.unical.asde.project2_puzzle.components.service;
+package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.util.ArrayList;
 

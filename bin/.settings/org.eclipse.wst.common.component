@@ -11,6 +11,7 @@
                         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/"/>
                         
         
         <property name="context-root" value="ASDE-puzzle_game"/>

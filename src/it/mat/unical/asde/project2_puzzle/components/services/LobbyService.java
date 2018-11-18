@@ -1,7 +1,6 @@
 package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;

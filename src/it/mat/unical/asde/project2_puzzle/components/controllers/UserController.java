@@ -1,4 +1,4 @@
-package it.mat.unical.asde.project2_puzzle.components.control;
+package it.mat.unical.asde.project2_puzzle.components.controllers;
 
 import java.util.Enumeration;
 
@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import it.mat.unical.asde.project2_puzzle.components.service.AccountService;
+import it.mat.unical.asde.project2_puzzle.components.services.AccountService;
 
 @Controller
 public class UserController {
@@ -23,7 +23,7 @@ public class UserController {
 
 		if (session.getAttribute("username") != null) {
 			model.addAttribute(accountService.getMatches((String) session.getAttribute("username")));
-			return "redirect:/Home";
+			return "redirect:/show_lobbies";
 		}
 		return "index";
 	}

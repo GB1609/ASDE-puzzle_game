@@ -15,7 +15,7 @@ public class LobbyController {
 	@Autowired
 	LobbyService lobbyService;
 	
-	@GetMapping("/")
+	@GetMapping("show_lobbies")
 	public String showLobbies(Model model) {
 		model.addAttribute("lobbies", lobbyService.getLobbies());
 		return "lobby";
