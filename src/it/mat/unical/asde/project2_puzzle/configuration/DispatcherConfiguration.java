@@ -20,7 +20,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class DispatcherConfiguration implements WebMvcConfigurer{
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
-        registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
+        registry.addResourceHandler("/resources/**", "resources/images/**").addResourceLocations("/WEB-INF/resources/");
     }
 
     @Bean
@@ -42,7 +42,6 @@ public class DispatcherConfiguration implements WebMvcConfigurer{
         try {
             lsfb.afterPropertiesSet();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return lsfb.getObject();
