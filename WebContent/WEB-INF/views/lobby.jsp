@@ -59,7 +59,7 @@ $(document).ready(function(){
 			<c:forEach items="${lobbies}" var="lobby">
 				<ul class="list-group">
 				  <li class="list-group-item">
-				  	<div class=" text-center">
+				  	<div class="text-center">
 				  		${lobby.name}
 					</div>
 					<div class=" text-center" >
