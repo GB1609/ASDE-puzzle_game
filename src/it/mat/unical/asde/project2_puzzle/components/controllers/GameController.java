@@ -20,6 +20,7 @@ public class GameController {
 	public String goToGame(Model m) {
 		m.addAttribute("randomGrid", gameService.getRandomGrid());
 		return "Game";
+
 	}
 
 	@PostMapping("move_piece")
