@@ -17,6 +17,7 @@ public class GameController{
     @GetMapping("/")
     public String goToGame(Model m){
         m.addAttribute("randomGrid", gameService.getRandomGrid());
+        System.err.println("mod");
         return "Game";
     }
 
