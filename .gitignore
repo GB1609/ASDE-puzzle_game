@@ -1,7 +1,6 @@
 *.properties
 /target/
 .DS_S*
-.classpath*
 pom.properties*
 #ignore thumbnails created by windows
 Thumbs.db
