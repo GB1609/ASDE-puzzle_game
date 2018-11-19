@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark myNav"
+<nav class="navbar navbar-expand-lg navbar-dark myNav no_margin"
 	style="background-color: rgba(0, 0, 0, 0.3);">
 	<a class="navbar-brand" href="#"><img alt="Logo"
 		src="resources/images/logo.png" style="height: inherit;"></a>
