@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark myNav"
+<nav class="navbar navbar-expand-lg navbar-dark myNav no_margin"
 	style="background-color: rgba(0, 0, 0, 0.3);">
 	<a class="navbar-brand" href="#"><img alt="Logo"
 		src="resources/images/logo.png" style="height: inherit;"></a>
@@ -12,7 +12,7 @@
 			<li class="nav-item active"><a class="nav-link" href="#">Home
 					<span class="sr-only">(current)</span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+			<li class="nav-item"><a class="nav-link" href="game">Game</a></li>
 			<li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#"
