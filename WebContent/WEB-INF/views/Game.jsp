@@ -14,7 +14,7 @@
 	<%@include file="includes/navbar.jsp"%>
 	<div class="no_margin">
 		<div class="row justify-content-md-end cover_all no_margin">
-		<div id="view" class="row justify-content-center align-items-center col-md-10">
+		<div id="view" class="row justify-content-center align-items-center col-md-10 col-sm-12 col-xs-12">
 			<div  class="row justify-content-center col-md-12">
 			<div class="board col-md-auto">
 				<div id="initial_location" class="myGrid ${randomGrid.difficulty}">
@@ -26,7 +26,7 @@
 					</c:forEach>
 				</div>
 			</div>
-			<div class="board col-md-auto offset-md-1">
+			<div class="board col-md-auto offset-0 offset-md-1">
 				<div id="to_complete" class="myGrid cinque">
 					<c:forEach items="${randomGrid.nameImages}" var="piece">
 						<span class="box_piece" ondrop="drop(event)"
@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		
-		<div class="col-md-2 game_info pr-0">
+		<div class="row col-12 col-md-2 col-sm-12 col-xs-12 game_info pr-0">
 		
 		</div>
 		</div>
