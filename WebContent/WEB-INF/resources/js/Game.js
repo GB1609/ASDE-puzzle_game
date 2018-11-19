@@ -5,6 +5,28 @@ function allowDrop(ev) {
 		}
 	}
 
+	function swapElements(obj1, obj2) {
+    // save the location of obj2
+    var parent2 = obj2.parentNode;
+    var next2 = obj2.nextSibling;
+    // special case for obj1 is the next sibling of obj2
+    if (next2 === obj1) {
+        // just put obj1 before obj2
+        parent2.insertBefore(obj1, obj2);
+    } else {
+        // insert obj2 right before obj1
+        obj1.parentNode.insertBefore(obj2, obj1);
+
+        // now insert obj1 where obj2 was
+        if (next2) {
+            // if there was an element after obj2, then insert obj1 right before that
+            parent2.insertBefore(obj1, next2);
+        } else {
+            // otherwise, just append as last child
+            parent2.appendChild(obj1);
+        }
+    }
+}
 	function drag(ev) {
 		ev.dataTransfer.setData("pieceMoved", ev.target.id);
 		ev.dataTransfer.setData("old_location", ev.target.parentElement.parentElement.id);
@@ -31,7 +53,7 @@ function allowDrop(ev) {
 						console.log("ok"+resultData);
 			          },
 		    error : function(e) {
-		    	
+
 					 	  alert(
 					 			 "old position"+old_position+"\n"+
 								"new_location   "+ev.target.parentElement.getAttribute("id")+"\n"+
@@ -40,14 +62,14 @@ function allowDrop(ev) {
 								"new_position   "+$(ev.target).prevAll(".box_piece").length
 					         );
 					       alert(e.responseText);
-					
+
 					console.log("ERROR: ", e);
 					}
-				});		
+				});
 
 	}
-	
-	
+
+
 	$(document).ready(function() {
 		//$('#base').addClass($('#base').attr('value'));
 	});
