@@ -16,7 +16,7 @@ public class GameController {
 	@Autowired
 	GameService gameService;
 
-	@GetMapping("/")
+	@GetMapping("game")
 	public String goToGame(Model m) {
 		m.addAttribute("randomGrid", gameService.getRandomGrid());
 		return "Game";

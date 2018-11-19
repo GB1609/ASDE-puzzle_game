@@ -4,9 +4,12 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<%@include file="includes/includes.jsp"%>
+
 <title>Home Puzzle Game</title>
 </head>
 <body>
+	<%@include file="includes/navbar.jsp"%>
 	<div class="py-5 text-center wsmenucontainer">
 		<div class="container">
 			<div class="row">
