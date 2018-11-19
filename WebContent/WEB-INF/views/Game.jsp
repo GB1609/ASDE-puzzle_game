@@ -12,26 +12,35 @@
 </head>
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
-	<div id="view" class="row justify-content-center">
-		<div class="board col-md-auto">
-			<div id="initial_location" class="myGrid ${randomGrid.difficulty}">
-				<c:forEach items="${randomGrid.nameImages}" var="piece">
-					<span class="box_piece" ondrop="drop(event)"
-						ondragover="allowDrop(event)"><img draggable="true"
-						ondragstart="drag(event)" id="${piece}" class="piece"
-						src="resources/images/${randomGrid.subjectName}/${randomGrid.difficulty}/${piece }.png " /></span>
-				</c:forEach>
+	<div class="no_margin">
+		<div class="row cover_all">
+		<div id="view" class="row justify-content-center align-items-center col-md-10">
+			<div  class="row justify-content-center col-md-12">
+			<div class="board col-md-auto">
+				<div id="initial_location" class="myGrid ${randomGrid.difficulty}">
+					<c:forEach items="${randomGrid.nameImages}" var="piece">
+						<span class="box_piece" ondrop="drop(event)"
+							ondragover="allowDrop(event)"><img draggable="true"
+							ondragstart="drag(event)" id="${piece}" class="piece"
+							src="resources/images/${randomGrid.subjectName}/${randomGrid.difficulty}/${piece }.png " /></span>
+					</c:forEach>
+				</div>
+			</div>
+			<div class="board col-md-auto offset-md-1">
+				<div id="to_complete" class="myGrid cinque">
+					<c:forEach items="${randomGrid.nameImages}" var="piece">
+						<span class="box_piece" ondrop="drop(event)"
+							ondragover="allowDrop(event)"></span>
+					</c:forEach>
+				</div>
+			</div>
 			</div>
 		</div>
-		<div class="board col-md-auto offset-md-1">
-			<div id="to_complete" class="myGrid cinque">
-				<c:forEach items="${randomGrid.nameImages}" var="piece">
-					<span class="box_piece" ondrop="drop(event)"
-						ondragover="allowDrop(event)"></span>
-				</c:forEach>
-			</div>
+		
+		<div class="col-md-2 game_info pr-0">
+		
+		</div>
 		</div>
 	</div>
-
 </body>
 </html>
