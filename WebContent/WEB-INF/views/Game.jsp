@@ -13,7 +13,7 @@
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
 	<div class="no_margin">
-		<div class="row cover_all">
+		<div class="row justify-content-md-end cover_all no_margin">
 		<div id="view" class="row justify-content-center align-items-center col-md-10">
 			<div  class="row justify-content-center col-md-12">
 			<div class="board col-md-auto">
