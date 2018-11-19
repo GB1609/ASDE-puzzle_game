@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table
 public class Credentials {
-	
+	 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
