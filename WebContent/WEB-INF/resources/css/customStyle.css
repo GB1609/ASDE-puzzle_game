@@ -1,0 +1,12 @@
+/*.navbar {
+	background-color: #737373;
+	
+}
+.navbar > li > a {
+	background-color: blue;
+	color: white;
+}
+
+.navbar > a:hover {
+	background-color: #cccccc;
+}*/

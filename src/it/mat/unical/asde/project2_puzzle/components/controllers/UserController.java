@@ -37,19 +37,25 @@ public class UserController {
 	@GetMapping("/login")
 	public String login(@RequestParam String username, @RequestParam String password, HttpSession session,
 			Model model) {
-		clearAttributes(session);
-		if (accountService.loginAccepted(username, password)) {
-			session.setAttribute("username", username);
-			return "redirect:/";
 
+		clearAttributes(session);
+		if (!(username == "" || password == "")) {
+			if (accountService.loginAccepted(username, password)) {
+				session.setAttribute("username", username);
+				return "redirect:/";
+
+			}
+			session.setAttribute("loginFailed", "Username or Password wrong!");
 		}
-		session.setAttribute("loginFailed", "Username or Password wrong!");
+		else
+			session.setAttribute("loginFailed", "Fields cannot be empty!");
 		return "redirect:/";
 	}
 
 	@GetMapping("/creationAccount")
 	public String creationAccount(@RequestParam String username, @RequestParam String password, HttpSession session,
 			Model model) {
+
 		clearAttributes(session);
 		if (!(username == "" || password == "")) {
 			if (accountService.accountCreated(username, password)) {
@@ -59,7 +65,7 @@ public class UserController {
 			session.setAttribute("creationFailed", "Username already used.");
 		} else
 			session.setAttribute("creationFailed", "Fields cannot be empty!");
-		
+
 		return "redirect:/";
 	}
 
