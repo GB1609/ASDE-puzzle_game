@@ -101,11 +101,13 @@
 						<br>
 						<form action="create_lobby">
 							<div class="form-group">
-								<label for="lobby_name_text" style="color:white;">Lobby's name:</label> <input
-									type="text" class="form-control" id="id_lobby_name"
-									name="lobby_name">
+								<label for="lobby_name_text" style="color: white;">Lobby's
+									name:</label> <input type="text" class="form-control"
+									id="id_lobby_name" name="lobby_name">
 							</div>
-							<button type="submit" class="btn btn-primary">Create</button>
+							<div align="center">
+								<button type="submit" class="btn btn-warning btn-sm">Create</button>
+							</div>
 						</form>
 					</div>
 				</div>
