@@ -18,105 +18,9 @@
 <script src="resources/js/main.js"></script>
 <!-- Gem jQuery -->
 <script type="text/javascript" src="resources/js/script.js"></script>
-
-
-
-
-
 </head>
+
 <body class="wsmenucontainer">
-
-	<!--  COMMENTOOOOOOOOOOOOO
-	<div class="container">
-		<h3 align="center">Sign in</h3>
-		<form class="form-horizontal" action="login">
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="username">Username:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="username"
-						placeholder="Enter username" name="username">
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="pwd">Password:</label>
-				<div class="col-sm-10">
-					<input type="password" class="form-control" id="pwd"
-						placeholder="Enter password" name="password">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-primary">Sign in</button>
-				</div>
-			</div>
-		</form>
-
-		<c:if test="${not empty loginFailed}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<strong>${loginFailed}</strong>
-			</div>
-
-		</c:if>
-
-	</div>
-	<div class="container">
-		<h3 align="center">Sign up</h3>
-		<form class="form-horizontal" action="creationAccount">
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="username">Username:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="username"
-						placeholder="Enter username" name="username">
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="pwd">Password:</label>
-				<div class="col-sm-10">
-					<input type="password" class="form-control" id="pwd"
-						placeholder="Enter password" name="password">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-primary">Sign up</button>
-				</div>
-			</div>
-		</form>
-
-		<c:if test="${not empty creationFailed}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<strong>${creationFailed}</strong>
-			</div>
-
-		</c:if>
-		<form class="form-horizontal" action="logout">
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-primary">Logout</button>
-				</div>
-			</div>
-		</form>
-
-	</div>  COMMENTOOOOOOOO -->
-
-
-
-	<!--  nav class="navbar navbar-inverse navbar-fixed-top">  -->
-
-
-
-
-
 	<div class="cd-user-modal">
 		<!-- this is the entire modal form, including the background -->
 		<div class="cd-user-modal-container">
@@ -188,21 +92,11 @@
 			<!-- cd-signup -->
 
 
-			<a href="#0" class="cd-close-form">Close</a>
+		<!--  <a href="#0" class="cd-close-form">Close</a>-->	
 		</div>
 		<!-- cd-user-modal-container -->
 	</div>
 	<!-- cd-user-modal -->
-	<!-- Page Content -->
-
-	<!-- /.row -->
-
-
-
-
-	<!-- /.container -->
-
-
 
 <script type="text/javascript">
 	var creationFailed ="<%=session.getAttribute("creationFailed")%>";
