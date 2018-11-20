@@ -13,6 +13,7 @@
   -ms-transition: none;
   transition: none;
 }
+
 .wsmenucontainer {
   overflow: auto;
   -webkit-backface-visibility: hidden;
@@ -24,11 +25,13 @@
   -ms-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
 }
-.wsmenucontainer{
+
+.wsmenucontainer {
   overflow: auto;
   display: block;
 }
- .navbar {
+
+.navbar {
   min-height: 70px;
 }
 
@@ -45,14 +48,15 @@
 }
 
 @media (min-width: 768px) {
-  .navbar-nav > li > a {
+  .navbar-nav>li>a {
     /* (80px - line-height of 27px) / 2 = 26.5px */
     padding-top: 26.5px;
     padding-bottom: 26.5px;
     line-height: 27px;
   }
 }
+
 .myNav {
-	background-color: rgba(0, 0, 0, 0.35);
-	/*margin-bottom: 30px;*/
+  background-color: rgba(0, 0, 0, 0.35);
+  /*margin-bottom: 30px;*/
 }
