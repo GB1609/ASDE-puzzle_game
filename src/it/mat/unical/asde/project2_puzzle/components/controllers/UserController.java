@@ -23,7 +23,7 @@ public class UserController {
 
 		if (session.getAttribute("username") != null) {
 			model.addAttribute(accountService.getMatches((String) session.getAttribute("username")));
-			return "redirect:/show_lobbies";
+			return "redirect:/lobby";
 		}
 		return "index";
 	}

@@ -11,6 +11,11 @@ public class Lobby {
 		this.user1 = user1;
 		this.user2 = user2;
 	}
+	public Lobby(String name, String user1) {
+		super();
+		this.name = name;
+		this.user1 = user1;
+	}
 	public String getName() {
 		return name;
 	}
