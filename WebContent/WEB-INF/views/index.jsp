@@ -30,6 +30,7 @@
 				<li><a href="#0">New account</a></li>
 			</ul>
 
+<input id=failed value="${creationFailed}" style="display: none">
 			<div id="cd-login">
 				<!-- log in form -->
 
@@ -37,19 +38,26 @@
 					<p class="fieldset">
 						<label class="image-replace cd-username" for="username">Username</label>
 						<input class="full-width has-padding has-border"
-							id="signup-username" type="text" placeholder="Username"
+							id="signin-username" type="text" placeholder="Username"
 							name="username"> 
-							<c:if test="${not empty loginFailed}">
+						<c:if test="${not empty loginFailed}">
 						<span class="cd-error-message is-selected;">${loginFailed}</span>
 						</c:if>
+						<c:if test="${not empty loginFailed1}">
+						<span class="cd-error-message is-selected;">${loginFailed1}</span>
+						</c:if>
+						
 					</p>
 					<p class="fieldset">
 						<label class="image-replace cd-password" for="signin-password">Password</label>
 						<input class="full-width has-padding has-border"
 							id="signin-password" type="text" placeholder="Password"
 							name="password"> <a href="#0" class="hide-password">Hide</a>
-									<c:if test="${not empty loginFailed}">
+						<!--<c:if test="${not empty loginFailed}">
 						<span class="cd-error-message is-selected;">${loginFailed}</span>
+						</c:if> -->
+						<c:if test="${not empty loginFailed2}">
+						<span class="cd-error-message is-selected;">${loginFailed2}</span>
 						</c:if>
 					</p>
 					<p class="fieldset">
@@ -65,11 +73,29 @@
 				<!-- sign up form -->
 				<form id="reg_form" action="creationAccount" class="cd-form">
 					<p class="fieldset">
+						<label class="image-replace cd-username" for="firstName">First Name</label>
+						<input class="full-width has-padding has-border"
+							id="signup-username" type="text" placeholder="First Name"
+							name="firstName"> 
+							<c:if test="${not empty creationFailedValue1}">
+						<span class="cd-error-message">${creationFailed}</span>
+						</c:if>
+					</p>
+					<p class="fieldset">
+						<label class="image-replace cd-username" for="lastName">Last Name</label>
+						<input class="full-width has-padding has-border"
+							id="signup-lastname" type="text" placeholder="Last Name"
+							name="lastName"> 
+							<c:if test="${not empty creationFailedValue2}">
+						<span class="cd-error-message">${creationFailed}</span>
+						</c:if>
+					</p>
+					<p class="fieldset">
 						<label class="image-replace cd-username" for="username">Username</label>
 						<input class="full-width has-padding has-border"
 							id="signup-username" type="text" placeholder="Username"
 							name="username"> 
-							<c:if test="${not empty creationFailed}">
+							<c:if test="${not empty creationFailedValue3}">
 						<span class="cd-error-message">${creationFailed}</span>
 						</c:if>
 					</p>
@@ -77,8 +103,10 @@
 						<label class="image-replace cd-password" for="password">Password</label>
 						<input class="full-width has-padding has-border"
 							id="signup-password" type="text" placeholder="Password"
-							name="password"> <a href="#0" class="hide-password">Hide</a>
-							<c:if test="${not empty creationFailed}">
+							name="password"> 
+							<a href="#0" class="hide-password">
+							Hide</a>
+							<c:if test="${not empty creationFailedValue4}">
 						<span class="cd-error-message">${creationFailed}</span>
 						</c:if>
 					</p>
@@ -98,9 +126,7 @@
 	</div>
 	<!-- cd-user-modal -->
 
-<script type="text/javascript">
-	var creationFailed ="<%=session.getAttribute("creationFailed")%>";
-</script>
+
 
 
 </body>

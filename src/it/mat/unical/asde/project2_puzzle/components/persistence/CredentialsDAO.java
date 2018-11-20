@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,28 +15,18 @@ public class CredentialsDAO {
 	@Autowired
 	private SessionFactory session;
 	
+	@Autowired
+	private DBManager dbManager;
+	
 	@PostConstruct
 	public void init()
 	{
-		save(new Credentials("Ciccio","ciccio"));
-		save(new Credentials("Giovanni","giovanni"));
+		dbManager.save(new Credentials("Ciccio","ciccio"));
+		dbManager.save(new Credentials("Giovanni","giovanni"));
 	}
 	
 	public boolean save(Credentials credentials) {
-		boolean results = false;
-		Session session = this.session.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.save(credentials);
-			tx.commit();
-			results = true;
-		} catch (Exception e) {
-			tx.rollback();
-			results = false;
-		}
-		session.close();
-		return results;
+		return dbManager.save(credentials);
 	}
 	
 	public boolean exists(Credentials credentials) {

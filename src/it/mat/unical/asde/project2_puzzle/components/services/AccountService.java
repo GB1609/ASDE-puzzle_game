@@ -2,14 +2,16 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.util.ArrayList;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.mat.unical.asde.project2_puzzle.components.persistence.MatchDAO;
+import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.CredentialsDAO;
 import it.mat.unical.asde.project2_puzzle.model.Credentials;
 import it.mat.unical.asde.project2_puzzle.model.Match;
+import it.mat.unical.asde.project2_puzzle.model.User;
+
 
 @Service
 public class AccountService {
@@ -18,15 +20,26 @@ public class AccountService {
 	private MatchDAO matchDAO;
 
 	@Autowired
-	private CredentialsDAO userDAO;
+	private CredentialsDAO credentialsDAO;
+	
+	@Autowired
+	private UserDAO userDAO;
+	
 
 
 	public boolean loginAccepted(String username, String password) {
-		return userDAO.exists(new Credentials(username, password));
+		return credentialsDAO.exists(new Credentials(username, password));
 	}
 
-	public boolean accountCreated(String username, String password) {
-		return userDAO.save(new Credentials(username, password));
+	public boolean accountCreated(String firstName, String lastName, String username, String password) {
+		System.out.println(firstName);
+		System.out.println(lastName);
+		System.out.println(username);
+		System.out.println(password);
+		boolean value = credentialsDAO.save(new Credentials(username, password));
+		if(value)
+		value = userDAO.save(new User(username, firstName, lastName));
+		return value;	
 	}
 
 	public ArrayList<Match> getMatches(String username) {

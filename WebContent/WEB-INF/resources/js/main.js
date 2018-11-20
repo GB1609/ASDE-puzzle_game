@@ -11,17 +11,22 @@ jQuery(document).ready(function($){
 		backToLoginLink = formForgotPassword.find('.cd-form-bottom-message a'),
 		mainNav = $('#signlog');
 	
-		if(creationFailed == "null")
+		var creationFailed = document.getElementById("failed").value;
+		
+	
+		if(creationFailed == "")
 			login_selected();
 		else
 			signup_selected();
 		
-		formLogin.find('input[id="signup-username"]').next('span').toggleClass('is-visible');
-		formLogin.find('input[id="signin-password"]').next('span').toggleClass('is-visible');
+		formLogin.find('input[id="signin-username"]').next('span').toggleClass('is-visible');
+		formLogin.find('input[id="signin-password"]').next('a').next('span').toggleClass('is-visible');
 		
-		formSignup.find('input[id="signup-password"]').next('span').toggleClass('is-visible');
+		formSignup.find('input[id="signup-password"]').next('a').next('span').toggleClass('is-visible');
 		formSignup.find('input[id="signup-username"]').next('span').toggleClass('is-visible');
-	
+		formSignup.find('input[id="signup-firstname"]').next('span').toggleClass('is-visible');
+		formSignup.find('input[id="signup-lastname"]').next('span').toggleClass('is-visible');
+		
 		//open modal
 	mainNav.on('click', function(event){
 		$(event.target).is(mainNav) && mainNav.children('ul').toggleClass('is-visible');
