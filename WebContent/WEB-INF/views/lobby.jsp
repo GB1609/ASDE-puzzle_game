@@ -18,6 +18,10 @@
 	height: 500px;
 	overflow: scroll;
 	}
+	a {
+	  color: inherit;
+	  text-decoration: inherit;
+	}
 </style>
 
 </head>
@@ -61,7 +65,8 @@
 						  	empty slot
 						  </c:otherwise>
 						</c:choose>
-						<button type="button" id="pippo" onclick="joinLobby()" class="btn btn-primary">Join</button>
+						
+						<button type="button" id="pippo" onclick="joinLobby()" class="btn btn-primary" ><a href="game">Join</a></button>
 					</div>
 				  </li>
 				</c:forEach>

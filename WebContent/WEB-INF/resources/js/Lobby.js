@@ -15,11 +15,11 @@ function joinLobby(ev) {
            }),
 		success: function(resultData){
 					console.log("join ok: "+resultData);
+					$("#lobbies_div").load(location.href+" #lobbies_div>*","");
 		          },
 	    error : function(e) {
 				       alert(e.responseText);
 				       console.log("JOIN ERROR: ", e);
 				}
 			});
-	$("#lobbies_div").load(location.href+" #lobbies_div>*","");
 }

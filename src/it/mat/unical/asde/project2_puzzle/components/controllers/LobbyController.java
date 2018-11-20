@@ -68,6 +68,7 @@ public class LobbyController {
 		//if(lobbyToJoin != null) {
 			//lobby with name "lobby_name" founded
 			lobbyToJoin.setUser2((String) session.getAttribute("username"));
+			lobbyService.removeLobby(lobbyToJoin);
 			System.out.println("Lobby to join: "+lobbyToJoin);
 			//return "redirect:/";
 		//}

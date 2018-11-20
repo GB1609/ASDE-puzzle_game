@@ -54,4 +54,8 @@ public class LobbyService {
 	public void putLobbyOnTop(int index) {
 		Collections.rotate(lobbies.subList(0, index+1), 1);
 	}
+	
+	public boolean removeLobby(Lobby lobby) {
+		return lobbies.remove(lobby);
+	}
 }
