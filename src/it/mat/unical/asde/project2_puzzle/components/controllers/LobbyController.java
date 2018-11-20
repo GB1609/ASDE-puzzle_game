@@ -95,3 +95,7 @@ public class LobbyController {
 		model.addAttribute("error_lobby_delete", "Lobby with name " + lobby_name + " not deleted");
 	}
 }
+
+/*
+ * TODO: fix search of lobby by user and name
+ */

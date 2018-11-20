@@ -45,27 +45,26 @@ a {
 								<img src="resources/images/avatar.svg" class="img-circle"
 									height="15" width="15" alt="Avatar">
 								<c:choose>
-									<c:when test="${not empty lobby.owner}">
-					  		${lobby.owner}
-						  </c:when>
-									<c:otherwise>
-						  	empty
-						  </c:otherwise>
+									<c:when test="${not empty lobby.owner}">${lobby.owner}</c:when>
+									<c:otherwise>empty</c:otherwise>
 								</c:choose>
-								VS <img src="resources/images/avatar.svg" class="img-circle"
+									VS <img src="resources/images/avatar.svg" class="img-circle"
 									height="15" width="15" alt="Avatar">
 								<c:choose>
-									<c:when test="${not empty lobby.guest}">
-					  		${lobby.guest}
-						  </c:when>
-									<c:otherwise>
-						  	empty
-						  </c:otherwise>
+									<c:when test="${not empty lobby.guest}">${lobby.guest}</c:when>
+									<c:otherwise>empty</c:otherwise>
 								</c:choose>
-								<button type="button" onclick="joinLobby()"
-									class="btn btn-primary">Join</button>
-								<button type="button" onclick="startGame()"
-									class="btn btn-primary">Start</button>
+								<c:choose>
+									<c:when test="${sessionScope.username eq lobby.owner}">
+										<button type="button" onclick="startGame()"
+										class="btn btn-primary">Start</button>
+									</c:when>
+									<c:otherwise>
+										<button type="button" onclick="joinLobby()"
+										class="btn btn-primary">Join</button>
+									</c:otherwise>
+								</c:choose>
+								
 							</div>
 						</li>
 					</c:forEach>
