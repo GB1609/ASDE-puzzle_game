@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,6 +38,7 @@
 			</div>
 			</div>
 		</div>
+		
 		
 		<div class="row col-12 col-md-2 col-sm-12 col-xs-12 game_info pr-0">
 				<div class="row">
