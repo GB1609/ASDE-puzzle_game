@@ -13,7 +13,7 @@ function drag(ev) {
 document.addEventListener("dragenter", function(event) {
   if (!event.target.hasChildNodes() &&
     event.target.getAttribute("class") == "box_piece") {
-    event.target.style.background = "yellow";
+    event.target.style.background = "#C37500";
   }
 }, false);
 
@@ -26,10 +26,10 @@ document.addEventListener("dragleave", function(event) {
 
 function drop(ev) {
   ev.preventDefault();
+  event.target.style.background = "";
   var data = ev.dataTransfer.getData("pieceMoved");
   var old = ev.dataTransfer.getData("old_location");
   var old_position = ev.dataTransfer.getData("old_position");
-  event.target.style.background = "";
   ev.target.appendChild(document.getElementById(data));
   $.ajax({
     url: "move_piece",

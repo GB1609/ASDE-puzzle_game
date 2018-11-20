@@ -1,0 +1,15 @@
+.player-avatar {
+    border-radius:100%;
+}
+
+.end_game_board {
+    margin:0;
+    padding:0;
+    border-radius:0;
+
+}
+
+.end_game_board-heading {
+    padding:1em;
+    border-radius:0;
+    }
