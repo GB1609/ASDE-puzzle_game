@@ -97,5 +97,9 @@ public class LobbyController {
 }
 
 /*
- * TODO: fix search of lobby by user and name
+ * TODO:
+ *
+ * -fix search of lobby by user and name
+ *
+ * -fix create and search lobby methods. must update only lobbies_div with ajax
  */
