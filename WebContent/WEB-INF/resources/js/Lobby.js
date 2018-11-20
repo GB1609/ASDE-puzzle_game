@@ -5,11 +5,13 @@ $(document).ready(function() {
 function joinLobby(ev) {
 	//ev.preventDefault();
 	//ev.target.appendChild(document.getElementById(data));
+	var lobby_name = $(document.activeElement).closest('#lobby_row').children('#lobby_name_div').text();
+	console.log();
 	$.ajax({
 		url: "join_lobby",
      	type: "POST",
 		data: ({
-			"lobby_name": document.getElementById("lobby_name_div").innerHTML
+			"lobby_name": lobby_name
            }),
 		success: function(resultData){
 					console.log("join ok: "+resultData);
@@ -18,6 +20,6 @@ function joinLobby(ev) {
 				       alert(e.responseText);
 				       console.log("JOIN ERROR: ", e);
 				}
-			});		
+			});
 	$("#lobbies_div").load(location.href+" #lobbies_div>*","");
 }

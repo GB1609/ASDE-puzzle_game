@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import it.mat.unical.asde.project2_puzzle.components.services.LobbyService;
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
@@ -22,7 +23,7 @@ public class LobbyController {
 	@Autowired
 	LobbyService lobbyService;
 	
-	@GetMapping("show_lobbies")
+	@GetMapping("lobby")
 	public String showLobbies(Model model) {
 		model.addAttribute("lobbies", lobbyService.getLobbies());
 		return "lobby";
@@ -61,6 +62,7 @@ public class LobbyController {
 	}
 	
 	@PostMapping("join_lobby")
+	@ResponseBody
 	public void joinLobby(Model model, HttpSession session, @RequestParam String lobby_name) {
 		Lobby lobbyToJoin = lobbyService.getLobbyByName(lobby_name);
 		//if(lobbyToJoin != null) {

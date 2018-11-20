@@ -37,9 +37,9 @@
 
 		</c:if>
 		<c:if test="${not empty lobbies}">
-			<c:forEach items="${lobbies}" var="lobby">
-				<ul class="list-group">
-				  <li class="list-group-item">
+			<ul class="list-group">
+				<c:forEach items="${lobbies}" var="lobby">
+				  <li class="list-group-item" id="lobby_row">
 				  	<div class="text-center" id="lobby_name_div">${lobby.name}</div>
 					<div class=" text-center" >
 						<img src="resources/images/avatar.svg" class="img-circle" height="15" width="15" alt="Avatar">
@@ -61,11 +61,11 @@
 						  	empty slot
 						  </c:otherwise>
 						</c:choose>
-						<button type="button" onclick="joinLobby()" class="btn btn-primary">Join</button>
+						<button type="button" id="pippo" onclick="joinLobby()" class="btn btn-primary">Join</button>
 					</div>
 				  </li>
-				</ul>
-			</c:forEach>
+				</c:forEach>
+			</ul>
 		</c:if>
 	</div>
 	<div class="dropdown col-sm-6">
