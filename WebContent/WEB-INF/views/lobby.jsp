@@ -8,20 +8,8 @@
 <%@include file="includes/includes.jsp"%>
 <script src="resources/js/Lobby.js"></script>
 <title>Insert title here</title>
-<style type="text/css">
-#lobbies_div {
-	border: none;
-	padding: 5px;
-	font: 24px/36px sans-serif;
-	height: 500px;
-	overflow: scroll;
-}
-
-a {
-	color: inherit;
-	text-decoration: inherit;
-}
-</style>
+<link rel="stylesheet" type="text/css" media="all"
+	href="resources/css/style_lobby.css" />
 </head>
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
@@ -109,5 +97,26 @@ a {
 			</c:if>
 		</div>
 	</div>
+	<div class="login-btn">
+		<a href="#" class="button" data-toggle="modal" data-target="#login-modal">Login</a>
+	</div>
+	
+	<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog">
+	        <div class="loginmodal-container">
+	            <h1>Login to Your Account</h1><br>
+                  <form>
+                    <input type="text" name="user" placeholder="Username">
+                    <input type="password" name="pass" placeholder="Password">
+                    <input type="submit" name="login" class="login loginmodal-submit" value="Login">
+                  </form>
+                    
+                  <div class="login-help">
+                    <a href="#">Register</a> - <a href="#">Forgot Password</a>
+	              </div>
+	          </div>
+	      </div>
+      </div>
+		      
 </body>
 </html>
