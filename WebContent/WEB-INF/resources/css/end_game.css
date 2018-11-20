@@ -1,15 +1,54 @@
-.player-avatar {
-    border-radius:100%;
+.team-icon {
+  border-radius: 100%;
 }
 
-.end_game_board {
-    margin:0;
-    padding:0;
-    border-radius:0;
-
+.list-group-item {
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
 }
 
-.end_game_board-heading {
-    padding:1em;
-    border-radius:0;
-    }
+.list-group {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+.panel {
+  margin: auto;
+  padding-top: 3%;
+  border-radius: 0;
+  border-width: 4px;
+  border-color: black;
+  border-style: ridge;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.panel-body {
+  padding: 15px;
+}
+
+.panel-default>.panel-heading {
+  padding: 1em;
+  border-radius: 0;
+  background-color: black;
+  color: white;
+  border-color: #ddd;
+}
+
+.panel-body>.list-group {
+  padding-left: 0;
+  margin-bottom: 20px;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
