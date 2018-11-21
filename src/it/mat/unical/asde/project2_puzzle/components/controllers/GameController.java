@@ -2,6 +2,8 @@ package it.mat.unical.asde.project2_puzzle.components.controllers;
 
 import java.util.concurrent.ForkJoinPool;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,18 +24,23 @@ public class GameController {
 	EventsService eventsService;
 
 	@GetMapping("game")
-	public String goToGame(Model m) {
-		m.addAttribute("randomGrid", gameService.getRandomGrid());
+	public String goToGame(Model m, HttpSession session) {
+		m.addAttribute("randomGrid", gameService.initNewGame((Integer) session.getAttribute("gameId")));
 		return "Game";
 	}
 
 	@PostMapping("move_piece")
 	@ResponseBody
 	public void movePiece(@RequestParam String old_location, @RequestParam int old_position,
-			@RequestParam String new_location, @RequestParam int new_position, @RequestParam String piece) {
-		gameService.updateStateGame(old_location, old_position, new_location, new_position, piece);
+			@RequestParam String new_location, @RequestParam int new_position, @RequestParam String piece,
+			HttpSession session) {
+
+		Integer gameId = (Integer) session.getAttribute("gameId");
+		String player = (String) session.getAttribute("player");
+		gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position, piece);
+		Integer progress = gameService.getProgressFor(gameId, player);
 		try {
-			eventsService.addEvent(1);
+			eventsService.addEventFor(gameId, player, progress);
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
 			e.printStackTrace();
@@ -42,25 +49,19 @@ public class GameController {
 
 	@PostMapping("get_progress")
 	@ResponseBody
-	public DeferredResult<String> getEvents(@RequestParam int gameId) {
-//		try {
-//			return eventsService.nextEvent(gameId);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return null;
-
-		DeferredResult<String> output = new DeferredResult<>();
+	public DeferredResult<Integer> getEvents(HttpSession session) {
+		Integer gameId = (Integer) session.getAttribute("gameId");
+		String player = (String) session.getAttribute("player");
+		DeferredResult<Integer> outputProgress = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
-				output.setResult(eventsService.nextEvent(gameId));
+				outputProgress.setResult(eventsService.nextEvent(gameId, player));
 			} catch (InterruptedException e) {
-				output.setResult("An error occurred during event retrieval");
+				outputProgress.setResult(-1000);
 			}
 		});
 
-		return output;
+		return outputProgress;
 	}
 
 }

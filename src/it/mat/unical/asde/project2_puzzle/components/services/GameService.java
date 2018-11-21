@@ -1,35 +1,33 @@
 package it.mat.unical.asde.project2_puzzle.components.services;
 
-import javax.annotation.PostConstruct;
+import java.util.HashMap;
+
 import org.springframework.stereotype.Service;
+
 import it.mat.unical.asde.project2_puzzle.model.Grid;
-import it.mat.unical.asde.project2_puzzle.model.GridToComplete;
+import it.mat.unical.asde.project2_puzzle.model.services_utility.RunningGame;
 
 @Service
-public class GameService{
-    Grid grid;
-    GridToComplete matrixToComplete;
+public class GameService {
+	HashMap<Integer, Grid> initalGrids = new HashMap<>();
+	HashMap<Integer, RunningGame> runningGames = new HashMap<>();
 
-    public boolean check_completation(){
-        return matrixToComplete.checkPuzzleTermination();
-    }
+	public Grid initNewGame(Integer gameId) {
+		if (!initalGrids.containsKey(gameId)) {
+			initalGrids.put(gameId, new Grid(0, "Gatto"));
+			if (!runningGames.containsKey(gameId))
+				runningGames.put(gameId, new RunningGame(initalGrids.get(gameId).getDim()));
+			return initalGrids.get(gameId);
+		}
+		return initalGrids.remove(gameId);
+	}
 
-    public Grid getRandomGrid(){
-        return grid;
-    }
+	public void updateStateGame(Integer gameId, String player, String old_location, int old_position,
+			String new_location, int new_position, String piece) {
+		runningGames.get(gameId).updateSateGame(player, old_location, old_position, new_location, new_position, piece);
+	}
 
-    @PostConstruct
-    public void init(){
-        grid = new Grid(0, "Gatto");
-        matrixToComplete = new GridToComplete(grid.getDim());
-    }
-
-    public void updateStateGame(String old_location,int old_position,String new_location,int new_position,String piece){
-        if (old_location.equals("to_complete"))
-            matrixToComplete.removePiece(piece, old_position);
-        if (new_location.equals("to_complete"))
-            matrixToComplete.insertPiece(piece, new_position);
-        if (check_completation())
-            System.out.println("WIN");
-    }
+	public Integer getProgressFor(Integer gameId, String player) {
+		return runningGames.get(gameId).getProgress(player);
+	}
 }
