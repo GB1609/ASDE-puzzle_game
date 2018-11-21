@@ -1,0 +1,52 @@
+#lobbies_div {
+	border: none;
+	padding: 5px;
+	font: 24px/36px sans-serif;
+	height: 500px;
+	overflow: scroll;
+}
+
+a {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+<!--
+****************************************************-->
+	/****** SEARCH MODAL ******/ 
+
+.login-help {
+	font-size: 12px;
+}
+
+.modal-open .modal {
+	overflow-x: hidden;
+	overflow-y: auto;
+	display: block;
+	width: fit-content;
+	height: fit-content;
+	background-color: rgba(0,0,0,0.8);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: 0px 2px 2px black;
+}
+
+.create_modal-container {
+	padding: 12px;
+    border-radius: 2px;
+/*     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.7);
+ */    overflow: hidden;
+    width: 100% !important;
+    margin: auto;
+}
+
+.create_modal-container>h1 {
+	color:white;
+}
+
+
+.modal.fade.show{
+	padding: 20px;
+}

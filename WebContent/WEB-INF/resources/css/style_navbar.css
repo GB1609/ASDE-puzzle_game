@@ -1,58 +1,66 @@
 .wsmenucontainer {
-  background-size: cover;
-  background-image: url(../images/bg01-2.jpg);
-  overflow: auto;
-  -webkit-background-attachment: fixed !important;
-  -moz-background-attachment: fixed !important;
-  background-attachment: fixed !important;
-  background-position: 50% 0;
-  background-repeat: no-repeat;
-  -webkit-transition: none;
-  -moz-transition: none;
-  -o-transition: none;
-  -ms-transition: none;
-  transition: none;
+	background-size: cover;
+	background-image: url(../images/bg01-2.jpg);
+	overflow: auto;
+	-webkit-background-attachment: fixed !important;
+	-moz-background-attachment: fixed !important;
+	background-attachment: fixed !important;
+	background-position: 50% 0;
+	background-repeat: no-repeat;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	-ms-transition: none;
+	transition: none;
 }
+
 .wsmenucontainer {
-  overflow: auto;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -webkit-transition: all 0.4s ease-in-out;
-  -moz-transition: all 0.4s ease-in-out;
-  -o-transition: all 0.4s ease-in-out;
-  -ms-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
+	overflow: auto;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-ms-backface-visibility: hidden;
+	-webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-ms-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
-.wsmenucontainer{
-  overflow: auto;
-  display: block;
+
+.wsmenucontainer {
+	overflow: auto;
+	display: block;
 }
- .navbar {
-  min-height: 70px;
+
+.navbar {
+	min-height: 70px;
 }
 
 .navbar-brand {
-  padding: 0 15px;
-  height: 70px;
-  line-height: 70px;
+	padding: 0 15px;
+	height: 70px;
+	line-height: 70px;
 }
 
 .navbar-toggle {
-  /* (80px - button height 34px) / 2 = 23px */
-  margin-top: 23px;
-  padding: 9px 10px !important;
+	/* (80px - button height 34px) / 2 = 23px */
+	margin-top: 23px;
+	padding: 9px 10px !important;
 }
 
-@media (min-width: 768px) {
-  .navbar-nav > li > a {
-    /* (80px - line-height of 27px) / 2 = 26.5px */
-    padding-top: 26.5px;
-    padding-bottom: 26.5px;
-    line-height: 27px;
-  }
+@media ( min-width : 768px) {
+	.navbar-nav>li>a {
+		/* (80px - line-height of 27px) / 2 = 26.5px */
+		padding-top: 26.5px;
+		padding-bottom: 26.5px;
+		line-height: 27px;
+	}
 }
+
 .myNav {
 	background-color: rgba(0, 0, 0, 0.35);
 	/*margin-bottom: 30px;*/
+}
+
+.hidden-field {
+	display: none;
 }
