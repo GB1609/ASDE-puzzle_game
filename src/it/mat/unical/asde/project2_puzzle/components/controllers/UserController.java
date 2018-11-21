@@ -28,8 +28,8 @@ public class UserController {
 	public String index(HttpSession session, Model model) {
 
 		if (session.getAttribute("username") != null) {
+//			return "lobby";
 			return goToUserProfile((String) session.getAttribute("username"), model);
-			// return "userProfile";
 		}
 		return "index";
 	}
@@ -91,7 +91,6 @@ public class UserController {
 		if (session.getAttribute("username") != null) {
 			String username = (String) session.getAttribute("username");
 			return goToUserProfile(username, model);
-			// return "userProfile";
 		}
 		return "index";
 	}
@@ -127,6 +126,7 @@ public class UserController {
 		model.addAttribute("firstname", user.getFirstName());
 		model.addAttribute("lastname", user.getLastName());
 		model.addAttribute("password", credentials.getPassword());
+		model.addAttribute("matches", accountService.getMatches(username));
 
 		return "userProfile";
 	}

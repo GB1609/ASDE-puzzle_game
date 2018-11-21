@@ -23,8 +23,8 @@ public class MatchDAO {
 
 	@PostConstruct
 	public void init() {
-		dbManager.save(new Match("Ciccio", "Giovanni", 0));
-		dbManager.save(new Match("Giovanni","Ciccio", 1));
+		dbManager.save(new Match("Ciccio", "Giovanni", 0,132));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
 	}
 
 	public boolean save(Match match) {

@@ -1,5 +1,6 @@
 var overview, overviewDiv;
 var settings, settingsDiv;
+var matchHistory, matchHistoryDiv;
 var showPasswordLabel;
 var password;
 
@@ -12,6 +13,10 @@ $(document).ready(function() {
 	settings = $('#settings-button');
 	settingsDiv = $('#settings-div');
 	settings.click(settingsClick);
+	matchHistory = $('li[class = matchHistory-button]');
+	matchHistoryDiv = $('#matchHistory-div');
+	matchHistory.click(matchClick);
+	
 	showPasswordLabel = $('#showPassLabel');
 	password = document.getElementById("password").value;
 	getFields();
@@ -31,12 +36,20 @@ function settingsClick(e) {
 	settingsDiv.toggleClass('hidden');
 	e.preventDefault();
 }
+function matchClick(e) {
+	hideAll();
+	matchHistory.addClass('active');
+	matchHistoryDiv.toggleClass('hidden');
+	e.preventDefault();
+}
 
 function hideAll() {
 	overviewDiv.addClass('hidden');
 	overview.removeClass('active');
 	settingsDiv.addClass('hidden');
 	settings.removeClass('active');
+	matchHistoryDiv.addClass('hidden');
+	matchHistory.removeClass('active');
 
 }
 
