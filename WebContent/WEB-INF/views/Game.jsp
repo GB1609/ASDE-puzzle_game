@@ -16,46 +16,49 @@
 }
 </style>
 <script type="text/javascript">
-	$(document).ready(
-			function() {
-				var progress=10.0;
-				var current_progress = 0;
-				if($("#difficulty").val()==="cinque"){
-					progress=100/25;
-				}
-				
-				
-				/*$.ajax({
-					url : "get_progress",
-					type: "post",
-					success : function(result) {
-						$("#dynamic").css("width", result + "%")
-						.attr("aria-valuenow", result).text(
-								result + "% Complete");
-						getEventsFromServer();
-					},
-					error : function() {
-						//call events again after some time
-						setTimeout(function() {
-							getEventsFromServer();
-						}, 5000);
-					}
-				});*/
-				
-				$(function() {
-					var current_progress = 0;
-					var interval = setInterval(function() {
-						current_progress += progress;
-						$("#dynamic").css("width", current_progress + "%")
-								.attr("aria-valuenow", current_progress).text(
-										current_progress + "% Complete");
-						if (current_progress >= 100)
-							clearInterval(interval);
-					}, 1000);
-				});
+	function getEventsFromServer() {
+		$.ajax({
+			url : "get_progress",
+			type : "post",
+			data : ({
+				"gameId" : "1"
+			}),
+			success : function(result) {
+				alert(result);
 
+				$("#dynamic").css("width", result + "%").attr("aria-valuenow",
+						result).text(result + "% Complete");
+				getEventsFromServer();
+			},
+			error : function(e) {
+				alert(e.responseText);
+				setTimeout(function() {
+					getEventsFromServer();
+				}, 5000);
 			}
-			);
+		});
+	}
+	$(document).ready(function() {
+		getEventsFromServer();
+		/*var progress=10.0;
+		var current_progress = 0;
+		if($("#difficulty").val()==="cinque"){
+			progress=100/25;
+		}*/
+
+		/*$(function() {
+			var current_progress = 0;
+			var interval = setInterval(function() {
+				current_progress += progress;
+				$("#dynamic").css("width", current_progress + "%")
+						.attr("aria-valuenow", current_progress).text(
+								current_progress + "% Complete");
+				if (current_progress >= 100)
+					clearInterval(interval);
+			}, 1000);
+		});*/
+
+	});
 </script>
 </head>
 <body class="wsmenucontainer">
@@ -66,7 +69,8 @@
 				class="row justify-content-center align-items-center col-md-10 col-sm-12 col-xs-12">
 				<div class="row justify-content-center col-md-12">
 					<div class="board col-md-auto">
-						<input id="difficulty" class="hidden-field" value="${randomGrid.difficulty}" />
+						<input id="difficulty" class="hidden-field"
+							value="${randomGrid.difficulty}" />
 						<div id="initial_location" class="myGrid ${randomGrid.difficulty}">
 							<c:forEach items="${randomGrid.nameImages}" var="piece">
 								<span class="box_piece" ondrop="drop(event)"
