@@ -1,16 +1,50 @@
 package it.mat.unical.asde.project2_puzzle.model;
-public class User{
-    private String username;
 
-    public User(String username){
-        this.username = username;
-    }
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-    public String getUsername(){
-        return username;
-    }
+@Entity
+@Table
+public class User {
 
-    public void setUsername(String username){
-        this.username = username;
-    }
+	@Id
+	@Column(nullable=false,unique=true)
+	private String username;
+	@Column(nullable=false)
+	private String firstName;
+	@Column(nullable=false)
+	private String lastName;
+
+	public User(String username, String firstName, String lastName) {
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 }
