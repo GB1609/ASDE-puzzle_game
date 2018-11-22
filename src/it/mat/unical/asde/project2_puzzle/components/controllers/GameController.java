@@ -55,7 +55,7 @@ public class GameController {
 		DeferredResult<Integer> outputProgress = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
-				outputProgress.setResult(eventsService.nextEvent(gameId, player));
+				outputProgress.setResult(eventsService.nextEventProgress(gameId, player));
 			} catch (InterruptedException e) {
 				outputProgress.setResult(-1000);
 			}
