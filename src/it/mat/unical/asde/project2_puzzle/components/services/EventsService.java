@@ -21,8 +21,10 @@ public class EventsService {
 	}
 
 	public Boolean getEventJoin(String lobbyName) throws InterruptedException {
-		if (!join.containsKey(lobbyName))
-			join.put(lobbyName, new LinkedBlockingQueue<>());
+		if (!join.containsKey(lobbyName)) {
+			System.out.println("No listener attached for this lobby" + lobbyName);
+			return null;
+		}
 		Boolean b = join.get(lobbyName).poll(29, TimeUnit.SECONDS);
 		if (b != null)
 			join.remove(lobbyName);
@@ -33,7 +35,6 @@ public class EventsService {
 		if (!join.containsKey(lobbyName))
 			throw new RuntimeException("This lobby isn't present in the list");
 		join.get(lobbyName).put(true);
-
 	}
 
 	public void addEventFor(Integer gameID, String player, Integer progress) throws InterruptedException {
@@ -41,6 +42,14 @@ public class EventsService {
 		if (!events.containsKey(key))
 			events.put(key, new LinkedBlockingQueue<>());
 		events.get(key).put(progress);
+	}
+
+	public void attachListenerToJoin(String lobby_name) {
+
+		if (join.containsKey(lobby_name))
+			throw new RuntimeException("This lobby already has a listener attached" + lobby_name);
+		else
+			join.put(lobby_name, new LinkedBlockingQueue<>());
 	}
 
 }

@@ -12,6 +12,7 @@ import it.mat.unical.asde.project2_puzzle.model.Lobby;
 
 @Service
 public class LobbyService {
+	// TODO refactor: change structure from list to set in order to avoid for
 	List<Lobby> lobbies;
 
 	@PostConstruct
@@ -26,10 +27,11 @@ public class LobbyService {
 		return this.lobbies;
 	}
 
-	public void joinToLobby(String lobby_name, String username) {
+	public Integer joinToLobby(String lobby_name, String username) {
 		this.leaveIfInOtherLobby(username);
 		Lobby lobbyToJoin = this.getLobby(lobby_name, SearchBy.LOBBY_NAME);
 		lobbyToJoin.setGuest(username);
+		return lobbyToJoin.getLobbyID();
 	}
 
 	// user with "username" leave the lobby where it is
@@ -71,6 +73,17 @@ public class LobbyService {
 			}
 		}
 		return false;
+	}
+
+	public Integer destrucLobby(String lobby_name) {
+		for (Lobby lobby : this.lobbies) {
+			if (lobby.getName().equals(lobby_name)) {
+				Integer lobbyId = lobby.getLobbyID();
+				this.lobbies.remove(lobby);
+				return lobbyId;
+			}
+		}
+		return -1;
 	}
 
 	public boolean addLobby(Lobby newLobby) {

@@ -1,5 +1,7 @@
 package it.mat.unical.asde.project2_puzzle.components.controllers;
 
+import java.util.concurrent.ForkJoinPool;
+
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
@@ -10,9 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import it.mat.unical.asde.project2_puzzle.components.services.EventsService;
 import it.mat.unical.asde.project2_puzzle.components.services.LobbyService;
+import it.mat.unical.asde.project2_puzzle.components.services.SearchBy;
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
 
 @Controller
@@ -30,6 +34,7 @@ public class LobbyController {
 		JSONObject result = new JSONObject().put("error", false);
 		Lobby newLobby = new Lobby(lobby_name, (String) session.getAttribute("username"));
 		if (this.lobbyService.addLobby(newLobby)) {
+			eventService.attachListenerToJoin(lobby_name);
 			System.out.println("ADD LOBBY: true || info: " + newLobby);
 			// Can we avoid to use this line? redundant with that in the "showLobbies"
 			// method.
@@ -38,6 +43,8 @@ public class LobbyController {
 		System.out.println("ADD LOBBY: false || info: " + newLobby);
 		return result.put("error", true).put("err_msg", "Lobby with name " + lobby_name + " already exists").toString();
 	}
+
+	// TODO DETACH LISTENER FOR LOBBY DELETED
 
 	@PostMapping("delete_lobby_by_name")
 	@ResponseBody
@@ -56,11 +63,12 @@ public class LobbyController {
 	}
 
 	@PostMapping("join_lobby")
-	@ResponseBody
 	public String joinLobby(Model model, HttpSession session, @RequestParam String lobby_name) {
 		JSONObject result = new JSONObject().put("error", false);
 		String username = (String) session.getAttribute("username");
-		this.lobbyService.joinToLobby(lobby_name, username);
+		Integer lobbyID = this.lobbyService.joinToLobby(lobby_name, username);
+		session.setAttribute("gameId", lobbyID);
+		session.setAttribute("player", "player2");
 		try {
 			this.eventService.addEventJoin(lobby_name);
 		} catch (Exception e) {
@@ -68,7 +76,7 @@ public class LobbyController {
 			System.out.println("I can't join to lobby" + lobby_name);
 		}
 		System.out.println("User: " + username + " join to Lobby: " + lobby_name);
-		return result.toString();
+		return "redirect:game";
 	}
 
 	@PostMapping("search_lobby")
@@ -90,6 +98,34 @@ public class LobbyController {
 	public String showLobbies(Model model) {
 		model.addAttribute("lobbies", this.lobbyService.getLobbies());
 		return "lobby";
+	}
+
+	@PostMapping("check_join")
+	@ResponseBody
+	public DeferredResult<Boolean> checkJoin(@RequestParam String lobby_name, HttpSession session) {
+		DeferredResult<Boolean> joins = new DeferredResult<>();
+		ForkJoinPool.commonPool().submit(() -> {
+			try {
+				joins.setResult(eventService.getEventJoin(lobby_name));
+			} catch (InterruptedException e) {
+				joins.setResult(null);
+			}
+		});
+
+		return joins;
+	}
+
+	@PostMapping("forward_to_game")
+	public String forwardToGame(@RequestParam String lobby_name, HttpSession session) {
+
+		Integer lobbyID = lobbyService.destrucLobby(lobby_name);
+		if (lobbyID.equals(-1))
+			throw new RuntimeException("no lobby found");
+
+		session.setAttribute("gameId", lobbyID);
+		session.setAttribute("player", "player1");
+
+		return "redirect:game";
 	}
 }
 
