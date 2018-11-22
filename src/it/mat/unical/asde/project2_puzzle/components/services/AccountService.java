@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import it.mat.unical.asde.project2_puzzle.components.persistence.MatchDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
@@ -29,10 +30,6 @@ public class AccountService {
 	}
 
 	public boolean accountCreated(String firstName, String lastName, String username, String password) {
-		System.out.println(firstName);
-		System.out.println(lastName);
-		System.out.println(username);
-		System.out.println(password);
 		boolean value = credentialsDAO.save(new Credentials(username, password));
 		if (value)
 			value = userDAO.save(new User(username, firstName, lastName));
@@ -61,5 +58,15 @@ public class AccountService {
 		if (status)
 			status = credentialsDAO.updateUserPassword(password, username);
 		return status;
+	}
+
+	public void fillUserInformation(String username, Model model) {
+		User user = getUser(username);
+		Credentials credentials = getCredentials(username);
+		model.addAttribute("firstname", user.getFirstName());
+		model.addAttribute("lastname", user.getLastName());
+		model.addAttribute("password", credentials.getPassword());
+		model.addAttribute("matches", getMatches(username));
+
 	}
 }

@@ -34,6 +34,9 @@ img {
 	max-width: 100%;
 }
 
+.hidden {
+	/*display: none !important;*/
+}
 input, textarea {
 	font-family: "PT Sans", sans-serif;
 	font-size: 16px;
@@ -194,7 +197,6 @@ xsigin/signup popup
 	left: 0;
 	width: 100%;
 	height: 100%;
-	
 	z-index: 3;
 	overflow-y: auto;
 	cursor: pointer;
@@ -539,4 +541,3 @@ xsigin/signup popup
 	{
 	display: block;
 }
-

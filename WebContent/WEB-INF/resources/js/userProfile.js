@@ -137,8 +137,7 @@ function update() {
 			else
 				alert("Something goes wrong!!!");
 
-			var go = window.location.href + "goToProfileSettings";
-			window.location.href = "goToProfileSettings";
+			window.location.href = "userProfile";
 		},
 		error : function(data) {
 			alert("Something goes wrong!!!")

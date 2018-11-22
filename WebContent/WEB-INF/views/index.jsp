@@ -29,35 +29,25 @@
 				<li><a href="#0">New account</a></li>
 			</ul>
 
-<input id=failed value="${creationFailed}" style="display: none">
+			<input id=failed value="${creationFailed}" style="display: none">
+			<input id=failedLogin value="${loginFailed}" style="display: none">
 			<div id="cd-login">
 				<!-- log in form -->
 
-				<form id="login-form" class="cd-form" action="login">
+				<form id="login-form" class="cd-form" action="login" onsubmit="return checkSigninFields();">
 					<p class="fieldset">
 						<label class="image-replace cd-username" for="username">Username</label>
 						<input class="full-width has-padding has-border"
 							id="signin-username" type="text" placeholder="Username"
-							name="username"> 
-						<c:if test="${not empty loginFailed}">
-						<span class="cd-error-message is-selected;">${loginFailed}</span>
-						</c:if>
-						<c:if test="${not empty loginFailed1}">
-						<span class="cd-error-message is-selected;">${loginFailed1}</span>
-						</c:if>
-						
+							name="username">
+							<span class="cd-error-message"></span>
 					</p>
 					<p class="fieldset">
 						<label class="image-replace cd-password" for="signin-password">Password</label>
 						<input class="full-width has-padding has-border"
-							id="signin-password" type="text" placeholder="Password"
-							name="password"> <a href="#0" class="hide-password">Hide</a>
-						<!--<c:if test="${not empty loginFailed}">
-						<span class="cd-error-message is-selected;">${loginFailed}</span>
-						</c:if> -->
-						<c:if test="${not empty loginFailed2}">
-						<span class="cd-error-message is-selected;">${loginFailed2}</span>
-						</c:if>
+							id="signin-password" type="password" placeholder="Password"
+							name="password"> <a href="#0" class="hide-password">Show</a>
+							<span class="cd-error-message"></span>
 					</p>
 					<p class="fieldset">
 						<input class="full-width" type="submit" value="Login">
@@ -68,46 +58,39 @@
 			</div>
 			<!-- cd-login -->
 
+
+
+
+
 			<div id="cd-signup">
 				<!-- sign up form -->
-				<form id="reg_form" action="creationAccount" class="cd-form">
+				<form id="reg_form" action="creationAccount" class="cd-form"
+					onsubmit="return checkSignupFields();">
 					<p class="fieldset">
-						<label class="image-replace cd-username" for="firstName">First Name</label>
-						<input class="full-width has-padding has-border"
-							id="signup-username" type="text" placeholder="First Name"
-							name="firstName"> 
-							<c:if test="${not empty creationFailedValue1}">
-						<span class="cd-error-message">${creationFailed}</span>
-						</c:if>
+						<label class="image-replace cd-username" for="firstName">First
+							Name</label> <input class="full-width has-padding has-border"
+							id="signup-firstname" type="text" placeholder="First Name"
+							name="firstName"> <span class="cd-error-message"></span>
+
 					</p>
 					<p class="fieldset">
-						<label class="image-replace cd-username" for="lastName">Last Name</label>
-						<input class="full-width has-padding has-border"
+						<label class="image-replace cd-username" for="lastName">Last
+							Name</label> <input class="full-width has-padding has-border"
 							id="signup-lastname" type="text" placeholder="Last Name"
-							name="lastName"> 
-							<c:if test="${not empty creationFailedValue2}">
-						<span class="cd-error-message">${creationFailed}</span>
-						</c:if>
+							name="lastName"> <span class="cd-error-message"></span>
 					</p>
 					<p class="fieldset">
 						<label class="image-replace cd-username" for="username">Username</label>
 						<input class="full-width has-padding has-border"
 							id="signup-username" type="text" placeholder="Username"
-							name="username"> 
-							<c:if test="${not empty creationFailedValue3}">
-						<span class="cd-error-message">${creationFailed}</span>
-						</c:if>
+							name="username"> <span class="cd-error-message"></span>
 					</p>
 					<p class="fieldset">
 						<label class="image-replace cd-password" for="password">Password</label>
 						<input class="full-width has-padding has-border"
-							id="signup-password" type="text" placeholder="Password"
-							name="password"> 
-							<a href="#0" class="hide-password">
-							Hide</a>
-							<c:if test="${not empty creationFailedValue4}">
-						<span class="cd-error-message">${creationFailed}</span>
-						</c:if>
+							id="signup-password" type="password" placeholder="Password"
+							name="password"> <a href="#0" class="hide-password">
+							Show</a> <span class="cd-error-message"></span>
 					</p>
 
 					<p class="fieldset">
@@ -119,7 +102,7 @@
 			<!-- cd-signup -->
 
 
-		<!--  <a href="#0" class="cd-close-form">Close</a>-->	
+			<!--  <a href="#0" class="cd-close-form">Close</a>-->
 		</div>
 		<!-- cd-user-modal-container -->
 	</div>
