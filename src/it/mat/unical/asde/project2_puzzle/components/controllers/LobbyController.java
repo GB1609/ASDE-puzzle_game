@@ -2,6 +2,7 @@ package it.mat.unical.asde.project2_puzzle.components.controllers;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,64 +24,41 @@ public class LobbyController {
 	@Autowired
 	EventsService eventService;
 
-	@GetMapping("lobby")
-	public String showLobbies(Model model) {
-		model.addAttribute("lobbies", this.lobbyService.getLobbies());
-		return "lobby";
-	}
-
-	@GetMapping("create_lobby")
+	@PostMapping("create_lobby")
+	@ResponseBody
 	public String createLobby(Model model, HttpSession session, @RequestParam String lobby_name) {
+		JSONObject result = new JSONObject().put("error", false);
 		Lobby newLobby = new Lobby(lobby_name, (String) session.getAttribute("username"));
-		if (!this.lobbyService.addLobby(newLobby)) {
-			System.out.println("ADD LOBBY: false || info: " + newLobby);
-			model.addAttribute("error", "Lobby with this name already exists");
-
+		if (this.lobbyService.addLobby(newLobby)) {
+			System.out.println("ADD LOBBY: true || info: " + newLobby);
 			// Can we avoid to use this line? redundant with that in the "showLobbies"
 			// method.
-			model.addAttribute("lobbies", this.lobbyService.getLobbies());
-
-			return "lobby";
+			return result.toString();
 		}
-		System.out.println("ADD LOBBY: true || info: " + newLobby);
-		return "redirect:/";
+		System.out.println("ADD LOBBY: false || info: " + newLobby);
+		return result.put("error", true).put("err_msg", "Lobby with name " + lobby_name + " already exists").toString();
 	}
 
-	@GetMapping("search_lobby_by_name")
-	public String searchLobbyByName(Model model, @RequestParam String lobby_name) {
-		Lobby newLobby = this.lobbyService.getLobbyByName(lobby_name);
-		System.out.println("Search lobby with name: " + lobby_name + ".");
-		if (newLobby != null) {
-			// lobby with name "lobby_name" founded
-			System.out.println("Lobby found: " + newLobby);
-
-			return "redirect:/";
+	@PostMapping("delete_lobby_by_name")
+	@ResponseBody
+	public String deleteLobbyByName(Model model, @RequestParam String lobby_name) {
+		JSONObject result = new JSONObject().put("error", false);
+		boolean deleted = this.lobbyService.removeLobbyByName(lobby_name);
+		System.out.println("DELETED lobby with name: " + lobby_name + ".");
+		if (deleted) {
+			System.out.println("Lobby Successfully deleted: " + lobby_name);
+			return result.toString();
 		}
-		// No lobby found with given name
-		System.out.println("Lobby NOT found !!!");
-		model.addAttribute("error_lobby_search", "Lobby with name " + lobby_name + " not found");
-		return "lobby";
-	}
-
-	@GetMapping("search_lobby_by_username")
-	public String searchLobbyByUsername(Model model, @RequestParam String user_name) {
-		Lobby newLobby = this.lobbyService.getLobbyByUsername(user_name);
-		System.out.println("Search lobby with owner: " + user_name + ".");
-		if (newLobby != null) {
-			// lobby with name "lobby_name" founded
-			System.out.println("Lobby found: " + newLobby);
-
-			return "redirect:/";
-		}
-		// No lobby found with given name
-		System.out.println("Lobby NOT found !!!");
-		model.addAttribute("error_lobby_search", "Lobby with owner " + user_name + " not found");
-		return "lobby";
+		System.out.println("Lobby NOT deleted !!!");
+		return result.put("error", true)
+				.put("err_msg", "Lobby with name " + lobby_name + " not deleted! An error occured on the server")
+				.toString();
 	}
 
 	@PostMapping("join_lobby")
 	@ResponseBody
-	public void joinLobby(Model model, HttpSession session, @RequestParam String lobby_name) {
+	public String joinLobby(Model model, HttpSession session, @RequestParam String lobby_name) {
+		JSONObject result = new JSONObject().put("error", false);
 		String username = (String) session.getAttribute("username");
 		this.lobbyService.joinToLobby(lobby_name, username);
 		try {
@@ -90,19 +68,28 @@ public class LobbyController {
 			System.out.println("I can't join to lobby" + lobby_name);
 		}
 		System.out.println("User: " + username + " join to Lobby: " + lobby_name);
+		return result.toString();
 	}
 
-	@PostMapping("delete_lobby_by_name")
+	@PostMapping("search_lobby")
 	@ResponseBody
-	public void deleteLobbyByName(Model model, @RequestParam String lobby_name) {
-		boolean deleted = this.lobbyService.removeLobbyByName(lobby_name);
-		System.out.println("DELETED lobby with name: " + lobby_name + ".");
-		if (deleted) {
-			System.out.println("Lobby Successfully deleted: " + lobby_name);
-			return;
+	public String searchLobby(Model model, @RequestParam String search_txt, @RequestParam String search_by) {
+		JSONObject result = new JSONObject().put("error", false);
+		Lobby newLobby = this.lobbyService.getLobby(search_txt, SearchBy.valueOf(search_by));
+		System.out.println("Search lobby by " + search_by + ": " + search_txt + ".");
+		if (newLobby != null) {
+			// lobby with name "lobby_name" founded
+			System.out.println("Lobby found: " + newLobby);
+			return result.toString();
 		}
-		System.out.println("Lobby NOT deleted !!!");
-		model.addAttribute("error_lobby_delete", "Lobby with name " + lobby_name + " not deleted");
+		System.out.println("Lobby NOT found !!!");
+		return result.put("error", true).put("err_msg", "Lobby with owner " + search_txt + " not found").toString();
+	}
+
+	@GetMapping("lobby")
+	public String showLobbies(Model model) {
+		model.addAttribute("lobbies", this.lobbyService.getLobbies());
+		return "lobby";
 	}
 }
 
@@ -112,4 +99,9 @@ public class LobbyController {
  * -fix search of lobby by user and name
  *
  * -fix create and search lobby methods. must update only lobbies_div with ajax
+ *
+ * TODO:
+ *
+ * -fix modal create lobby
+ *
  */

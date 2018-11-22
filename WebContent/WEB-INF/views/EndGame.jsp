@@ -6,7 +6,7 @@
 			<head>
 				<meta charset="ISO-8859-1">
 					<%@include file="includes/includes.jsp"%>
-						<link rel="stylesheet" type="text/css" media="all" href="resources/css/end_game.css"/>
+						<link rel="stylesheet" type="text/css" media="all" href="resources/css/style_end_game.css"/>
 						<title>Game End</title>
 					</head>
 					<body class="wsmenucontainer">

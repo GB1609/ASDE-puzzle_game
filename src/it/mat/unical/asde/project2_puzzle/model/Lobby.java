@@ -1,68 +1,65 @@
 package it.mat.unical.asde.project2_puzzle.model;
+public class Lobby{
+    private String name;
+    private String owner;
+    private String guest;
 
-public class Lobby {
+    public Lobby(String name){
+        super();
+        this.name = name;
+    }
 
-	private String name;
-	private String owner;
-	private String guest;
+    public Lobby(String name,String owner){
+        super();
+        this.name = name;
+        this.owner = owner;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public Lobby(String name,String owner,String guest){
+        super();
+        this.name = name;
+        this.owner = owner;
+        this.guest = guest;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public boolean equals(Object obj){
+        // Two lobbies are equals if they have the same "name"
+        // In this way a user can search lobbies by "name"
+        return name.equals(((Lobby) obj).getName());
+    }
 
-	public Lobby(String name) {
-		super();
-		this.name = name;
-	}
+    public String getGuest(){
+        return guest;
+    }
 
-	public Lobby(String name, String owner) {
-		super();
-		this.name = name;
-		this.owner = owner;
-	}
+    public String getName(){
+        return name;
+    }
 
-	public Lobby(String name, String owner, String guest) {
-		super();
-		this.name = name;
-		this.owner = owner;
-		this.guest = guest;
-	}
+    public String getOwner(){
+        return owner;
+    }
 
-	public String getOwner() {
-		return this.owner;
-	}
+    @Override
+    public int hashCode(){
+        return name.hashCode();
+    }
 
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
+    public void setGuest(String guest){
+        this.guest = guest;
+    }
 
-	public String getGuest() {
-		return this.guest;
-	}
+    public void setName(String name){
+        this.name = name;
+    }
 
-	public void setGuest(String guest) {
-		this.guest = guest;
-	}
+    public void setOwner(String owner){
+        this.owner = owner;
+    }
 
-	@Override
-	public String toString() {
-		return "Lobby [name=" + this.name + ", owner=" + this.owner + ", guest=" + this.guest + "]";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		// Two lobbies are equals if they have the same "name"
-		// In this way a user can search lobbies by "name"
-		return this.name.equals(((Lobby) obj).getName());
-	}
-
-	@Override
-	public int hashCode() {
-		return this.name.hashCode();
-	}
-
+    @Override
+    public String toString(){
+        return "Lobby [name=" + name + ", owner=" + owner + ", guest=" + guest + "]";
+    }
 }
