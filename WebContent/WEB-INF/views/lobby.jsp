@@ -21,8 +21,8 @@
 						data-toggle="modal" data-target="#create-modal">Create</a>
 				</div>
 				<div class="modal fade" id="create-modal" tabindex="-1"
-					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-					style="display: none;">
+					role="dialog" aria-hidden="true" style="display: none;">
+
 					<div class="modal-dialog">
 						<div class="create_modal-container">
 							<h1>Create your lobby</h1>
@@ -31,7 +31,7 @@
 								<div class="form-group">
 									<label for="lobby_name_text" style="color: white;">Lobby's
 										name:</label> <input type="text" class="form-control"
-										id="id_lobby_name" >
+										id="id_lobby_name"> <br>
 									<button type="button" onclick="createLobby()"
 										class="btn btn-warning btn-sm">Create</button>
 								</div>
@@ -39,7 +39,6 @@
 						</div>
 					</div>
 				</div>
-				<!-- ******************************************* -->
 				<div class="dropdown col">
 					<button type="button"
 						class="btn btn-warning btn-lg dropdown-toggle button-in-row"
@@ -61,21 +60,12 @@
 								</div>
 							</div>
 						</form>
-						<!-- <form action="search_lobby_by_username">
-							<div class="form-group row">
-								<input type="text" class="form-control" id="id_user_name"
-									name="user_name" placeholder="Username">
-								
-							</div>
-						</form> -->
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row center-content-row">
-			<div class="row col-md-10">
-				<!-- Grid column -->
-				<!-- Exaple 1 -->
+			<div class="row col-md-10 lobbyesBox">
 				<div id="lobbies_div" class=" card scrollbar-ripe-malinka">
 					<div class="card-body">
 						<c:if test="${not empty error}">
@@ -99,12 +89,16 @@
 												<c:when test="${not empty lobby.owner}">${lobby.owner}</c:when>
 												<c:otherwise>empty</c:otherwise>
 											</c:choose>
-											VS <img src="resources/images/avatar.svg" class="img-circle"
-												height="64" width="64" alt="Avatar">
+											<img
+												style="max-height: 1cm; max-width: 1cm; margin-left: 0%;"
+												src="resources/img/vs.jpg">
 											<c:choose>
 												<c:when test="${not empty lobby.guest}">${lobby.guest}</c:when>
 												<c:otherwise>empty</c:otherwise>
 											</c:choose>
+											<img src="resources/images/avatar.svg" class="img-circle"
+												height="64" width="64" alt="Avatar">
+
 											<c:choose>
 												<c:when test="${sessionScope.username eq lobby.owner}">
 													<button type="button" onclick="startGame()"
@@ -112,7 +106,7 @@
 												</c:when>
 												<c:otherwise>
 													<button type="button" onclick="joinLobby()"
-														class="btn btn-primary float-right">Join</button>
+														class="btn btn-warning btn-lg float-right">Join</button>
 												</c:otherwise>
 											</c:choose>
 										</div>

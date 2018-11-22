@@ -57,6 +57,7 @@ function createLobby(ev) {
 		success : function(resultData) {
 			console.log("lobby create ok: " + resultData);
 			refreshDivByID(resultData, "lobbies_div");
+			$('#create-modal').hide();
 		},
 		error : function(e) {
 			alert(e.responseText);
