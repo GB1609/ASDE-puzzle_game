@@ -3,10 +3,6 @@ a {
 	text-decoration: inherit;
 }
 
-.login-help {
-	font-size: 12px;
-}
-
 .modal-open .modal {
 	overflow-x: hidden;
 	overflow-y: auto;

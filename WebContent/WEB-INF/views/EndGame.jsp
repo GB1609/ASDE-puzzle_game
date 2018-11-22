@@ -12,38 +12,38 @@
 </head>
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
-	<div class="panel panel-default col-sm-6 centered">
-		<div class='panel panel-heading text-center'>Lobby Name</div>
+	<div class="panel panel-default col-sm-6">
+		<div class='panel panel-heading text-center'><strong>Lobby Name</strong></div>
 		<div class='panel-body'>
 			<ul class="list-group">
-				<li class="list-group-item text-center">Game Finished</li>
+				<li class="list-group-item text-center card-with-shadow">Game Finished</li>
 				<c:set var="win" value="${false}" />
 				<c:choose>
 					<c:when test="${win}">
-						<li class="list-group-item text-center">Hai Vinto</li>
+						<li class="list-group-item text-center card-with-shadow " style="background:#004d00;">Congrats, you win!</li>
 					</c:when>
 					<c:otherwise>
-						<li class="list-group-item text-center">Hai perso</li>
+						<li class="list-group-item text-center card-with-shadow"  style="background:#B90000;">Sorry, you are very stupid. You lose.</li>
 					</c:otherwise>
 				</c:choose>
 			</ul>
 			<div class="row">
 				<div class='col-sm-6 text-center'>
 					<ul class="list-group">
-						<li class="list-group-item"><img class='team-icon'
+						<li class="list-group-item card-with-shadow"><img class='team-icon'
 							src='http://fakeimg.pl/100x100/?text=Team 1&font=lobster'
 							width='64' height='64'></li>
-						<li class="list-group-item">Player 1</li>
-						<li class="list-group-item">Tempo impiegato: 1</li>
+						<li class="list-group-item card-with-shadow">Player 1</li>
+						<li class="list-group-item card-with-shadow">Tempo impiegato: 1</li>
 					</ul>
 				</div>
 				<div class='col-sm-6 text-center'>
 					<ul class="list-group">
-						<li class="list-group-item"><img class='team-icon'
+						<li class="list-group-item card-with-shadow"><img class='team-icon'
 							src='http://fakeimg.pl/100x100/?text=Team 2&font=lobster'
 							width='64' height='64'></li>
-						<li class="list-group-item">Player 2</li>
-						<li class="list-group-item">Tempo impiegato: 2</li>
+						<li class="list-group-item card-with-shadow">Player 2</li>
+						<li class="list-group-item card-with-shadow">Tempo impiegato: 2</li>
 					</ul>
 				</div>
 			</div>
