@@ -17,6 +17,10 @@ public class User {
 	@Column(nullable=false)
 	private String lastName;
 
+	public User() {
+		super();
+	}
+	
 	public User(String username, String firstName, String lastName) {
 		this.username = username;
 		this.firstName = firstName;

@@ -17,7 +17,6 @@
 <!-- Modernizr -->
 <script src="resources/js/main.js"></script>
 <!-- Gem jQuery -->
-<script type="text/javascript" src="resources/js/script.js"></script>
 </head>
 
 <body class="wsmenucontainer">
