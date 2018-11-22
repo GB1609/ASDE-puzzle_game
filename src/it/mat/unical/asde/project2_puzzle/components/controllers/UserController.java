@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import it.mat.unical.asde.project2_puzzle.components.services.AccountService;
 
-
 @Controller
 public class UserController {
 
@@ -45,7 +44,7 @@ public class UserController {
 
 		if (accountService.loginAccepted(username, password)) {
 			session.setAttribute("username", username);
-			return "redirect:/";
+			return goToProfileSettings(session, model);
 		}
 
 		model.addAttribute("loginFailed", "Username or Password wrong!");
@@ -67,8 +66,8 @@ public class UserController {
 	@GetMapping("userProfile")
 	public String goToProfileSettings(HttpSession session, Model model) {
 		if (session.getAttribute("username") != null) {
-			String username = (String) session.getAttribute("username");	
-			accountService.fillUserInformation(username,model);
+			String username = (String) session.getAttribute("username");
+			accountService.fillUserInformation(username, model);
 			return "userProfile";
 		}
 		return "index";

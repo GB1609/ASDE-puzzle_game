@@ -1,11 +1,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <li class="list-group-item col-md-12" id="lobby_row"
 	style="display: inline; margin-bottom: 0%; margin-top: 0%">
 	<fieldset class="fieldset col-md-12">
 		<div class="form-group col-md-12"
 			style="margin-bottom: 0%; margin-top: 0%">
 			<label class="col-md-3 control-label" for="firstname-field"
-				style="margin-left: 6%;"><c:choose>
+				style="margin-left: 6%;">
+				<c:choose>
 					<c:when test="${not empty match.user1}">${match.user1}</c:when>
 					<c:otherwise>empty</c:otherwise>
 				</c:choose> </label>
