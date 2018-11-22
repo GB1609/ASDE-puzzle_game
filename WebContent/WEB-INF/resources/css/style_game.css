@@ -64,7 +64,7 @@ span:hover {
 
 .game_info {
 	/*width:20vw;*/
-	left: 15px;
+	/* left: 15px; */
 	background-color: rgba(0, 0, 0, 0.35);
 }
 
@@ -93,13 +93,30 @@ span:hover {
 #dynamic {
 	height: 50px;
 	width: 100%;
-	pa
 }
 .minimal-row{
-	
     padding-left: 0px;
     margin-left: 0px;
     left:auto;
-    
-	
+}
+
+.card-with-shadow {
+	color: white;
+	background: #212529ba;
+	border-radius: 10px;
+	display: inline-block;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	padding: 1rem;
+	position: relative;
+	/* width: fit-content;*/
+	border-width: 5px;
+	border-style: outset;
+	border-color: black;
+	border-radius: 10px;
+	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px
+		rgba(0, 0, 0, 0.22);
+		margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
