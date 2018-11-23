@@ -27,13 +27,18 @@
 	background-color: rgba(0, 0, 0, .6);
 	width: 30vw;
 	height: 30vw;
-	min-width: 300px;
-	min-height: 300px;
+	min-width: 150px;
+	min-height: 150px;
 	overflow: hidden;
+	margin: 1%;
 	border: 12px solid #a2b9bc;
 	border-radius: 12px;
 	border-width: 5px;
 	border-style: outset;
+}
+
+#view {
+	margin: auto;
 }
 
 .box_piece {
