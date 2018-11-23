@@ -2,20 +2,31 @@ $(document).ready(function() {
 	// $('#base').addClass($('#base').attr('value'));
 });
 
-function joinLobby(ev) {
-	var lobby_name = $(document.activeElement).closest('#lobby_row').children(
-			'#lobby_name_div').text();
+function joinLobby(ev, id_lobby) {
+	var lobby_name = $("#"+id_lobby).children(
+	'#lobby_name_div').text();
 	console.log(lobby_name);
+	//alert("joinLobby NAME = "+lobby_name);
 	$.ajax({
 		url : "join_lobby",
 		type : "POST",
-		async : false,
 		data : ({
 			"lobby_name" : lobby_name
 		}),
+		complete: function(jqXHR, textStatus){
+				refreshDivByID( 'lobbies_list', id_lobby);
+				//putLobbyOnTop(id_lobby);
+			//alert("COMPLETE: " + textStatus);
+		},
 		success : function(resultData) {
 			console.log("join ok: " + resultData);
-			refreshDivByID(resultData, "lobbies_div");
+			var r = JSON.parse(resultData);
+			if (r.error) {
+				alert("ERROR: " + r.err_msg);
+			} else {
+				//refreshDivByID(resultData, 'lobbies_list', id_lobby);
+//				putLobbyOnTop(id_lobby);
+			}
 		},
 		error : function(e) {
 			alert(e.responseText);
@@ -58,6 +69,7 @@ function createLobby(ev) {
 			console.log("lobby create ok: " + resultData);
 			refreshDivByID(resultData, "lobbies_div");
 			$('#create-modal').hide();
+			putLobbyOnTop(id_lobby);
 		},
 		error : function(e) {
 			alert(e.responseText);
@@ -67,9 +79,7 @@ function createLobby(ev) {
 }
 
 function deleteLobby(ev) {
-	// ev.preventDefault();
-	// ev.target.appendChild(document.getElementById(data));
-	var lobby_name = $(document.activeElement).closest('#lobby_row').children(
+	var lobby_name = $(document.activeElement).closest('.lobby_row').children(
 			'#lobby_name_div').text();
 	console.log("ENTRATO IN START GAME lobby_name:" + lobby_name);
 	$.ajax({
@@ -104,7 +114,7 @@ function searchLobby(ev, searchBy) {
 		}),
 		success : function(resultData) {
 			console.log("lobby search ok: " + resultData);
-			refreshDivByID(resultData, "lobbies_div");
+			putLobbyOnTop(id_lobby);
 		},
 		error : function(ev) {
 			alert(e.responseText);
@@ -113,11 +123,30 @@ function searchLobby(ev, searchBy) {
 	});
 }
 
-function refreshDivByID(resultData, id_div) {
-	var r = JSON.parse(resultData);
+function refreshDivByID(/*resultData,*/ id_div, id_lobby_on_top) {
+	/*var r = JSON.parse(resultData);
 	if (r.error) {
 		alert("ERROR: " + r.err_msg);
-	} else {
-		$("#" + id_div).load(location.href + " #" + id_div + ">*", "");
-	}
+	} else {*/
+		simpleRefreshByID(id_div,id_lobby_on_top);
+//	}
 }
+
+function simpleRefreshByID(id_div,id_lobby_on_top){
+	//alert("SIMPLE refresh: "+id_div);
+	$("#" + id_div).load(location.href + " #" + id_div + ">*", "");
+	var row_copy = $("#"+id_lobby_on_top).clone();
+	var pos = row_copy.prevAll(".card-with-shadow").length;
+	//alert("PUT ON TOP....ELEMENT: "+lobby_row);
+	$("#"+id_lobby_on_top).remove();
+	$("#lobbies_list").prepend(row_copy);
+}
+
+function putLobbyOnTop(id_lobby){
+	var row_copy = $("#"+id_lobby).clone();
+	var pos = row_copy.prevAll(".card-with-shadow").length;
+	//alert("PUT ON TOP....ELEMENT: "+lobby_row);
+	$("#"+id_lobby).remove();
+	$("#lobbies_list").prepend(row_copy);
+}
+

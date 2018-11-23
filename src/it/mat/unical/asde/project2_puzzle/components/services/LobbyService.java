@@ -28,13 +28,14 @@ public class LobbyService {
 
 	public void joinToLobby(String lobby_name, String username) {
 		this.leaveIfInOtherLobby(username);
+		System.out.println("join to lobby: " + lobby_name);
 		Lobby lobbyToJoin = this.getLobby(lobby_name, SearchBy.LOBBY_NAME);
 		lobbyToJoin.setGuest(username);
 	}
 
 	// user with "username" leave the lobby where it is
 	public void leaveIfInOtherLobby(String username) {
-		System.out.println("LEAVE if in other lobby");
+		System.out.println("LEAVE if in other lobby: " + username);
 		for (int i = 0; i < this.lobbies.size(); i++) {
 			Lobby lobby = this.lobbies.get(i);
 			String guest = lobby.getGuest();
@@ -94,7 +95,7 @@ public class LobbyService {
 				condition = lobby.getOwner().equals(name);
 			}
 			if (condition) {
-				this.putLobbyOnTop(i);
+				// this.putLobbyOnTop(i);
 				return lobby;
 			}
 		}

@@ -16,6 +16,13 @@
 	<div align="center">
 		<div class="row center-content-row">
 			<div class="dropdown col-sm-6 row">
+				
+				<div class="col">
+					<button type="button"
+						class="btn btn-warning btn-lg button-in-row"
+						onclick="simpleRefreshByID('lobbies_div')">Refresh</button>
+				</div>
+				
 				<div class="create-btn col">
 					<a href="#" class="btn btn-warning btn-lg button-in-row "
 						data-toggle="modal" data-target="#create-modal">Create</a>
@@ -78,9 +85,9 @@
 							</div>
 						</c:if>
 						<c:if test="${not empty lobbies}">
-							<ul class="list-group">
+							<ul class="list-group" id="lobbies_list">
 								<c:forEach items="${lobbies}" var="lobby">
-									<li class="list-group-item card-with-shadow" id="lobby_row">
+									<li class="list-group-item card-with-shadow lobby_row" id="id_lobby_${lobby.name}">
 										<div class="text-center" id="lobby_name_div">${lobby.name}</div>
 										<div class=" text-center">
 											<img src="resources/images/avatar.svg" class="img-circle"
@@ -105,7 +112,7 @@
 														class="btn btn-primary float-right">Start</button>
 												</c:when>
 												<c:otherwise>
-													<button type="button" onclick="joinLobby()"
+													<button type="button" onclick="joinLobby(event,'id_lobby_${lobby.name}')"
 														class="btn btn-warning btn-lg float-right">Join</button>
 												</c:otherwise>
 											</c:choose>
