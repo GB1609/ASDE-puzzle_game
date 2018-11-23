@@ -1,7 +1,7 @@
 <form class="form-horizontal">
 	<fieldset class="fieldset">
 		<!-- Form Name -->
-		<div class="box-title main-title">
+		<div class="box-title main-title" style="border-bottom-style:none;">
 			<h2 style="text-align: center;">Account Settings</h2>
 		</div>
 		<!-- Text input Username -->

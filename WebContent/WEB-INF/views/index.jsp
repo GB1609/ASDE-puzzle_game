@@ -25,13 +25,13 @@
 		<div class="cd-user-modal-container">
 			<!-- this is the container wrapper -->
 			<ul class="cd-switcher" style="list-style: none;">
-				<li><a href="#0">Sign in</a></li>
-				<li><a href="#0">New account</a></li>
+				<li><a style="color: black; font-size: 20px;" href="#0">Sign in</a></li>
+				<li><a style="color: black; font-size: 20px;" href="#0">New account</a></li>
 			</ul>
 
 			<input id=failed value="${creationFailed}" style="display: none">
 			<input id=failedLogin value="${loginFailed}" style="display: none">
-			<div id="cd-login">
+			<div id="cd-login" style="background: rgba(0,0,0,0.45);">
 				<!-- log in form -->
 
 				<form id="login-form" class="cd-form" action="login" onsubmit="return checkSigninFields();">
@@ -50,7 +50,7 @@
 							<span class="cd-error-message"></span>
 					</p>
 					<p class="fieldset">
-						<input class="full-width" type="submit" value="Login">
+						<input class="full-width" type="submit" value="Login" style="color: black;">
 					</p>
 				</form>
 
@@ -62,7 +62,7 @@
 
 
 
-			<div id="cd-signup">
+			<div id="cd-signup" style="background: rgba(0,0,0,0.45);">
 				<!-- sign up form -->
 				<form id="reg_form" action="creationAccount" class="cd-form"
 					onsubmit="return checkSignupFields();">
@@ -95,7 +95,7 @@
 
 					<p class="fieldset">
 						<input class="full-width has-padding" type="submit"
-							value="Create account">
+							value="Create account" style="color: black;">
 					</p>
 				</form>
 			</div>
