@@ -13,19 +13,14 @@ function joinLobby(ev, id_lobby) {
 		data : ({
 			"lobby_name" : lobby_name
 		}),
-		complete: function(jqXHR, textStatus){
-				refreshDivByID( 'lobbies_list', id_lobby);
-				//putLobbyOnTop(id_lobby);
-			//alert("COMPLETE: " + textStatus);
-		},
 		success : function(resultData) {
 			console.log("join ok: " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
 				alert("ERROR: " + r.err_msg);
 			} else {
-				//refreshDivByID(resultData, 'lobbies_list', id_lobby);
-//				putLobbyOnTop(id_lobby);
+				refreshDivByID(resultData, 'lobbies_list');
+				putLobbyOnTop(id_lobby);
 			}
 		},
 		error : function(e) {
@@ -123,23 +118,18 @@ function searchLobby(ev, searchBy) {
 	});
 }
 
-function refreshDivByID(/*resultData,*/ id_div, id_lobby_on_top) {
-	/*var r = JSON.parse(resultData);
+function refreshDivByID(resultData, id_div) {
+	var r = JSON.parse(resultData);
 	if (r.error) {
 		alert("ERROR: " + r.err_msg);
-	} else {*/
-		simpleRefreshByID(id_div,id_lobby_on_top);
-//	}
+	} else {
+		simpleRefreshByID(id_div);
+	}
 }
 
-function simpleRefreshByID(id_div,id_lobby_on_top){
+function simpleRefreshByID(id_div){
 	//alert("SIMPLE refresh: "+id_div);
 	$("#" + id_div).load(location.href + " #" + id_div + ">*", "");
-	var row_copy = $("#"+id_lobby_on_top).clone();
-	var pos = row_copy.prevAll(".card-with-shadow").length;
-	//alert("PUT ON TOP....ELEMENT: "+lobby_row);
-	$("#"+id_lobby_on_top).remove();
-	$("#lobbies_list").prepend(row_copy);
 }
 
 function putLobbyOnTop(id_lobby){
