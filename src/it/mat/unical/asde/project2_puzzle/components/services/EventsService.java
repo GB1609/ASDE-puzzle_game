@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EventsService {
-	private Map<String, BlockingQueue<Integer>> events = new HashMap<>();
+	private Map<String, BlockingQueue<String>> events = new HashMap<>();
 	private Map<String, BlockingQueue<String>> join = new HashMap<>();
 
-	public Integer nextEventProgress(Integer gameId, String player) throws InterruptedException {
+	public String nextEventProgress(Integer gameId, String player) throws InterruptedException {
 		String key = gameId + player;
 		if (!events.containsKey(key))
 			events.put(key, new LinkedBlockingQueue<>());
@@ -39,7 +39,7 @@ public class EventsService {
 		join.get(lobbyName).put("join");
 	}
 
-	public void addEventFor(Integer gameID, String player, Integer progress) throws InterruptedException {
+	public void addEventFor(Integer gameID, String player, String progress) throws InterruptedException {
 		String key = gameID + (player.equals("player1") ? "player2" : "player1");
 		if (!events.containsKey(key))
 			events.put(key, new LinkedBlockingQueue<>());

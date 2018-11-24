@@ -46,12 +46,6 @@ function startGame(ev) {
 }
 
 function listenForJoinToLobby(lobby_name) {
-	// alert("go to forward ");
-	// $("#lobby_name").val(lobby_name);
-	// alert("go to forward " + $("#lobby_name").val());
-	// alert("go to forward " + $("#ftg_form").attr('method'));
-	// $("#ftg_form").submit();
-	// alert(lobby_name);
 	var xhr = $.ajax({
 		url : "check_join",
 		type : "post",
@@ -59,16 +53,10 @@ function listenForJoinToLobby(lobby_name) {
 			"lobby_name" : lobby_name
 		}),
 		success : function(result) {
-			// alert("result" + result);
 			if (!$.trim(result))
 				listenForJoinToLobby(lobby_name);
-			else
-			// window.location.href = "/ASDE-puzzle_game/forward_to_game?"
-			// + lobby_name;
-			{
-				// alert("go to forward ");
+			else {
 				$("#lobby_name").val(lobby_name);
-				// alert("go to forward " + $("#lobby_name").val());
 				$("#ftg_form").submit();
 			}
 		},

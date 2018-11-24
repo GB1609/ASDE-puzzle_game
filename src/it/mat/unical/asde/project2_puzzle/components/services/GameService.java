@@ -27,7 +27,7 @@ public class GameService {
 		runningGames.get(gameId).updateSateGame(player, old_location, old_position, new_location, new_position, piece);
 	}
 
-	public Integer getProgressFor(Integer gameId, String player) {
-		return runningGames.get(gameId).getProgress(player);
+	public String getProgressFor(Integer gameId, String player) {
+		return runningGames.get(gameId).getProgress(player).toString();
 	}
 }

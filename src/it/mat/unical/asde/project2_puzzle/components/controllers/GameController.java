@@ -40,7 +40,7 @@ public class GameController {
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		String player = (String) session.getAttribute("player");
 		gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position, piece);
-		Integer progress = gameService.getProgressFor(gameId, player);
+		String progress = gameService.getProgressFor(gameId, player);
 		try {
 			eventsService.addEventFor(gameId, player, progress);
 		} catch (InterruptedException e) {
@@ -51,15 +51,15 @@ public class GameController {
 
 	@PostMapping("get_progress")
 	@ResponseBody
-	public DeferredResult<Integer> getEvents(HttpSession session) {
+	public DeferredResult<String> getEvents(HttpSession session) {
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		String player = (String) session.getAttribute("player");
-		DeferredResult<Integer> outputProgress = new DeferredResult<>();
+		DeferredResult<String> outputProgress = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
 				outputProgress.setResult(eventsService.nextEventProgress(gameId, player));
 			} catch (InterruptedException e) {
-				outputProgress.setResult(-1000);
+				outputProgress.setResult(-1000 + "");
 			}
 		});
 
