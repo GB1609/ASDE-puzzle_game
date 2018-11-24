@@ -16,13 +16,16 @@
 	<div align="center">
 		<div class="row center-content-row">
 			<div class="dropdown col-sm-6 row">
+				<div class="col">
+					<button type="button" class="btn btn-warning btn-lg button-in-row"
+						onclick="refreshLobbies()">Refresh</button>
+				</div>
 				<div class="create-btn col">
 					<a href="#" class="btn btn-warning btn-lg button-in-row "
 						data-toggle="modal" data-target="#create-modal">Create</a>
 				</div>
 				<div class="modal fade" id="create-modal" tabindex="-1"
 					role="dialog" aria-hidden="true" style="display: none;">
-
 					<div class="modal-dialog">
 						<div class="create_modal-container">
 							<h1>Create your lobby</h1>
@@ -67,8 +70,17 @@
 		<div class="row center-content-row">
 			<div class="row col-md-10 lobbyesBox">
 				<div id="lobbies_div" class=" card scrollbar-ripe-malinka">
-					<div class="card-body">
-						<c:if test="${not empty error}">
+					<div class="card-body" id="id_lobbies_list_div">
+						<ul class="list-group" id="id_lobbies_list_ul">
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<!-- 					<c:if test="${not empty error}">
 							<div class="alert alert-danger alert-dismissible" role="alert">
 								<button type="button" class="close" data-dismiss="alert"
 									aria-label="Close">
@@ -78,9 +90,9 @@
 							</div>
 						</c:if>
 						<c:if test="${not empty lobbies}">
-							<ul class="list-group">
+							<ul class="list-group" id="lobbies_list">
 								<c:forEach items="${lobbies}" var="lobby">
-									<li class="list-group-item card-with-shadow" id="lobby_row">
+									<li class="list-group-item card-with-shadow lobby_row" id="id_lobby_${lobby.name}">
 										<div class="text-center" id="lobby_name_div">${lobby.name}</div>
 										<div class=" text-center">
 											<img src="resources/images/avatar.svg" class="img-circle"
@@ -105,7 +117,7 @@
 														class="btn btn-primary float-right">Start</button>
 												</c:when>
 												<c:otherwise>
-													<button type="button" onclick="joinLobby()"
+													<button type="button" onclick="joinLobby(event,'id_lobby_${lobby.name}')"
 														class="btn btn-warning btn-lg float-right">Join</button>
 												</c:otherwise>
 											</c:choose>
@@ -114,10 +126,4 @@
 								</c:forEach>
 							</ul>
 						</c:if>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</body>
-</html>
+						 -->
