@@ -6,26 +6,26 @@ public class Lobby {
 
 	private static final AtomicInteger count = new AtomicInteger(0);
 	private final int id;
-	private String name;
-	private String owner;
-	private String guest;
+	private String name = "";
+	private String owner = "";
+	private String guest = "";
 
 	public Lobby(String name) {
 		super();
-		this.name = name;
+		this.name = name.toLowerCase().trim();
 		this.id = count.incrementAndGet();
 	}
 
 	public Lobby(String name, String owner) {
 		super();
-		this.name = name;
+		this.name = name.toLowerCase().trim();
 		this.owner = owner;
 		this.id = count.incrementAndGet();
 	}
 
 	public Lobby(String name, String owner, String guest) {
 		super();
-		this.name = name;
+		this.name = name.toLowerCase().trim();
 		this.owner = owner;
 		this.guest = guest;
 		this.id = count.incrementAndGet();

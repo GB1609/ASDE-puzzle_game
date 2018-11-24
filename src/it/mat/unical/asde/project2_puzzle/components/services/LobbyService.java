@@ -1,6 +1,5 @@
 package it.mat.unical.asde.project2_puzzle.components.services;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,37 +27,33 @@ public class LobbyService {
 
 	public void joinToLobby(String lobby_name, String username) {
 		this.leaveIfInOtherLobby(username);
-		System.out.println("join to lobby: " + lobby_name);
 		Lobby lobbyToJoin = this.getLobby(lobby_name, SearchBy.LOBBY_NAME);
 		lobbyToJoin.setGuest(username);
+		// System.out.println("join to lobby: " + lobbyToJoin);
 	}
 
 	// user with "username" leave the lobby where it is
 	public void leaveIfInOtherLobby(String username) {
-		System.out.println("LEAVE if in other lobby: " + username);
+		// System.out.println("LEAVE if in other lobby: " + username);
 		for (int i = 0; i < this.lobbies.size(); i++) {
 			Lobby lobby = this.lobbies.get(i);
 			String guest = lobby.getGuest();
 			if (lobby.getOwner().equals(username)) {
-				if (guest != null) {
+				if (!guest.isEmpty()) {
 					lobby.setOwner(guest);
-					lobby.setGuest(null);
+					lobby.setGuest("");
 					System.out.println("LEAVE LOBBY: " + lobby);
 				} else {
 					this.lobbies.remove(i);
 					System.out.println("REMOVE LOBBY: " + lobby);
 				}
-			} else if (guest != null) {
+			} else if (!guest.isEmpty()) {
 				if (guest.equals(username)) {
 					System.out.println("LEAVE LOBBY: " + lobby);
-					lobby.setGuest(null);
+					lobby.setGuest("");
 				}
 			}
 		}
-	}
-
-	public void putLobbyOnTop(int index) {
-		Collections.rotate(this.lobbies.subList(0, index + 1), 1);
 	}
 
 	public boolean removeLobby(Lobby lobby) {
@@ -101,26 +96,4 @@ public class LobbyService {
 		}
 		return null;
 	}
-
-//	public Lobby getLobbyByName(String name) {
-//		for (int i = 0; i < this.lobbies.size(); i++) {
-//			Lobby lobby = this.lobbies.get(i);
-//			if (lobby.getName().equals(name)) {
-//				this.putLobbyOnTop(i);
-//				return lobby;
-//			}
-//		}
-//		return null;
-//	}
-//
-//	public Lobby getLobbyByUsername(String username) {
-//		for (int i = 0; i < this.lobbies.size(); i++) {
-//			Lobby lobby = this.lobbies.get(i);
-//			if (lobby.getOwner().equals(username)) {
-//				this.putLobbyOnTop(i);
-//				return lobby;
-//			}
-//		}
-//		return null;
-//	}
 }
