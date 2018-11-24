@@ -32,7 +32,8 @@ public class LobbyController {
 	@ResponseBody
 	public String createLobby(Model model, HttpSession session, @RequestParam String lobby_name) {
 		JSONObject result = new JSONObject().put("error", false);
-		Lobby newLobby = new Lobby(lobby_name, (String) session.getAttribute("username"));
+		Lobby newLobby = new Lobby(lobby_name, (String) session.getAttribute("username"));// TODO move this creation in
+																							// lobby service
 		if (this.lobbyService.addLobby(newLobby)) {
 			eventService.attachListenerToJoin(lobby_name);
 			System.out.println("ADD LOBBY: true || info: " + newLobby);
@@ -53,6 +54,7 @@ public class LobbyController {
 		boolean deleted = this.lobbyService.removeLobbyByName(lobby_name);
 		System.out.println("DELETED lobby with name: " + lobby_name + ".");
 		if (deleted) {
+			eventService.detachListenerForJoin(lobby_name);
 			System.out.println("Lobby Successfully deleted: " + lobby_name);
 			return result.toString();
 		}
@@ -63,6 +65,7 @@ public class LobbyController {
 	}
 
 	@PostMapping("join_lobby")
+	@ResponseBody
 	public String joinLobby(Model model, HttpSession session, @RequestParam String lobby_name) {
 		JSONObject result = new JSONObject().put("error", false);
 		String username = (String) session.getAttribute("username");
@@ -76,7 +79,8 @@ public class LobbyController {
 			System.out.println("I can't join to lobby" + lobby_name);
 		}
 		System.out.println("User: " + username + " join to Lobby: " + lobby_name);
-		return "redirect:game";
+
+		return session.getServletContext() + "/game";
 	}
 
 	@PostMapping("search_lobby")
@@ -102,8 +106,8 @@ public class LobbyController {
 
 	@PostMapping("check_join")
 	@ResponseBody
-	public DeferredResult<Boolean> checkJoin(@RequestParam String lobby_name, HttpSession session) {
-		DeferredResult<Boolean> joins = new DeferredResult<>();
+	public DeferredResult<String> checkJoin(@RequestParam String lobby_name, HttpSession session) {
+		DeferredResult<String> joins = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
 				joins.setResult(eventService.getEventJoin(lobby_name));

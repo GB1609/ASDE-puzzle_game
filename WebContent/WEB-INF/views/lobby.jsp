@@ -31,7 +31,7 @@
 								<div class="form-group">
 									<label for="lobby_name_text" style="color: white;">Lobby's
 										name:</label> <input type="text" class="form-control"
-										id="id_lobby_name" >
+										id="id_lobby_name">
 									<button type="button" onclick="createLobby()"
 										class="btn btn-warning btn-sm">Create</button>
 								</div>
@@ -125,5 +125,8 @@
 			</div>
 		</div>
 	</div>
+	<form style="display: hidden" action="forward_to_game" method="post" id="ftg_form">
+		<input type="hidden" id="lobby_name" name="lobby_name" value="" /> 
+	</form>
 </body>
 </html>

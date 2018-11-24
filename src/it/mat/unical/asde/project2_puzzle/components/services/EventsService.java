@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EventsService {
 	private Map<String, BlockingQueue<Integer>> events = new HashMap<>();
-	private Map<String, BlockingQueue<Boolean>> join = new HashMap<>();
+	private Map<String, BlockingQueue<String>> join = new HashMap<>();
 
 	public Integer nextEventProgress(Integer gameId, String player) throws InterruptedException {
 		String key = gameId + player;
@@ -20,12 +20,14 @@ public class EventsService {
 		return events.get(key).poll(29, TimeUnit.SECONDS);
 	}
 
-	public Boolean getEventJoin(String lobbyName) throws InterruptedException {
+	public String getEventJoin(String lobbyName) throws InterruptedException {
 		if (!join.containsKey(lobbyName)) {
+			join.put(lobbyName, new LinkedBlockingQueue<>());
+
 			System.out.println("No listener attached for this lobby" + lobbyName);
-			return null;
+//			return null;
 		}
-		Boolean b = join.get(lobbyName).poll(29, TimeUnit.SECONDS);
+		String b = join.get(lobbyName).poll(29, TimeUnit.SECONDS);
 		if (b != null)
 			join.remove(lobbyName);
 		return b;
@@ -34,7 +36,7 @@ public class EventsService {
 	public void addEventJoin(String lobbyName) throws InterruptedException {
 		if (!join.containsKey(lobbyName))
 			throw new RuntimeException("This lobby isn't present in the list");
-		join.get(lobbyName).put(true);
+		join.get(lobbyName).put("join");
 	}
 
 	public void addEventFor(Integer gameID, String player, Integer progress) throws InterruptedException {
@@ -47,9 +49,17 @@ public class EventsService {
 	public void attachListenerToJoin(String lobby_name) {
 
 		if (join.containsKey(lobby_name))
-			throw new RuntimeException("This lobby already has a listener attached" + lobby_name);
-		else
+			/* throw new RuntimeException */System.out
+					.println("This lobby already has a listener attached" + lobby_name);
+		else {
+			System.out.println("listener attached for lobby" + lobby_name);
 			join.put(lobby_name, new LinkedBlockingQueue<>());
+			System.out.println(join.containsKey(lobby_name));
+		}
+	}
+
+	public void detachListenerForJoin(String lobby_name) {
+		join.remove(lobby_name);
 	}
 
 }

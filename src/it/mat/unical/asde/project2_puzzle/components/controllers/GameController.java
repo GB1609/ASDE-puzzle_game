@@ -23,9 +23,11 @@ public class GameController {
 	@Autowired
 	EventsService eventsService;
 
-	@GetMapping("game")
+	@GetMapping("/game")
 	public String goToGame(Model m, HttpSession session) {
+		System.out.println("IN GAME" + session.getAttribute("player"));
 		m.addAttribute("randomGrid", gameService.initNewGame((Integer) session.getAttribute("gameId")));
+		System.out.println("IN Game dopo" + session.getAttribute("player"));
 		return "Game";
 	}
 
