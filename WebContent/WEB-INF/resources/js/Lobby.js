@@ -1,12 +1,28 @@
 $(document).ready(function() {
 	refreshLobbies();
+	orderLobbies("lobbyOnTop");
+	orderLobbies("lobbyCreated");
 	// $('#base').addClass($('#base').attr('value'));
 });
 
-
+function orderLobbies(class_label){
+	var id_ontop = $("."+class_label).attr('id');
+	if(id_ontop !== undefined){
+		console.log("LOBBY ON TOP :"+id_ontop.attr('class'));
+		putLobbyOnTop(id_ontop);
+	}else{
+		console.log("LOBBY ON TOP UNDEFINED... SESSION: "+"#"+sessionStorage.getItem(class_label));
+		id_ontop = $("#"+sessionStorage.getItem(class_label)).attr('id');
+		if(id_ontop !== undefined){
+			putLobbyOnTop(id_ontop);
+		}else{
+			console.log("LOBBY on top UNDEFINED ALSO IN SESSION");
+		}
+	}
+	
+}
 
 function refreshLobbies(){
-	//alert("joinLobby NAME = "+lobby_name);
 	$.ajax({
 		url : "refresh_lobbies",
 		type : "POST",
@@ -16,9 +32,9 @@ function refreshLobbies(){
 			if (r.error) {
 				alert("ERROR: " + r.err_msg);
 			} else {
-				//alert("Lobby in for: "+r.lobbies[1].name);
-				var row_copy = $(".ontop").clone();
-				refreshLocalLobbiesList(row_copy.attr('id'), null, r.lobbies, r.usr);
+				refreshLocalLobbiesList(r.lobbies, r.usr);
+				orderLobbies("lobbyOnTop");
+				orderLobbies("lobbyCreated");
 			}
 		},
 		error : function(e) {
@@ -32,7 +48,6 @@ function joinLobby(ev, id_lobby) {
 	var lobby_name = $("#"+id_lobby).children(
 	'#lobby_name_div').text();
 	console.log(lobby_name);
-	//alert("joinLobby NAME = "+lobby_name);
 	ev.preventDefault();
 	$.ajax({
 		url : "join_lobby",
@@ -46,8 +61,10 @@ function joinLobby(ev, id_lobby) {
 			if (r.error) {
 				alert("ERROR: " + r.err_msg);
 			} else {
-				//alert("Lobby in for: "+r.lobbies[1].name);
-				refreshLocalLobbiesList(id_lobby, null, r.lobbies, r.usr);
+				refreshLocalLobbiesList(r.lobbies, r.usr);
+				sessionStorage.setItem('lobbyOnTop', id_lobby);
+				$("#"+id_lobby).addClass("lobbyOnTop");
+				putLobbyOnTop(id_lobby);
 			}
 		},
 		error : function(e) {
@@ -58,22 +75,19 @@ function joinLobby(ev, id_lobby) {
 }
 
 function startGame(ev) {
-	console.log("ENTRATO IN START GAME");
-	$
-			.ajax({
-				url : "game",
-				type : "GET",
-				async : false,
-				success : function(resultData) {
-					console.log("Start game ok: " + resultData);
-					deleteLobby(ev);
-					window.location.href = "http://localhost:8080/ASDE-puzzle_game/game";
-				},
-				error : function(e) {
-					alert(e.responseText);
-					console.log("START GAME ERROR: ", e);
-				}
-			});
+	$.ajax({
+		url : "game",
+		type : "GET",
+		success : function(resultData) {
+			console.log("Start game ok: " + resultData);
+			//deleteLobby(ev);
+			window.location.href = "http://localhost:8080/ASDE-puzzle_game/game";
+		},
+		error : function(e) {
+			alert(e.responseText);
+			console.log("START GAME ERROR: ", e);
+		}
+	});
 }
 
 function createLobby(ev) {
@@ -83,7 +97,6 @@ function createLobby(ev) {
 	$.ajax({
 		url : "create_lobby",
 		type : "POST",
-		async : false,
 		data : ({
 			"lobby_name" : lobby_name
 		}),
@@ -93,11 +106,12 @@ function createLobby(ev) {
 			if (r.error) {
 				alert("ERROR: " + r.err_msg);
 			} else {
-				var id_lobby = "id_lobby_"+r.new_lobby.name;
-				$("#"+id_lobby).addClass("ontop");
+				refreshLocalLobbiesList(r.lobbies, r.usr);
+				var id_lobby = "id_lobby_"+r.new_lobby;
+				sessionStorage.setItem('lobbyCreated', id_lobby);
+				$("#"+id_lobby).addClass("lobbyCreated");
 				putLobbyOnTop(id_lobby);
-				$('#create-modal').hide();
-				putLobbyOnTop(id_lobby);
+				//$('#create-modal').hide();
 			}
 		},
 		error : function(e) {
@@ -107,38 +121,13 @@ function createLobby(ev) {
 	});
 }
 
-/*
-function deleteLobby(ev) {
-	var lobby_name = $(document.activeElement).closest('.lobby_row').children(
-			'#lobby_name_div').text();
-	console.log("ENTRATO IN START GAME lobby_name:" + lobby_name);
-	$.ajax({
-		url : "delete_lobby_by_name",
-		type : "POST",
-		async : false,
-		data : ({
-			"lobby_name" : lobby_name
-		}),
-		success : function(resultData) {
-			console.log("lobby delete ok: " + resultData);
-			refreshDivByID(resultData, "lobbies_div");
-		},
-		error : function(e) {
-			alert(e.responseText);
-			console.log("LOBBY DELETE ERROR: ", e);
-		}
-	});
-}
-*/
-
 function searchLobby(ev, searchBy) {
 	var name = $(document.activeElement).closest(".form-group").children(
 			'#id_search_txt').val();
-	console.log("ENTRATO IN search lobby by " + searchBy + ":" + name);
+	ev.preventDefault();
 	$.ajax({
 		url : "search_lobby",
 		type : "POST",
-		async : false,
 		data : ({
 			"search_txt" : name,
 			"search_by" : searchBy
@@ -149,8 +138,9 @@ function searchLobby(ev, searchBy) {
 			if (r.error) {
 				alert("ERROR: " + r.err_msg);
 			} else {
-				var id_lobby = "id_lobby_"+r.lobby_searched.name;
-				$("#"+id_lobby).addClass("ontopsearched");
+				var id_lobby = "id_lobby_"+r.lobby_searched;
+				console.log("LOBBY SEARCHED: "+id_lobby);
+				$("#"+id_lobby).addClass("searched");
 				putLobbyOnTop(id_lobby);
 			}
 		},
@@ -161,54 +151,17 @@ function searchLobby(ev, searchBy) {
 	});
 }
 
-/*function refreshDivByID(resultData, id_div) {
-	var r = JSON.parse(resultData);
-	if (r.error) {
-		alert("ERROR: " + r.err_msg);
-	} else {
-		simpleRefreshByID(id_div);
-	}
-}
-
-function simpleRefreshByID(id_div){
-	//alert("SIMPLE refresh: "+id_div);
-	console.log("REFRESH LOBBIES LIST");
-	$("#" + id_div).load(location.href + " #" + id_div + ">*", "");
-}*/
-
 function putLobbyOnTop(id_lobby){
 	if(id_lobby !== undefined){
+		console.log("PUT LOBBY ON TOP");
 		var row_copy = $("#"+id_lobby).clone();
-		//var pos = row_copy.prevAll(".card-with-shadow").length;
-		//alert("PUT ON TOP....ELEMENT: "+lobby_row);
 		$("#"+id_lobby).remove();
 		$("#id_lobbies_list_ul").prepend(row_copy);
 	}else{
 		console.log("PUT on top id UNDEFINED");
 	}
-	console.log("PUT LOBBY ON TOP");
 }
 
-function clearLobbiesList(){
-	var list = document.getElementById("id_lobbies_list_ul");
-	while (list.firstChild) {
-		list.removeChild(list.firstChild);
-	}
-}
-
-function buildLobbyRows(lobbies, user){
-	var list = document.getElementById("id_lobbies_list_ul");
-	for ( var i in lobbies) {
-		var lobby = lobbies[i];
-		var id= lobby.id;
-		var name = lobby.name;
-		var owner = lobby.owner;
-		var guest = lobby.guest;
-		var username = user;
-		var newLobby = buildLobbyRow(id,name,owner,guest,username);
-		list.append(htmlToElement(newLobby));
-	}
-}
 function buildLobbyRow(id,name,owner,guest,username){
 	var newLobby = "";
 	newLobby += "<li class=\"list-group-item card-with-shadow lobby_row\" id=\"id_lobby_"+name+"\" >"
@@ -244,15 +197,68 @@ function htmlToElement(html) {
     return template.content.firstChild;
 }
 
-function refreshLocalLobbiesList(id_ontop, id_searched, lobbies, user){
+//00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+function refreshLocalLobbiesList(lobbies, user){
 	clearLobbiesList();
 	buildLobbyRows(lobbies, user);
-	if(id_ontop !== undefined && id_ontop !== null && id_ontop !== ""){
-		$("#"+id_ontop).addClass("ontop");
-	}
-	if(id_searched !== undefined && id_searched !== null && id_searched !== ""){
-		$("#"+id_searched).addClass("ontop");
-	}
-	putLobbyOnTop(id_ontop);
-	putLobbyOnTop(id_searched);
 }
+function clearLobbiesList(){
+	var list = document.getElementById("id_lobbies_list_ul");
+	while (list.firstChild) {
+		list.removeChild(list.firstChild);
+	}
+}
+function buildLobbyRows(lobbies, user){
+	var list = document.getElementById("id_lobbies_list_ul");
+	for ( var i in lobbies) {
+		var lobby = lobbies[i];
+		var id= lobby.id;
+		var name = lobby.name;
+		var owner = lobby.owner;
+		var guest = lobby.guest;
+		var username = user;
+		var newLobby = buildLobbyRow(id,name,owner,guest,username);
+		list.append(htmlToElement(newLobby));
+	}
+}
+//00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+
+/*
+function deleteLobby(ev) {
+	var lobby_name = $(document.activeElement).closest('.lobby_row').children(
+			'#lobby_name_div').text();
+	console.log("ENTRATO IN START GAME lobby_name:" + lobby_name);
+	$.ajax({
+		url : "delete_lobby_by_name",
+		type : "POST",
+		async : false,
+		data : ({
+			"lobby_name" : lobby_name
+		}),
+		success : function(resultData) {
+			console.log("lobby delete ok: " + resultData);
+			refreshDivByID(resultData, "lobbies_div");
+		},
+		error : function(e) {
+			alert(e.responseText);
+			console.log("LOBBY DELETE ERROR: ", e);
+		}
+	});
+}
+*/
+
+/*function refreshDivByID(resultData, id_div) {
+	var r = JSON.parse(resultData);
+	if (r.error) {
+		alert("ERROR: " + r.err_msg);
+	} else {
+		simpleRefreshByID(id_div);
+	}
+}
+
+function simpleRefreshByID(id_div){
+	//alert("SIMPLE refresh: "+id_div);
+	console.log("REFRESH LOBBIES LIST");
+	$("#" + id_div).load(location.href + " #" + id_div + ">*", "");
+}*/
