@@ -88,6 +88,6 @@ public class GridToComplete {
 					progress++;
 				a++;
 			}
-		return progress;
+		return (progress * 100) / (height * width);
 	}
 }

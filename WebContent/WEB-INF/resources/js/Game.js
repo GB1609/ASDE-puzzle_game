@@ -48,12 +48,13 @@ function drop(ev) {
 		},
 		error : function(e) {
 
-			alert("old position" + old_position + "\n" + "new_location   "
+			console.log("old position" + old_position + "\n"
+					+ "new_location   "
 					+ ev.target.parentElement.getAttribute("id") + "\n"
 					+ "old_location   " + old + "\n" + "piece  " + data + "\n"
 					+ "new_position   "
 					+ $(ev.target).prevAll(".box_piece").length);
-			alert(e.responseText);
+			console.log(e.responseText);
 
 			console.log("ERROR: ", e);
 		}
@@ -61,27 +62,46 @@ function drop(ev) {
 }
 
 function getEventsFromServer() {
-	var gameId = $("#gameId").val();
+	// var gameId = $("#gameId").val();
 	$.ajax({
 		url : "get_progress",
 		type : "post",
 		data : ({
-			"gameId" : gameId
+		// "gameId" : gameId
 		}),
 		success : function(result) {
-			if ($.trim(result))
-				$("#dynamic").css("width", result + "%").attr("aria-valuenow",
-						result).text(result + "% Complete");
+			if ($.trim(result)) {
+				if (result == "END-GAME")
+					window.location.href = "/ASDE-puzzle_game/end_game";
+				else
+					$("#dynamic").css("width", result + "%").attr(
+							"aria-valuenow", result)
+							.text(result + "% Complete");
+
+			}
 			getEventsFromServer();
 		},
 		error : function(e) {
-			alert(e.responseText);
+			console.log(e.responseText);
 			setTimeout(function() {
 				getEventsFromServer();
 			}, 5000);
 		}
 	});
 }
+window.onbeforeunload = function() {
+	return "Are you sure";
+};
+window.onunload = function() {
+	$.ajax({
+		url : "leave_game",
+		async : false,
+		data : ({})
+	});
+}
 $(document).ready(function() {
+	if (performance.navigation.type == 1) {
+		window.location.href = "/ASDE-puzzle_game/end_game";
+	}
 	getEventsFromServer();
 });

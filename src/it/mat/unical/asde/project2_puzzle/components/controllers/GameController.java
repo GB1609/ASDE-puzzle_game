@@ -39,10 +39,16 @@ public class GameController {
 
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		String player = (String) session.getAttribute("player");
-		gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position, piece);
-		String progress = gameService.getProgressFor(gameId, player);
+
 		try {
-			eventsService.addEventFor(gameId, player, progress);
+			if (gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position,
+					piece))
+				eventsService.addEventEndGame(gameId);
+
+			else {
+				String progress = gameService.getProgressFor(gameId, player);
+				eventsService.addEventFor(gameId, player, progress);
+			}
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
 			e.printStackTrace();
@@ -64,6 +70,24 @@ public class GameController {
 		});
 
 		return outputProgress;
+	}
+
+	@GetMapping("end_game")
+	public String goToEndGame() {
+		return "EndGame";
+	}
+
+	@GetMapping("leave_game")
+	@ResponseBody
+	public void leaveGame(HttpSession session) {
+		Integer gameId = (Integer) session.getAttribute("gameId");
+		String player = (String) session.getAttribute("player");
+		try {
+			eventsService.addEventLeaveGameBy(gameId, player);
+		} catch (InterruptedException e) {
+			System.out.println("non riesco ad aggiungere");
+			e.printStackTrace();
+		}
 	}
 
 }

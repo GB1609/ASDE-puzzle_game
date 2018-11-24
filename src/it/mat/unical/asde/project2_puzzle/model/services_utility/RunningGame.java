@@ -10,20 +10,19 @@ public class RunningGame {
 		gamePlayer2 = new GridToComplete(dim);
 	}
 
-	public void updateSateGame(String player, String old_location, int old_position, String new_location,
+	public boolean updateSateGame(String player, String old_location, int old_position, String new_location,
 			int new_position, String piece) {
-		updateGameForPlayer(player.equals("player1") ? gamePlayer1 : gamePlayer2, old_location, old_position,
+		return updateGameForPlayer(player.equals("player1") ? gamePlayer1 : gamePlayer2, old_location, old_position,
 				new_location, new_position, piece);
 	}
 
-	private void updateGameForPlayer(GridToComplete gamePlayer12, String old_location, int old_position,
+	private boolean updateGameForPlayer(GridToComplete gamePlayer12, String old_location, int old_position,
 			String new_location, int new_position, String piece) {
 		if (old_location.equals("to_complete"))
 			gamePlayer12.removePiece(piece, old_position);
 		if (new_location.equals("to_complete"))
 			gamePlayer12.insertPiece(piece, new_position);
-		if (gamePlayer12.checkPuzzleTermination())
-			System.out.println("WIN");
+		return gamePlayer12.checkPuzzleTermination();
 	}
 
 	public Integer getProgress(String player) {

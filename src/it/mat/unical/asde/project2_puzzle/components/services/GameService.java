@@ -22,9 +22,10 @@ public class GameService {
 		return initalGrids.remove(gameId);
 	}
 
-	public void updateStateGame(Integer gameId, String player, String old_location, int old_position,
+	public boolean updateStateGame(Integer gameId, String player, String old_location, int old_position,
 			String new_location, int new_position, String piece) {
-		runningGames.get(gameId).updateSateGame(player, old_location, old_position, new_location, new_position, piece);
+		return runningGames.get(gameId).updateSateGame(player, old_location, old_position, new_location, new_position,
+				piece);
 	}
 
 	public String getProgressFor(Integer gameId, String player) {

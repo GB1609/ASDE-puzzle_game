@@ -107,6 +107,7 @@
 											</c:choose>
 											<c:choose>
 												<c:when test="${sessionScope.username eq lobby.owner}">
+													<input id="created_lobby" type="hidden" value="created" />
 													<button type="button" onclick="startGame()"
 														class="btn btn-primary float-right">Start</button>
 												</c:when>
@@ -125,8 +126,9 @@
 			</div>
 		</div>
 	</div>
-	<form style="display: hidden" action="forward_to_game" method="post" id="ftg_form">
-		<input type="hidden" id="lobby_name" name="lobby_name" value="" /> 
+	<form style="display: hidden" action="forward_to_game" method="post"
+		id="ftg_form">
+		<input type="hidden" id="lobby_name" name="lobby_name" value="" />
 	</form>
 </body>
 </html>

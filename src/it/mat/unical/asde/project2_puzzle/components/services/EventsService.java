@@ -41,6 +41,10 @@ public class EventsService {
 
 	public void addEventFor(Integer gameID, String player, String progress) throws InterruptedException {
 		String key = gameID + (player.equals("player1") ? "player2" : "player1");
+		addEvent(progress, key);
+	}
+
+	private void addEvent(String progress, String key) throws InterruptedException {
 		if (!events.containsKey(key))
 			events.put(key, new LinkedBlockingQueue<>());
 		events.get(key).put(progress);
@@ -60,6 +64,18 @@ public class EventsService {
 
 	public void detachListenerForJoin(String lobby_name) {
 		join.remove(lobby_name);
+	}
+
+	public void addEventEndGame(Integer gameId) throws InterruptedException {
+		String event = "END-GAME";
+		addEvent(event, gameId + "player1");
+		addEvent(event, gameId + "player2");
+	}
+
+	public void addEventLeaveGameBy(Integer gameID, String player) throws InterruptedException {
+		String key = gameID + (player.equals("player1") ? "player2" : "player1");
+		addEvent("END-GAME", key);
+
 	}
 
 }

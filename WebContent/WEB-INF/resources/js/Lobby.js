@@ -1,7 +1,3 @@
-$(document).ready(function() {
-	// $('#base').addClass($('#base').attr('value'));
-});
-
 function joinLobby(ev) {
 	var lobby_name = $(document.activeElement).closest('#lobby_row').children(
 			'#lobby_name_div').text();
@@ -14,13 +10,12 @@ function joinLobby(ev) {
 			"lobby_name" : lobby_name
 		}),
 		success : function(resultData) {
-			alert(resultData);
 			console.log("join ok: " + resultData);
 			window.location.href = "/ASDE-puzzle_game/game";
 			refreshDivByID(resultData, "lobbies_div");
 		},
 		error : function(e) {
-			alert(e.responseText);
+			console.log(e.responseText);
 			console.log("JOIN ERROR: ", e);
 		}
 	});
@@ -39,13 +34,14 @@ function startGame(ev) {
 					window.location.href = "http://localhost:8080/ASDE-puzzle_game/game";
 				},
 				error : function(e) {
-					alert(e.responseText);
+					console.log(e.responseText);
 					console.log("START GAME ERROR: ", e);
 				}
 			});
 }
 
 function listenForJoinToLobby(lobby_name) {
+	alert("in join")
 	var xhr = $.ajax({
 		url : "check_join",
 		type : "post",
@@ -61,7 +57,7 @@ function listenForJoinToLobby(lobby_name) {
 			}
 		},
 		error : function(e) {
-			alert(e.responseText);
+			console.log(e.responseText);
 			setTimeout(function() {
 				listenForJoinToLobby(lobby_name);
 			}, 5000);
@@ -88,7 +84,7 @@ function createLobby(ev) {
 			listenForJoinToLobby(lobby_name);
 		},
 		error : function(e) {
-			alert(e.responseText);
+			console.log(e.responseText);
 			console.log("LOBBY CREATE ERROR: ", e);
 		}
 	});
@@ -112,7 +108,7 @@ function deleteLobby(ev) {
 			refreshDivByID(resultData, "lobbies_div");
 		},
 		error : function(e) {
-			alert(e.responseText);
+			console.log(e.responseText);
 			console.log("LOBBY DELETE ERROR: ", e);
 		}
 	});
@@ -135,7 +131,7 @@ function searchLobby(ev, searchBy) {
 			refreshDivByID(resultData, "lobbies_div");
 		},
 		error : function(ev) {
-			alert(e.responseText);
+			console.log(e.responseText);
 			console.log("LOBBY SEARCH ERROR: ", e);
 		}
 	});
@@ -144,8 +140,15 @@ function searchLobby(ev, searchBy) {
 function refreshDivByID(resultData, id_div) {
 	var r = JSON.parse(resultData);
 	if (r.error) {
-		alert("ERROR: " + r.err_msg);
+		console.log("ERROR: " + r.err_msg);
 	} else {
 		$("#" + id_div).load(location.href + " #" + id_div + ">*", "");
 	}
 }
+$(document).ready(function() {
+	var created_lobby = $("#created_lobby");
+	if (performance.navigation.type == 1 && created_lobby.val() === "created") {
+		var lobby_name = $.trim($("#created_lobby").parent().prev().text());
+		listenForJoinToLobby(lobby_name);
+	}
+});
