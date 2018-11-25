@@ -28,8 +28,14 @@ public class EventsService {
 //			return null;
 		}
 		String b = join.get(lobbyName).poll(29, TimeUnit.SECONDS);
-		if (b != null)
-			join.remove(lobbyName);
+		if (b != null) {
+
+			if (b.equals("already-joined"))
+				join.remove(lobbyName);
+			else
+				join.get(lobbyName).put("already-joined");
+
+		}
 		return b;
 	}
 
