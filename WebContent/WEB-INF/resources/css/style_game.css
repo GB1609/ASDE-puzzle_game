@@ -92,8 +92,9 @@ span:hover {
 }
 
 #dynamic {
-	height: 50px;
-	width: 100%;
+	width: 200%;
+	height: 100px;
+	margin: 20px;
 }
 
 .minimal-row {
