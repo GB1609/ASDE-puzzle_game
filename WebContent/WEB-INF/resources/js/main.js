@@ -87,6 +87,8 @@ jQuery(document)
 						formForgotPassword.removeClass('is-selected');
 						tabLogin.addClass('selected');
 						tabSignup.removeClass('selected');
+						
+						$('#imageSection').addClass('no-visible');
 
 					}
 
@@ -98,7 +100,7 @@ jQuery(document)
 						formForgotPassword.removeClass('is-selected');
 						tabLogin.removeClass('selected');
 						tabSignup.addClass('selected');
-
+						
 
 					}
 
@@ -211,16 +213,8 @@ function fieldValid(e) {
 
 
 function openAvatarGrid() {
-	
-	
 	$('#imageSection').removeClass('no-visible');
-	
-	
-	
-	
-	
-	
-	
+
 }
 
 // credits
