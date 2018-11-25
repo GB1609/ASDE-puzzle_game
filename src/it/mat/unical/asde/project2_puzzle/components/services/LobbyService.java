@@ -90,7 +90,6 @@ public class LobbyService {
 				condition = lobby.getOwner().equals(name);
 			}
 			if (condition) {
-				// this.putLobbyOnTop(i);
 				return lobby;
 			}
 		}

@@ -31,7 +31,7 @@ public class LobbyController {
 			System.out.println("ADD LOBBY: true || info: " + newLobby);
 			// Can we avoid to use this line? redundant with that in the "showLobbies"
 			// method.
-			return result.put("new_lobby", newLobby.toString()).toString();
+			return result.put("new_lobby", newLobby.getName()).toString();
 		}
 		System.out.println("ADD LOBBY: false || info: " + newLobby);
 		return result.put("error", true).put("err_msg", "Lobby with name " + lobby_name + " already exists").toString();
@@ -84,7 +84,7 @@ public class LobbyController {
 		System.out.println("Search lobby by " + search_by + ": " + search_txt + ".");
 		if (newLobby != null) {
 			System.out.println("Lobby found: " + newLobby);
-			return result.put("lobby_searched", newLobby.toString()).toString();
+			return result.put("lobby_searched", newLobby.getName()).toString();
 		}
 		System.out.println("Lobby NOT found !!!");
 		return result.put("error", true).put("err_msg", "Lobby with " + search_by + ": " + search_txt + " not found")
