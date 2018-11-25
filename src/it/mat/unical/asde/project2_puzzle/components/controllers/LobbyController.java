@@ -36,6 +36,7 @@ public class LobbyController {
 																							// lobby service
 		if (this.lobbyService.addLobby(newLobby)) {
 			eventService.attachListenerToJoin(lobby_name);
+			session.setAttribute("lobby_created", lobby_name);
 			System.out.println("ADD LOBBY: true || info: " + newLobby);
 			// Can we avoid to use this line? redundant with that in the "showLobbies"
 			// method.
@@ -67,9 +68,13 @@ public class LobbyController {
 	@PostMapping("join_lobby")
 	@ResponseBody
 	public String joinLobby(Model model, HttpSession session, @RequestParam String lobby_name) {
-		JSONObject result = new JSONObject().put("error", false);
+		JSONObject result = new JSONObject();
 		String username = (String) session.getAttribute("username");
 		Integer lobbyID = this.lobbyService.joinToLobby(lobby_name, username);
+		if (lobbyID == -1) {
+			result.put("error", true);
+			return result.toString();
+		}
 		session.setAttribute("gameId", lobbyID);
 		session.setAttribute("player", "player2");
 		try {
@@ -80,7 +85,9 @@ public class LobbyController {
 		}
 		System.out.println("User: " + username + " join to Lobby: " + lobby_name);
 
-		return session.getServletContext() + "/game";
+		eventService.attachListenerToStart(lobby_name);
+		result.put("error", false);
+		return result.toString();
 	}
 
 	@PostMapping("search_lobby")
@@ -106,11 +113,26 @@ public class LobbyController {
 
 	@PostMapping("check_join")
 	@ResponseBody
-	public DeferredResult<String> checkJoin(@RequestParam String lobby_name, HttpSession session) {
+	public DeferredResult<String> checkJoin(@RequestParam String lobby_name) {
 		DeferredResult<String> joins = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
 				joins.setResult(eventService.getEventJoin(lobby_name));
+			} catch (InterruptedException e) {
+				joins.setResult(null);
+			}
+		});
+
+		return joins;
+	}
+
+	@PostMapping("check_start")
+	@ResponseBody
+	public DeferredResult<String> checkStart(@RequestParam String lobby_name) {
+		DeferredResult<String> joins = new DeferredResult<>();
+		ForkJoinPool.commonPool().submit(() -> {
+			try {
+				joins.setResult(eventService.getEventStartGame(lobby_name));
 			} catch (InterruptedException e) {
 				joins.setResult(null);
 			}
@@ -128,7 +150,13 @@ public class LobbyController {
 
 		session.setAttribute("gameId", lobbyID);
 		session.setAttribute("player", "player1");
-
+		eventService.detachListenerForJoin(lobby_name);
+		try {
+			eventService.addEventStartGame(lobby_name);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "redirect:game";
 	}
 }

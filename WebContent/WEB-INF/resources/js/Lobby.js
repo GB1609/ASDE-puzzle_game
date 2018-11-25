@@ -1,3 +1,33 @@
+function listenForStartGame(lobby_name) {
+	alert("in join")
+	var xhr = $.ajax({
+		url : "check_start",
+		type : "post",
+		data : ({
+			"lobby_name" : lobby_name
+		}),
+		success : function(result) {
+			if (!$.trim(result))
+				listenForStartGame(lobby_name);
+			else {
+				window.location.href = "/ASDE-puzzle_game/game";
+				// TODO listen for leave lobby
+				// $("#start_button").removeClass("hidden-field");
+				// $("#lobby_name").val(lobby_name);
+				// $("#ftg_form").submit();
+			}
+		},
+		error : function(e) {
+			console.log(e.responseText);
+			setTimeout(function() {
+				listenForStartGame(lobby_name);
+			}, 5000);
+		}
+	});
+	console.log(xhr);
+
+}
+
 function joinLobby(ev) {
 	var lobby_name = $(document.activeElement).closest('#lobby_row').children(
 			'#lobby_name_div').text();
@@ -11,8 +41,14 @@ function joinLobby(ev) {
 		}),
 		success : function(resultData) {
 			console.log("join ok: " + resultData);
-			window.location.href = "/ASDE-puzzle_game/game";
-			refreshDivByID(resultData, "lobbies_div");
+			// window.location.href = "/ASDE-puzzle_game/game";
+			var r = JSON.parse(resultData);
+			if (!r.error) {
+				refreshDivByID(resultData, "lobbies_div");
+				listenForStartGame(lobby_name);
+			} else {
+				alert("Lobby busy");
+			}
 		},
 		error : function(e) {
 			console.log(e.responseText);
@@ -22,26 +58,28 @@ function joinLobby(ev) {
 }
 
 function startGame(ev) {
-	console.log("ENTRATO IN START GAME");
-	$
-			.ajax({
-				url : "game",
-				type : "GET",
-				async : false,
-				success : function(resultData) {
-					console.log("Start game ok: " + resultData);
-					deleteLobby(ev);
-					window.location.href = "http://localhost:8080/ASDE-puzzle_game/game";
-				},
-				error : function(e) {
-					console.log(e.responseText);
-					console.log("START GAME ERROR: ", e);
-				}
-			});
+	// console.log("ENTRATO IN START GAME");
+	// $
+	// .ajax({
+	// url : "game",
+	// type : "GET",
+	// async : false,
+	// success : function(resultData) {
+	// console.log("Start game ok: " + resultData);
+	// deleteLobby(ev);
+	// window.location.href = "http://localhost:8080/ASDE-puzzle_game/game";
+	// },
+	// error : function(e) {
+	// console.log(e.responseText);
+	// console.log("START GAME ERROR: ", e);
+	// }
+	// });
+	// $("#lobby_name").val(lobby_name);
+	$("#ftg_form").submit();
 }
 
 function listenForJoinToLobby(lobby_name) {
-	alert("in join")
+	// alert("in join")
 	var xhr = $.ajax({
 		url : "check_join",
 		type : "post",
@@ -52,8 +90,10 @@ function listenForJoinToLobby(lobby_name) {
 			if (!$.trim(result))
 				listenForJoinToLobby(lobby_name);
 			else {
-				$("#lobby_name").val(lobby_name);
-				$("#ftg_form").submit();
+				// TODO listen for leave lobby
+				$("#start_button").removeClass("hidden-field");
+				// $("#lobby_name").val(lobby_name);
+				// $("#ftg_form").submit();
 			}
 		},
 		error : function(e) {
@@ -145,6 +185,7 @@ function refreshDivByID(resultData, id_div) {
 		$("#" + id_div).load(location.href + " #" + id_div + ">*", "");
 	}
 }
+
 $(document).ready(function() {
 	var created_lobby = $("#created_lobby");
 	if (performance.navigation.type == 1 && created_lobby.val() === "created") {

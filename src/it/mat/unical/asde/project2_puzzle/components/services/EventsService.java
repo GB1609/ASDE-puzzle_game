@@ -29,12 +29,10 @@ public class EventsService {
 		}
 		String b = join.get(lobbyName).poll(29, TimeUnit.SECONDS);
 		if (b != null) {
-
 			if (b.equals("already-joined"))
 				join.remove(lobbyName);
 			else
 				join.get(lobbyName).put("already-joined");
-
 		}
 		return b;
 	}
@@ -82,6 +80,44 @@ public class EventsService {
 		String key = gameID + (player.equals("player1") ? "player2" : "player1");
 		addEvent("END-GAME", key);
 
+	}
+
+	public void attachListenerToStart(String lobby_name) {
+		String key = lobby_name + "player2";
+
+		if (join.containsKey(key))
+			/* throw new RuntimeException */System.out
+					.println("This lobby already has a listener attached" + lobby_name);
+		else {
+			System.out.println("listener attached for start" + lobby_name);
+			join.put(key, new LinkedBlockingQueue<>());
+			System.out.println(join.containsKey(key));
+		}
+	}
+
+	public void addEventStartGame(String lobby_name) throws InterruptedException {
+		String key = lobby_name + "player2";
+		if (!join.containsKey(key))
+			throw new RuntimeException("No join found for this lobby");
+		join.get(key).put("START-GAME");
+	}
+
+	public String getEventStartGame(String lobbyName) throws InterruptedException {
+		String key = lobbyName + "player2";
+		if (!join.containsKey(key)) {
+			join.put(key, new LinkedBlockingQueue<>());
+
+			System.out.println("No listener attached for this lobby" + lobbyName);
+//			return null;
+		}
+		String b = join.get(key).poll(29, TimeUnit.SECONDS);
+		if (b != null) {
+			if (b.equals("already-started"))
+				join.remove(key);
+			else
+				join.get(key).put("already-started");
+		}
+		return b;
 	}
 
 }
