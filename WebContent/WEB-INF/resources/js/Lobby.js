@@ -1,9 +1,6 @@
 $(document).ready(function() {
 	refreshLobbies();
-	// $('#base').addClass($('#base').attr('value'));
 });
-
-
 
 function refreshLobbies(){
 	//alert("joinLobby NAME = "+lobby_name);

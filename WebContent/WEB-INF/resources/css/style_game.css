@@ -43,8 +43,7 @@
 
 .box_piece {
 	background: none;
-	box-shadow: inset 3px 3px 0 rgba(255, 255, 255, 0.05), inset -2px -2px 0
-		#d5e1df;
+	box-shadow: inset 3px 3px 0 rgba(255, 255, 255, 0.05), inset -2px -2px 0 #d5e1df;
 }
 
 .piece {
@@ -62,14 +61,12 @@ span:hover {
 	border-width: 2px;
 	border-style: outset;
 	opacity: 0.8 !important;
-	filter: alpha(opacity = 70) !important;
+	filter: alpha(opacity=70) !important;
 	box-shadow: 0 0 0px #000000 !important;
 	-webkit-transform: translate3d(0, 0, 0);
 }
 
 .game_info {
-	/*width:20vw;*/
-	/* left: 15px; */
 	background-color: rgba(0, 0, 0, 0.35);
 }
 
@@ -78,7 +75,6 @@ span:hover {
 	height: 86.5vh;
 	width: 99vw;
 	margin: 0px;
-
 	/* -webkit-fill-available;*/
 }
 
@@ -99,10 +95,11 @@ span:hover {
 	height: 50px;
 	width: 100%;
 }
-.minimal-row{
-    padding-left: 0px;
-    margin-left: 0px;
-    left:auto;
+
+.minimal-row {
+	padding-left: 0px;
+	margin-left: 0px;
+	left: auto;
 }
 
 .card-with-shadow {
@@ -119,9 +116,8 @@ span:hover {
 	border-style: outset;
 	border-color: black;
 	border-radius: 10px;
-	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px
-		rgba(0, 0, 0, 0.22);
-		margin: auto;
-    margin-top: 1%;
-    margin-bottom: 1%;
+	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+	margin: auto;
+	margin-top: 1%;
+	margin-bottom: 1%;
 }
