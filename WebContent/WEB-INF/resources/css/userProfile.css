@@ -8,7 +8,16 @@
 	background: #fff;
 }
 
+.profile-userpic
+{
+	max-height: 6em;
+	max-width: 6em;
+	margin-left: 5em;
+}
 .profile-userpic img {
+	
+	margin-left: 4.5em;
+	padding-top: 1em;
 	float: none;
 	margin: 0 auto;
 	width: 100%;

@@ -24,8 +24,17 @@
 				<div class="profile-sidebar sidebar-container">
 					<!-- SIDEBAR USERPIC -->
 					<div class="profile-userpic">
-						<img src="resources/images/avatar.svg" class="img-responsive"
-							alt="">
+
+						<c:choose>
+							<c:when test="${avatar =='avatar.svg'}">
+								<img src="resources/images/${avatar}" class="img-responsive"
+									alt="">
+							</c:when>
+							<c:otherwise>
+								<img src="resources/images/avatars/${avatar}" class="img-responsive"
+									alt="">
+							</c:otherwise>
+						</c:choose>
 					</div>
 					<!-- END SIDEBAR USERPIC -->
 					<!-- SIDEBAR USER TITLE -->
@@ -85,7 +94,8 @@
 								</ul>
 							</c:when>
 							<c:otherwise>
-								<h2 style="text-align: center; font-size: 20px;">No matches found</h2>
+								<h2 style="text-align: center; font-size: 20px;">No matches
+									found</h2>
 							</c:otherwise>
 						</c:choose>
 					</div>

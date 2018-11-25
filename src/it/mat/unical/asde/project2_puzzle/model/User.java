@@ -10,21 +10,24 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
-	@Column(nullable=false,unique=true)
+	@Column(nullable = false, unique = true)
 	private String username;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String firstName;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String lastName;
+	@Column(nullable = false)
+	private String avatar;
 
 	public User() {
 		super();
 	}
-	
-	public User(String username, String firstName, String lastName) {
+
+	public User(String username, String firstName, String lastName, String avatar) {
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.avatar = avatar;
 	}
 
 	public String getFirstName() {
@@ -33,6 +36,14 @@ public class User {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public String getLastName() {

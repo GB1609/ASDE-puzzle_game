@@ -1,7 +1,7 @@
 jQuery(document)
 		.ready(
 				function($) {
-
+					var imageSection = $('#imageSection');
 					var formModal = $('.cd-user-modal'), formLogin = formModal
 							.find('#cd-login'), formSignup = formModal
 							.find('#cd-signup'), formForgotPassword = formModal
@@ -14,7 +14,7 @@ jQuery(document)
 					// formRegistration = formSignup.find('#reg_form');
 					// formRegistration.submit(check);
 					// mainNav.on('click', '.cd-signup', signup_selected);
-
+					imageSection.addClass('no-visible');
 					var creationFailed = document.getElementById("failed").value;
 					var loginFailed = document.getElementById("failedLogin").value;
 					login_selected();
@@ -25,20 +25,6 @@ jQuery(document)
 					}
 					if (loginFailed != "")
 						alert(loginFailed);
-
-					// formLogin.find('input[id="signin-username"]').next('span')
-					// .toggleClass('is-visible');
-					// formLogin.find('input[id="signin-password"]').next('a')
-					// .next('span').toggleClass('is-visible');
-					//
-					// formSignup.find('input[id="signup-password"]').next('a')
-					// .next('span').toggleClass('is-visible');
-					// formSignup.find('input[id="signup-username"]').next('span')
-					// .toggleClass('is-visible');
-					// formSignup.find('input[id="signup-firstname"]')
-					// .next('span').toggleClass('is-visible');
-					// formSignup.find('input[id="signup-lastname"]').next('span')
-					// .toggleClass('is-visible');
 
 					// open modal
 					mainNav.on('click', function(event) {
@@ -101,6 +87,7 @@ jQuery(document)
 						formForgotPassword.removeClass('is-selected');
 						tabLogin.addClass('selected');
 						tabSignup.removeClass('selected');
+
 					}
 
 					function signup_selected() {
@@ -111,6 +98,8 @@ jQuery(document)
 						formForgotPassword.removeClass('is-selected');
 						tabLogin.removeClass('selected');
 						tabSignup.addClass('selected');
+
+
 					}
 
 					function forgot_password_selected() {
@@ -148,6 +137,14 @@ jQuery(document)
 					}
 
 				});
+
+function selectAvatar(e) {
+	document.getElementById("avatar").value = e.id;
+	$('.avatar_grid p').removeClass("avatar_selected");
+	var p = e.closest('p');
+	$(p).addClass("avatar_selected");
+//	$('#imageSection').addClass('no-visible');
+}
 
 function checkSignupFields() {
 	var check = true;
@@ -211,6 +208,21 @@ function fieldValid(e) {
 	e.text("");
 	e.removeClass("is-visible");
 }
+
+
+function openAvatarGrid() {
+	
+	
+	$('#imageSection').removeClass('no-visible');
+	
+	
+	
+	
+	
+	
+	
+}
+
 // credits
 // http://css-tricks.com/snippets/jquery/move-cursor-to-end-of-textarea-or-input/
 jQuery.fn.putCursorAtEnd = function() {

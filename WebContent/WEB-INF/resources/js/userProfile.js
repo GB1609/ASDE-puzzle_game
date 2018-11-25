@@ -106,10 +106,6 @@ function updateSettings() {
 		return;
 	}
 	update();
-	console.log(newFirstName);
-	console.log(newLastName);
-	console.log(newPassword);
-	console.log(repeatNewPassword);
 
 }
 
@@ -118,6 +114,10 @@ function getFields() {
 	newLastName = document.getElementById('lastname-field');
 	newPassword = document.getElementById('password-field');
 	repeatNewPassword = document.getElementById('reenter-password-field');
+}
+function openAvatarGrid()
+{
+	
 }
 
 function update() {
