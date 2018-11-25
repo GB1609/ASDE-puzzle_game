@@ -91,8 +91,7 @@ function startGame(ev) {
 }
 
 function createLobby(ev) {
-	var lobby_name = $(document.activeElement).closest('.form-group').children(
-			'#id_lobby_name').val();
+	var lobby_name = $('#id_lobby_name').val();
 	console.log("ENTRATO IN CREATE LOBBY lobby_name:" + lobby_name);
 	$.ajax({
 		url : "create_lobby",
@@ -111,7 +110,8 @@ function createLobby(ev) {
 				sessionStorage.setItem('lobbyCreated', id_lobby);
 				$("#"+id_lobby).addClass("lobbyCreated");
 				putLobbyOnTop(id_lobby);
-				//$('#create-modal').hide();
+				refreshLobbies();
+				$('#create-modal').modal("toggle");
 			}
 		},
 		error : function(e) {
