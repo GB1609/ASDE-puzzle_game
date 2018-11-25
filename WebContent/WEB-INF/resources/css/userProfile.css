@@ -8,7 +8,16 @@
 	background: #fff;
 }
 
+.profile-userpic
+{
+	max-height: 6em;
+	max-width: 6em;
+	margin-left: 5em;
+}
 .profile-userpic img {
+	
+	margin-left: 4.5em;
+	padding-top: 1em;
 	float: none;
 	margin: 0 auto;
 	width: 100%;
@@ -28,7 +37,7 @@
 }
 
 .profile-usertitle-name {
-	color: #5a7391;
+	color: #e0a800;
 	font-size: 30px;
 	font-weight: 400;
 	margin-bottom: 7px;
@@ -90,9 +99,7 @@
 	text-align: center;
 }
 
-
-
-.matchHistory-button a{
+.matchHistory-button a {
 	color: #93a3b5;
 	font-size: 16px;
 	font-weight: 339;
@@ -105,9 +112,10 @@
 }
 
 .profile-usermenu ul li a {
-	color: #93a3b5;
+	background-color: rgba(0, 0, 0, 0.45);
+	color: #e0a800;
 	font-size: 16px;
-	font-weight: 339;
+	font-weight: 500;
 	border-radius: 251px;
 	width: 100%;
 	padding-left: 30%;
@@ -122,8 +130,8 @@
 }
 
 .profile-usermenu ul li a:hover {
-	background-color: #fafcfd;
-	color: #5b9bd1;
+	background-color: #e0a800;
+	color: #111111;
 	border-radius: 10px;
 }
 
@@ -132,10 +140,17 @@
 }
 
 .profile-usermenu ul li.active a {
-	color: #5b9bd1;
-	background-color: #f6f9fb;
-	border-left: 9px solid #5b9bd1;
+	color: #000000;
+	background-color: #e0a800;
+	border-left: 9px solid #e0a900;
 	margin-left: 0px;
+}
+
+.customLabel
+{
+	color: #e0a800; 
+	border-radius: 10px; 
+	background-color: rgba(0, 0, 0, 0.45);
 }
 
 .profile-usermenu ul li {
@@ -156,16 +171,17 @@
 /*ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss*/
 .form-group label {
 	font-weight: 700;
-	color: #5b9bd1;
+	color: #e0a800;
 }
+
 .profile-content #overview-div label {
 	font-weight: 700;
-	color: #5b9bd1;
+	color: #e0a800;
 }
 
 .profile-content #settings-div label {
 	font-weight: 700;
-	color: #5b9bd1;
+	color: #e0a800;
 }
 
 .main-title {
@@ -272,12 +288,18 @@ th, td {
 	border-bottom: 10px solid transparent;
 }
 
+h2 {
+	color: #e0a800 !important;
+}
+
 .sidebar-container {
 	border-radius: 20px;
+	background-color: rgba(0, 0, 0, 0.45);
 }
 
 .settings-container {
 	border-radius: 20px;
+	background-color: rgba(0, 0, 0, 0.45);
 }
 
 .box>div {

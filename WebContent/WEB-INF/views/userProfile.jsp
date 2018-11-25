@@ -1,7 +1,6 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,16 +15,26 @@
 <title>User Profile</title>
 </head>
 <body class="wsmenucontainer">
+	<%@include file="includes/navbar.jsp"%>
 	<div class="container ">
-		<div class="row" style="margin-bottom: 10%"></div>
+		<div class="row" style="margin-bottom: 0%"></div>
 		<div class="row profile">
 			<div class="col-md-2"></div>
 			<div class="col-md-3">
 				<div class="profile-sidebar sidebar-container">
 					<!-- SIDEBAR USERPIC -->
 					<div class="profile-userpic">
-						<img src="resources/images/avatar.svg" class="img-responsive"
-							alt="">
+
+						<c:choose>
+							<c:when test="${avatar =='avatar.svg'}">
+								<img src="resources/images/${avatar}" class="img-responsive"
+									alt="">
+							</c:when>
+							<c:otherwise>
+								<img src="resources/images/avatars/${avatar}" class="img-responsive"
+									alt="">
+							</c:otherwise>
+						</c:choose>
 					</div>
 					<!-- END SIDEBAR USERPIC -->
 					<!-- SIDEBAR USER TITLE -->
@@ -71,16 +80,24 @@
 					</div>
 
 					<div id="matchHistory-div" class="hidden">
-						<div class="box-title main-title">
+						<div class="box-title main-title"
+							style="border-bottom-style: none;">
 							<h2 style="text-align: center;">Matches History</h2>
 						</div>
-						<c:if test="${not empty matches}">
-							<ul class="list-group">
-								<c:forEach items="${matches}" var="match">
-									<%@include file="template/matchItem.jsp"%>
-								</c:forEach>
-							</ul>
-						</c:if>
+						<c:choose>
+							<c:when test="${not empty matches}">
+								<ul class="list-group"
+									style="overflow: auto; max-height: 23.8em;">
+									<c:forEach items="${matches}" var="match">
+										<%@include file="template/matchItem.jsp"%>
+									</c:forEach>
+								</ul>
+							</c:when>
+							<c:otherwise>
+								<h2 style="text-align: center; font-size: 20px;">No matches
+									found</h2>
+							</c:otherwise>
+						</c:choose>
 					</div>
 					<!-- overview content end -->
 				</div>

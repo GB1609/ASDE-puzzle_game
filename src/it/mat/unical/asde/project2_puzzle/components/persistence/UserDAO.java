@@ -22,8 +22,8 @@ public class UserDAO {
 
 	@PostConstruct
 	public void init() {
-		dbManager.save(new User("Ciccio", "Francesco", "Pasticcio"));
-		dbManager.save(new User("Giovanni", "Francesco", "Pasticcio"));
+		dbManager.save(new User("Ciccio", "Francesco", "Pasticcio","avatar.svg"));
+		dbManager.save(new User("Giovanni", "Francesco", "Pasticcio","avatar_1.png"));
 	}
 
 	public boolean save(User user) {

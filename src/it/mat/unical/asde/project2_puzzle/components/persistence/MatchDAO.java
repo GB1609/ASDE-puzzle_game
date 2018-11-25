@@ -25,6 +25,53 @@ public class MatchDAO {
 	public void init() {
 		dbManager.save(new Match("Ciccio", "Giovanni", 0,132));
 		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
+		dbManager.save(new Match("Giovanni","Ciccio", 1,67));
 	}
 
 	public boolean save(Match match) {
