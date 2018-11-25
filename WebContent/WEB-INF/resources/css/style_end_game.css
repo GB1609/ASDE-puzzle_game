@@ -62,7 +62,7 @@
 	margin-top: 1rem;
 	margin-down: 1rem;
 	min-width: fit-content; position : relative;
-	/* width: fit-content;*/
+	width: 100%;
 	border-width: 5px;
 	border-style: solid;
 	border-color: black;
