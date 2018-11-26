@@ -93,7 +93,7 @@ span:hover {
 
 #dynamic {
 	width: 200%;
-	height: 100px;
+	height: 40%;
 	margin: 20px;
 }
 
@@ -114,7 +114,7 @@ span:hover {
 	position: relative;
 	/* width: fit-content;*/
 	border-width: 5px;
-	border-style: outset;
+	border-style: solid;
 	border-color: black;
 	border-radius: 10px;
 	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
@@ -122,3 +122,95 @@ span:hover {
 	margin-top: 1%;
 	margin-bottom: 1%;
 }
+
+.chat{
+	position: absolute;
+	bottom: 6%;
+	margin: 3%;
+	padding: 5%;
+	height: 60%;
+}
+
+.input-chat.col-9 {
+	margin: auto;
+}
+
+.input-chat{
+	/* padding:2%; */
+	justify-content: center;
+}
+
+
+.scrollbar-ripe-malinka::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+	box-shadow: none;
+	background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+.scrollbar-ripe-malinka::-webkit-scrollbar {
+	width: 16px;
+}
+
+.scrollbar-ripe-malinka::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+	box-shadow: none;
+	background-image: -webkit-linear-gradient(330deg, #f093fb 0%, #f5576c 100%);
+	background-image: linear-gradient(120deg, #DAA520 0%, #FF8C00 100%);
+}
+
+.bordered-deep-purple::-webkit-scrollbar-track {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border: 1px solid black;
+}
+
+.bordered-deep-purple::-webkit-scrollbar-thumb {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.bordered-cyan::-webkit-scrollbar-track {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border: 1px solid black;
+}
+
+.bordered-cyan::-webkit-scrollbar-thumb {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.square::-webkit-scrollbar-track {
+	border-radius: 0 !important;
+}
+
+.square::-webkit-scrollbar-thumb {
+	border-radius: 0 !important;
+}
+
+.thin::-webkit-scrollbar {
+	width: 6px;
+}
+.chat-list{
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.45);
+	border-width: 5px;
+	border-style: solid;
+	border-color: black;
+	border-radius: 10px;
+}
+
+.button-send {
+	border-style: solid;
+	border-color: black;
+	border-width: 3px;
+	border-radius: 25%;
+	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+	margin: auto;
+	margin-top: 1%;
+	margin-bottom: 1%;
+}
+
+

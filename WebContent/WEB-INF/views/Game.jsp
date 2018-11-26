@@ -8,11 +8,7 @@
 			<meta charset="ISO-8859-1">
 			<%@include file="includes/includes.jsp"%>
 				<script src="resources/js/Game.js"></script>
-				<script src="resources/js/progressbar.js"></script>
-				
-				<!-- <script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script> -->
-
-
+				<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
 				<title>Game Page</title>
 				<style type="text/css">
 					#container {
@@ -72,7 +68,7 @@
 			<%@include file="includes/navbar.jsp"%>
 				<div class="no_margin">
 					<div class="row justify-content-md-end cover_all no_margin">
-						<div id="view" class="row justify-content-center align-items-center col-md-10 col-sm-12 col-xs-12">
+						<div id="view" class="row justify-content-center align-items-center col-md-9 col-sm-12 col-xs-12">
 							<div class="row justify-content-center col-md-12">
 								<div class="board col-md-auto">
 									<input id="difficulty" class="hidden-field" value="${randomGrid.difficulty}" />
@@ -94,48 +90,25 @@
 								</div>
 							</div>
 						</div>
-						<div class="row minimal-row col-12 col-md-2 col-sm-12 col-xs-12 game_info card-with-shadow">
+						<div class="row minimal-row col-12 col-md-3 col-sm-12 col-xs-12 game_info card-with-shadow">
 							<div class="row minimal-row fit-row">
-								<!-- PROGRESS BAR -->
 								<div id="dynamic">
-									<script>
-										var bar = new ProgressBar.SemiCircle(dynamic, {
-											strokeWidth: 6,
-											color: '#FFEA82',
-											trailColor: '#eee',
-											trailWidth: 1,
-											easing: 'easeInOut',
-											duration: 1400,
-											svgStyle: null,
-											text: {
-												value: '',
-												alignToBottom: false
-											},
-											from: {
-												color: '#FFEA82'
-											},
-											to: {
-												color: '#ED6A5A'
-											},
-											// Set default step function for all animate calls
-											step: (state, bar) => {
-												bar.path.setAttribute('stroke', state.color);
-												var value = Math.round(bar.value() * 100);
-												if (value === 0) {
-													bar.setText('');
-												} else {
-													bar.setText(value);
-												}
-
-												bar.text.style.color = state.color;
-											}
-										});
-										bar.text.style.fontSize = '2rem';
-
-										bar.animate(1.0);
-									</script>
+									<!-- PROGRESS BAR -->
 								</div>
-								<!-- END PROGRESS BAR -->
+								<div class="row">
+									<!-- CHAT -->
+									<div class="chat">
+										<div class="row chat-list scrollbar-ripe-malinka" id="chat_content ">
+
+										</div>
+										<div class="row input-chat ">
+											<input type="text" class="form-control col-9 card-with-shadow" id="message_text" placeholder="Message to send">
+											<button type="button" onclick="sendMessage()" class="btn btn-warning button-send btn-sm col-2">
+												<img src="resources/images/icons/send.png" class="piece" width="-webkit-fill-available" height="-webkit-fill-available" />
+											</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

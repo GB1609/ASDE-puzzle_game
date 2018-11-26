@@ -10,14 +10,14 @@ function drag(ev) {
   ev.dataTransfer.setData("old_location", ev.target.parentElement.parentElement.id);
   ev.dataTransfer.setData("old_position", $(ev.target.parentElement).prevAll(".box_piece").length);
 }
-document.addEventListener("dragenter", function(event) {
+document.addEventListener("dragenter", function (event) {
   if (!event.target.hasChildNodes() &&
     event.target.getAttribute("class") == "box_piece") {
     event.target.style.background = "#C37500";
   }
 }, false);
 
-document.addEventListener("dragleave", function(event) {
+document.addEventListener("dragleave", function (event) {
   if (!event.target.hasChildNodes() &&
     event.target.getAttribute("class") == "box_piece") {
     event.target.style.background = "";
@@ -41,10 +41,10 @@ function drop(ev) {
       "new_position": $(ev.target).prevAll(".box_piece").length,
       "piece": data
     }),
-    success: function(resultData) {
+    success: function (resultData) {
       console.log("ok" + resultData);
     },
-    error: function(e) {
+    error: function (e) {
 
       alert(
         "old position" + old_position + "\n" +
@@ -61,6 +61,38 @@ function drop(ev) {
 }
 
 
-$(document).ready(function() {
-  //$('#base').addClass($('#base').attr('value'));
+$(document).ready(function () {
+  var bar = new ProgressBar.SemiCircle(dynamic, {
+    strokeWidth: 6,
+    color: '#FFEA82',
+    trailColor: '#eee',
+    trailWidth: 1,
+    easing: 'easeInOut',
+    duration: 1400,
+    svgStyle: null,
+    text: {
+      value: '',
+      alignToBottom: false
+    },
+    from: {
+      color: '#FFEA82'
+    },
+    to: {
+      color: '#ED6A5A'
+    },
+    // Set default step function for all animate calls
+    step: (state, bar) => {
+      bar.path.setAttribute('stroke', state.color);
+      var value = Math.round(bar.value() * 100);
+      if (value === 0) {
+        bar.setText('');
+      } else {
+        bar.setText(value);
+      }
+
+      bar.text.style.color = state.color;
+    }
+  });
+  bar.text.style.fontSize = '2rem';
+  bar.animate(0.7);
 });
