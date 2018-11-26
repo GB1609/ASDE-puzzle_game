@@ -99,7 +99,7 @@
 								<div class="row">
 									<!-- CHAT -->
 									<div class="chat">
-										<div class="row chat-list scrollbar-ripe-malinka" id="chat_content ">
+										<div class="row chat-list scrollbar-ripe-malinka" id="chat_content">
 
 										</div>
 										<div class="row input-chat ">
