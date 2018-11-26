@@ -6,6 +6,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <%@include file="includes/includes.jsp"%>
+<link rel="stylesheet" type="text/css" media="all" href="resources/css/style_game.css"/>
+<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
 <script src="resources/js/Game.js"></script>
 <title>Game Page</title>
 <style type="text/css">
@@ -23,7 +25,7 @@
 	<div class="no_margin">
 		<div class="row justify-content-md-end cover_all no_margin">
 			<div id="view"
-				class="row justify-content-center align-items-center col-md-10 col-sm-12 col-xs-12">
+				class="row justify-content-center align-items-center col-md-9 col-sm-12 col-xs-12">
 				<div class="row justify-content-center col-md-12">
 					<div class="board col-md-auto">
 						<input id="difficulty" class="hidden-field"
@@ -47,17 +49,27 @@
 					</div>
 				</div>
 			</div>
-			<div
-				class="row minimal-row col-12 col-md-2 col-sm-12 col-xs-12 game_info pr-0">
-				<div class="row minimal-row fit-row">
-					<div id="dynamic"
-						class="progress-bar progress-bar-success progress-bar-striped active"
-						role="progressbar" aria-valuenow="0" aria-valuemin="0"
-						aria-valuemax="100" style="width: 0%">
-						<span id="current-progress"></span>
-					</div>
-				</div>
-			</div>
+			<div class="row minimal-row col-12 col-md-3 col-sm-12 col-xs-12 game_info card-with-shadow">
+              <div class="row minimal-row fit-row">
+                <div id="dynamic">
+                  <!-- PROGRESS BAR -->
+                </div>
+                <div class="row">
+                  <!-- CHAT -->
+                  <div class="chat">
+                    <div class="row chat-list scrollbar-ripe-malinka" id="chat_content">
+
+                    </div>
+                    <div class="row input-chat ">
+                      <input type="text" class="form-control col-9 card-with-shadow" id="message_text" placeholder="Message to send">
+                      <button type="button" onclick="sendMessage()" class="btn btn-warning button-send btn-sm col-2">
+                        <img src="resources/images/icons/send.png" class="piece" width="-webkit-fill-available" height="-webkit-fill-available" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 		</div>
 	</div>
 </body>

@@ -6,6 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,7 +47,8 @@ public class EventsService {
 
 	public void addEventFor(Integer gameID, String player, String progress) throws InterruptedException {
 		String key = gameID + (player.equals("player1") ? "player2" : "player1");
-		addEvent(progress, key);
+		JSONObject JsonMessage = new JSONObject().put("message", false).put("progress", progress);
+		addEvent(JsonMessage.toString(), key);
 	}
 
 	private void addEvent(String progress, String key) throws InterruptedException {
@@ -120,6 +122,13 @@ public class EventsService {
 				join.get(key).put("already-started");
 		}
 		return b;
+	}
+
+	public void addMessageFor(Integer gameId, String player, String message) throws InterruptedException {
+		String key = gameId + (player.equals("player1") ? "player2" : "player1");
+		JSONObject JsonMessage = new JSONObject().put("message", true).put("message_text", message);
+		addEvent(JsonMessage.toString(), key);
+
 	}
 
 }

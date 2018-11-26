@@ -89,4 +89,17 @@ public class GameController {
 		}
 	}
 
+	@PostMapping("send_message")
+	@ResponseBody
+	public void sendMessage(@RequestParam String message, HttpSession session) {
+		Integer gameId = (Integer) session.getAttribute("gameId");
+		String player = (String) session.getAttribute("player");
+		try {
+			eventsService.addMessageFor(gameId, player, message);
+		} catch (InterruptedException e) {
+			System.out.println("non riesco ad aggiungere");
+			e.printStackTrace();
+		}
+	}
+
 }

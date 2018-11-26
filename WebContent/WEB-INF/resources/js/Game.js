@@ -1,4 +1,6 @@
 var endGame = false;
+var bar;
+var value;
 function allowDrop(ev) {
 	if (!ev.target.hasChildNodes()
 			&& ev.target.getAttribute("class") == "box_piece") {
@@ -62,6 +64,20 @@ function drop(ev) {
 	});
 }
 
+function createMessageNode(message){
+	var div = document.createElement("DIV");
+	var t = document.createTextNode(message);
+	div.appendChild(t);
+	return div;
+}
+function appendMessage(message, isSender){
+	var node=createMessageNode(message);
+	if(isSender)
+		node.style.background="#DAA520";
+	else
+		node.style.background="darkorange";
+	document.getElementById("chat_content").appendChild(node);	
+}
 function getEventsFromServer() {
 	// var gameId = $("#gameId").val();
 	$.ajax({
@@ -76,9 +92,16 @@ function getEventsFromServer() {
 					endGame = true;
 					window.location.href = "/ASDE-puzzle_game/end_game";
 				} else
-					$("#dynamic").css("width", result + "%").attr(
-							"aria-valuenow", result)
-							.text(result + "% Complete");
+					{					
+						var r = JSON.parse(result);
+						if (r.message) {
+							appendMessage(r.message_text,false);
+						} else {
+							value=r.progress;
+							bar.animate(value/100);
+						}					
+						
+					}
 
 			}
 			getEventsFromServer();
@@ -91,6 +114,39 @@ function getEventsFromServer() {
 		}
 	});
 }
+
+function makeRequest(action, type, data, onsuccess, onerror){
+	$.ajax({
+		url : action,
+		type : type,
+		data : data,
+		success : onsuccess,
+		error : onerro
+	});
+	
+}
+
+
+
+function sendMessage(){
+	var message=$("#message_text").val();
+	$.ajax({
+		url : "send_message",
+		type : "post",
+		data : ({
+		"message" : message
+		}),
+		success : function(result) {
+			appendMessage(message,true);
+		},
+		error : function(e) {
+			console.log(e.responseText);
+		}
+	});
+}
+
+
+
 window.onbeforeunload = function() {
 	if (!endGame)
 		return "Are you sure";
@@ -104,9 +160,50 @@ window.onunload = function() {
 		data : ({})
 	});
 }
+function initProgressBar(){
+	 bar = new ProgressBar.SemiCircle(dynamic, {
+		    strokeWidth: 6,
+		    color: '#FFEA82',
+		    trailColor: '#eee',
+		    trailWidth: 1,
+		    easing: 'easeInOut',
+		    duration: 1400,
+		    svgStyle: null,
+		    text: {
+		      value: '',
+		      alignToBottom: false
+		    },
+		    from: {
+		      color: '#FFEA82'
+		    },
+		    to: {
+		      color: '#ED6A5A'
+		    },
+		    // Set default step function for all animate calls
+		    step: (state, bar) => {
+		      bar.path.setAttribute('stroke', state.color);
+		      value = Math.round(bar.value() * 100);
+		      if (value === 0) {
+		        bar.setText('0 %');
+		      } else {
+		        bar.setText(value+" %");
+		      }
+
+		      bar.text.style.color = state.color;
+		    }
+		  });
+		  bar.text.style.fontSize = '2rem';
+
+}
 $(document).ready(function() {
 	if (performance.navigation.type == 1) {
 		window.location.href = "/ASDE-puzzle_game/end_game";
 	}
 	getEventsFromServer();
+	initProgressBar();
+		 		 // bar.animate(0.7);
+	
+	
+	
+	
 });
