@@ -142,7 +142,7 @@ function searchLobby(ev, searchBy) {
 				console.log("LOBBY SEARCHED: "+id_lobby);
 				$("#"+id_lobby).addClass("searched");
 				putLobbyOnTop(id_lobby);
-				$('.dropdown-toggle').dropdown('dispose');
+				$('.dropdown-toggle').dropdown();
 			}
 		},
 		error : function(ev) {

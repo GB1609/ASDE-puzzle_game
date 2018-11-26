@@ -9,6 +9,7 @@
 			<%@include file="includes/includes.jsp"%>
 				<script src="resources/js/Game.js"></script>
 				<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
+				<link rel="stylesheet" type="text/css" media="all" href="resources/css/style_game.css" />
 				<title>Game Page</title>
 				<style type="text/css">
 					#container {

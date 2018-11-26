@@ -17,4 +17,3 @@
 <!-- font awesome -->
 
 <link rel="stylesheet" type="text/css" media="all" href="resources/css/style_navbar.css" />
-<link rel="stylesheet" type="text/css" media="all" href="resources/css/style_game.css" />
