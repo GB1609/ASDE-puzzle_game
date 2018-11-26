@@ -36,7 +36,7 @@ public class LobbyController {
 																							// lobby service
 		if (this.lobbyService.addLobby(newLobby)) {
 			eventService.attachListenerToJoin(lobby_name);
-			session.setAttribute("lobby_created", lobby_name);
+//			session.setAttribute("lobby_created", lobby_name);
 			System.out.println("ADD LOBBY: true || info: " + newLobby);
 			// Can we avoid to use this line? redundant with that in the "showLobbies"
 			// method.

@@ -4,6 +4,8 @@ public class RunningGame {
 
 	private GridToComplete gamePlayer1;
 	private GridToComplete gamePlayer2;
+	private String user1;
+	private String user2;
 
 	public RunningGame(int dim) {
 		gamePlayer1 = new GridToComplete(dim);

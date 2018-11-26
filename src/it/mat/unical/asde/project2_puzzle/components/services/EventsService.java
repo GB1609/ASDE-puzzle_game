@@ -22,6 +22,7 @@ public class EventsService {
 
 	public String getEventJoin(String lobbyName) throws InterruptedException {
 		if (!join.containsKey(lobbyName)) {
+			// TODO THROW EXCEPTION
 			join.put(lobbyName, new LinkedBlockingQueue<>());
 
 			System.out.println("No listener attached for this lobby" + lobbyName);
@@ -112,6 +113,7 @@ public class EventsService {
 		}
 		String b = join.get(key).poll(29, TimeUnit.SECONDS);
 		if (b != null) {
+			// only for reload problem
 			if (b.equals("already-started"))
 				join.remove(key);
 			else

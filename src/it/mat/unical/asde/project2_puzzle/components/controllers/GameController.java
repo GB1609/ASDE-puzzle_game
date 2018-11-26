@@ -44,7 +44,6 @@ public class GameController {
 			if (gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position,
 					piece))
 				eventsService.addEventEndGame(gameId);
-
 			else {
 				String progress = gameService.getProgressFor(gameId, player);
 				eventsService.addEventFor(gameId, player, progress);

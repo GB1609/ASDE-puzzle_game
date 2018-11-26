@@ -1,3 +1,4 @@
+var endGame = false;
 function allowDrop(ev) {
 	if (!ev.target.hasChildNodes()
 			&& ev.target.getAttribute("class") == "box_piece") {
@@ -71,9 +72,10 @@ function getEventsFromServer() {
 		}),
 		success : function(result) {
 			if ($.trim(result)) {
-				if (result == "END-GAME")
+				if (result == "END-GAME") {
+					endGame = true;
 					window.location.href = "/ASDE-puzzle_game/end_game";
-				else
+				} else
 					$("#dynamic").css("width", result + "%").attr(
 							"aria-valuenow", result)
 							.text(result + "% Complete");
@@ -90,7 +92,10 @@ function getEventsFromServer() {
 	});
 }
 window.onbeforeunload = function() {
-	return "Are you sure";
+	if (!endGame)
+		return "Are you sure";
+	else
+		return;
 };
 window.onunload = function() {
 	$.ajax({
