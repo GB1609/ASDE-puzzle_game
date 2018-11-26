@@ -21,10 +21,10 @@ jQuery(document)
 
 					if (creationFailed != "") {
 						signup_selected();
-						alert(creationFailed);
+						//alert(creationFailed);
 					}
 					if (loginFailed != "")
-						alert(loginFailed);
+						//alert(loginFailed);
 
 					// open modal
 					mainNav.on('click', function(event) {
@@ -87,7 +87,7 @@ jQuery(document)
 						formForgotPassword.removeClass('is-selected');
 						tabLogin.addClass('selected');
 						tabSignup.removeClass('selected');
-						
+
 						$('#imageSection').addClass('no-visible');
 
 					}
@@ -100,7 +100,6 @@ jQuery(document)
 						formForgotPassword.removeClass('is-selected');
 						tabLogin.removeClass('selected');
 						tabSignup.addClass('selected');
-						
 
 					}
 
@@ -145,7 +144,7 @@ function selectAvatar(e) {
 	$('.avatar_grid p').removeClass("avatar_selected");
 	var p = e.closest('p');
 	$(p).addClass("avatar_selected");
-//	$('#imageSection').addClass('no-visible');
+	// $('#imageSection').addClass('no-visible');
 }
 
 function checkSignupFields() {
@@ -211,9 +210,13 @@ function fieldValid(e) {
 	e.removeClass("is-visible");
 }
 
-
-function openAvatarGrid() {
-	$('#imageSection').removeClass('no-visible');
+function avatarGrid(e) {
+	$('#imageSection').toggleClass('no-visible');
+	if ($('#imageSection').hasClass('no-visible')) {
+		e.value = "Choose avatar";
+	} else {
+		e.value = "Close avatar";
+	}
 
 }
 
