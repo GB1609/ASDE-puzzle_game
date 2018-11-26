@@ -8,8 +8,7 @@
 <%@include file="includes/includes.jsp"%>
 <script src="resources/js/Lobby.js"></script>
 <title>Lobby Page</title>
-<link rel="stylesheet" type="text/css" media="all"
-	href="resources/css/style_lobby.css" />
+<link rel="stylesheet" type="text/css" media="all"	href="resources/css/style_lobby.css" />
 </head>
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
@@ -20,6 +19,33 @@
 					<button type="button" class="btn btn-warning btn-lg button-in-row"
 						onclick="refreshLobbies()">Refresh</button>
 				</div>
+				<!-- <button type="button" class="btn btn-warning btn-lg button-in-row"
+		          data-toggle="modal" data-target="#create-modal">Create</button>
+		        <div class="modal fade" id="create-modal">
+		          <div class="modal-dialog">
+		            <div class="modal-content">
+		              <div class="modal-header">
+		                <h4 class="modal-title">Create your lobby</h4>
+		                <button type="button" class="close" data-dismiss="modal">&times;</button>
+		              </div>
+		              <form id="id_create_lobby_form">
+		                <div class="modal-header center-content-row">
+		                  <div class="form-group">
+		                    <label for="lobby_name_text" style="color: white;">Lobby's
+		                      name: </label> <input type="text" class="form-control"
+		                      id="id_lobby_name"> <br>
+		                  </div>
+		                </div>
+		                <div class="modal-footer center-content-row">
+		                  <button type="button" onclick="createLobby()"
+		                    class="btn btn-warning btn-sm">Create</button>
+		                </div>
+		              </form>
+		
+		            </div>
+		          </div>
+		        </div>-->
+				
 				<div class="create-btn col">
 					<a href="#" class="btn btn-warning btn-lg button-in-row "
 						data-toggle="modal" data-target="#create-modal">Create</a>
@@ -77,53 +103,7 @@
 				</div>
 			</div>
 		</div>
+		
 	</div>
 </body>
 </html>
-<!-- 					<c:if test="${not empty error}">
-							<div class="alert alert-danger alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert"
-									aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-								<strong>${error}</strong>
-							</div>
-						</c:if>
-						<c:if test="${not empty lobbies}">
-							<ul class="list-group" id="lobbies_list">
-								<c:forEach items="${lobbies}" var="lobby">
-									<li class="list-group-item card-with-shadow lobby_row" id="id_lobby_${lobby.name}">
-										<div class="text-center" id="lobby_name_div">${lobby.name}</div>
-										<div class=" text-center">
-											<img src="resources/images/avatar.svg" class="img-circle"
-												height="64" width="64" alt="Avatar">
-											<c:choose>
-												<c:when test="${not empty lobby.owner}">${lobby.owner}</c:when>
-												<c:otherwise>empty</c:otherwise>
-											</c:choose>
-											<img
-												style="max-height: 1cm; max-width: 1cm; margin-left: 0%;"
-												src="resources/img/vs.jpg">
-											<c:choose>
-												<c:when test="${not empty lobby.guest}">${lobby.guest}</c:when>
-												<c:otherwise>empty</c:otherwise>
-											</c:choose>
-											<img src="resources/images/avatar.svg" class="img-circle"
-												height="64" width="64" alt="Avatar">
-
-											<c:choose>
-												<c:when test="${sessionScope.username eq lobby.owner}">
-													<button type="button" onclick="startGame()"
-														class="btn btn-primary float-right">Start</button>
-												</c:when>
-												<c:otherwise>
-													<button type="button" onclick="joinLobby(event,'id_lobby_${lobby.name}')"
-														class="btn btn-warning btn-lg float-right">Join</button>
-												</c:otherwise>
-											</c:choose>
-										</div>
-									</li>
-								</c:forEach>
-							</ul>
-						</c:if>
-						 -->

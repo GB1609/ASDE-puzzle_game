@@ -16,7 +16,7 @@ public class LobbyService {
 	@PostConstruct
 	public void init() {
 		this.lobbies = new LinkedList<>();
-		for (int i = 0; i <= 5; i++) {
+		for (int i = 0; i <= 100; i++) {
 			this.lobbies.add(new Lobby("Lobby" + (i + 1), "user" + (int) (Math.random() * 100), ""));
 		}
 	}
@@ -25,10 +25,14 @@ public class LobbyService {
 		return this.lobbies;
 	}
 
-	public void joinToLobby(String lobby_name, String username) {
+	public boolean joinToLobby(String lobby_name, String username) {
 		this.leaveIfInOtherLobby(username);
 		Lobby lobbyToJoin = this.getLobby(lobby_name, SearchBy.LOBBY_NAME);
-		lobbyToJoin.setGuest(username);
+		if (lobbyToJoin.getGuest().isEmpty()) {
+			lobbyToJoin.setGuest(username);
+			return true;
+		}
+		return false;
 		// System.out.println("join to lobby: " + lobbyToJoin);
 	}
 
