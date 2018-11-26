@@ -19,13 +19,13 @@
 }
 
 .panel {
-	margin:auto;
-	margin-top: 20px;
-	border-radius: 0;
-	border-width: 4px;
-	border-color: black;
-	border-style: ridge;
-	background-color: rgba(0, 0, 0, 0.3);
+    margin: auto;
+    margin-top: 20px;
+    border-radius: 4%;
+    border-width: 4px;
+    border-color: black;
+    border-style: solid;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .panel-body {

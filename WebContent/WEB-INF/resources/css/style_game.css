@@ -75,7 +75,6 @@ span:hover {
 	height: 86.5vh;
 	width: 99vw;
 	margin: 0px;
-	/* -webkit-fill-available;*/
 }
 
 .no_margin {
@@ -123,7 +122,7 @@ span:hover {
 	margin-bottom: 1%;
 }
 
-.chat{
+.chat {
 	position: absolute;
 	bottom: 6%;
 	margin: 3%;
@@ -135,11 +134,10 @@ span:hover {
 	margin: auto;
 }
 
-.input-chat{
+.input-chat {
 	/* padding:2%; */
 	justify-content: center;
 }
-
 
 .scrollbar-ripe-malinka::-webkit-scrollbar-track {
 	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
@@ -193,7 +191,8 @@ span:hover {
 .thin::-webkit-scrollbar {
 	width: 6px;
 }
-.chat-list{
+
+.chat-list {
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.45);
 	border-width: 5px;
@@ -212,5 +211,3 @@ span:hover {
 	margin-top: 1%;
 	margin-bottom: 1%;
 }
-
-

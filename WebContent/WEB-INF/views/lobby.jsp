@@ -52,7 +52,7 @@
 
 				<div class="dropdown col">
 					<button type="button"
-						class="btn btn-warning btn-lg dropdown-toggle button-in-row"
+						class="btn btn-warning btn-lg dropdown-toggle button-in-row" aria-haspopup="true"
 						data-toggle="dropdown">Search Lobby</button>
 					<div class="dropdown-menu dropdown-content">
 						<form>

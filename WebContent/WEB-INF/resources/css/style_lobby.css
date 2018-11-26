@@ -127,7 +127,7 @@ a {
 .card-with-shadow {
 	color: white;
 	background: #212529ba;
-	width: -webkit-fill-available;
+	width: 100%;
 	border-radius: 10px;
 	display: inline-block;
 	height: fit-content;
@@ -137,7 +137,7 @@ a {
 	position: relative;
 	/* width: fit-content;*/
 	border-width: 5px;
-	border-style: outset;
+	border-style: solid;
 	border-color: black;
 	border-radius: 10px;
 	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
