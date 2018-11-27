@@ -12,7 +12,7 @@ public class GameService{
     HashMap<Integer, RunningGame> runningGames = new HashMap<>();
 
     public Grid initNewGame(Integer gameId){
-        int randomPuzzle = new Random().nextInt(12) + 1;
+        int randomPuzzle = new Random().nextInt(13);
         if (!initalGrids.containsKey(gameId)) {
             initalGrids.put(gameId, new Grid(0, "" + randomPuzzle));
             if (!runningGames.containsKey(gameId))
@@ -22,11 +22,12 @@ public class GameService{
         return initalGrids.remove(gameId);
     }
 
-    public void updateStateGame(Integer gameId,String player,String old_location,int old_position,String new_location,int new_position,String piece){
-        runningGames.get(gameId).updateSateGame(player, old_location, old_position, new_location, new_position, piece);
+    public boolean updateStateGame(Integer gameId,String player,String old_location,int old_position,String new_location,int new_position,
+            String piece){
+        return runningGames.get(gameId).updateSateGame(player, old_location, old_position, new_location, new_position, piece);
     }
 
-    public Integer getProgressFor(Integer gameId,String player){
-        return runningGames.get(gameId).getProgress(player);
+    public String getProgressFor(Integer gameId,String player){
+        return runningGames.get(gameId).getProgress(player).toString();
     }
 }

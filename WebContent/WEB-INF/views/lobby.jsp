@@ -122,8 +122,17 @@
 
 											<c:choose>
 												<c:when test="${sessionScope.username eq lobby.owner}">
-													<button type="button" onclick="startGame()"
-														class="btn btn-primary float-right">Start</button>
+													<input id="created_lobby" type="hidden" value="created" />
+													<button id="start_button" type="button"
+														onclick="startGame()"
+														class="btn btn-primary float-right hidden-field">Start</button>
+													<div id="join_alert" class="alert alert-info hidden-field" role="alert">A player joined to lobby</div>
+													<div id="leave_alert" class="alert alert-danger hidden-field" role="alert">The player leaved the lobby</div>
+													<form style="display: hidden" action="forward_to_game"
+														method="post" id="ftg_form">
+														<input type="hidden" id="lobby_name" name="lobby_name"
+															value="${lobby.name}" />
+													</form>
 												</c:when>
 												<c:otherwise>
 													<button type="button" onclick="joinLobby(event,'id_lobby_${lobby.name}')"

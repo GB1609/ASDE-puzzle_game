@@ -8,10 +8,48 @@ $(document).ready(	function() {
 				+ listElm.clientHeight >= (listElm.scrollHeight - 1)) {
 			getLobbies(false);
 		}
-	});
+		});
+		var created_lobby = $("#created_lobby");
+	if (performance.navigation.type == 1 && created_lobby.val() === "created") {
+		var lobby_name = $.trim($("#created_lobby").parent().prev().text());
+		listenForJoinToLobby(lobby_name);
+	}
 	getLobbies(true);
 	// $('#base').addClass($('#base').attr('value'));
 });
+function listenForStartGame(lobby_name) {
+	var xhr = $.ajax({
+		url : "check_start",
+		type : "post",
+		data : ({
+			"lobby_name" : lobby_name
+		}),
+		success : function(result) {
+			if (!$.trim(result))
+				listenForStartGame(lobby_name);
+			else {
+				var r = JSON.parse(result);
+				if (r.start) {
+					window.location.href = "/ASDE-puzzle_game/game";
+				} else if (r.leave) {
+					alert("Lobby destruct");// TODO make alert
+				}
+				// TODO listen for leave lobby
+				// $("#start_button").removeClass("hidden-field");
+				// $("#lobby_name").val(lobby_name);
+				// $("#ftg_form").submit();
+			}
+		},
+		error : function(e) {
+			console.log(e.responseText);
+			setTimeout(function() {
+				listenForStartGame(lobby_name);
+			}, 5000);
+		}
+	});
+	console.log(xhr);
+
+}
 
 function getLobbies(reset) {
 	$.ajax({
@@ -53,14 +91,60 @@ function joinLobby(ev, id_lobby) {
 				alert("ERROR: " + r.err_msg);
 			} else {
 				getLobbies(true);
+				listenForStartGame(lobby_name);
 			}
 		},
 		error : function(e) {
-			alert(e.responseText);
+			console.log(e.responseText);
 			console.log("JOIN ERROR: ", e);
 		}
 	});
 	ev.preventDefault();
+}
+
+
+function startGame(ev) {
+	$("#ftg_form").submit();
+}
+
+function listenForJoinToLobby(lobby_name) {
+	// alert("in join")
+	var xhr = $.ajax({
+		url : "check_join",
+		type : "post",
+		data : ({
+			"lobby_name" : lobby_name
+		}),
+		success : function(result) {
+			if ($.trim(result) && !(result === "already-joined")) {
+				var r = JSON.parse(result);
+				if (r.join) {
+					// TODO listen for leave lobby
+					$("#start_button").removeClass("hidden-field");
+					$('#join_alert').fadeIn('slow', function() {
+						$('#join_alert').delay(5000).fadeOut();
+					});
+				} else if (r.leave) {
+					$("#start_button").addClass("hidden-field");
+					$('#leave_alert').fadeIn('slow', function() {
+						$('#leave_alert').delay(5000).fadeOut();
+					});
+				}
+				// $("#lobby_name").val(lobby_name);
+				// $("#ftg_form").submit();
+			}
+			listenForJoinToLobby(lobby_name);
+
+		},
+		error : function(e) {
+			console.log(e.responseText);
+			setTimeout(function() {
+				listenForJoinToLobby(lobby_name);
+			}, 5000);
+		}
+	});
+	console.log(xhr);
+
 }
 
 function createLobby(ev) {
@@ -79,10 +163,11 @@ function createLobby(ev) {
 			} else {
 				getLobbies(true);
 				$('#create-modal').modal("toggle");
+				listenForJoinToLobby(lobby_name);
 			}
 		},
 		error : function(e) {
-			alert(e.responseText);
+			console.log(e.responseText);
 			console.log("LOBBY CREATE ERROR: ", e);
 		}
 	});
@@ -115,24 +200,7 @@ function searchLobby(ev, searchBy) {
 	});
 }
 
-function startGame(ev, id_lobby) {
-	var lobby_name = $("#" + id_lobby).children('#lobby_name_div').text();
-	$.ajax({
-		url : "delete_lobby_by_name",
-		type : "POST",
-		data : ({
-			"lobby_name" : lobby_name,
-		}),
-		success : function(resultData) {
-			console.log("Start game ok");//: " + resultData);
-			window.location.href = "http://localhost:8080/ASDE-puzzle_game/game";
-		},
-		error : function(e) {
-			alert(e.responseText);
-			console.log("START GAME ERROR: ", e);
-		}
-	});
-}
+
 // 0000000000000000000000000000000000000000000000000000000000000000000000000000000
 // 00000000000000000000000 - UTILITY - 0000000000000000000000000000000000000000000
 // 0000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -149,6 +217,7 @@ var clearLobbiesList = function () {
 	while (list.firstChild) {
 		list.removeChild(list.firstChild);
 	}
+	
 }
 
 var loadMore = function(lobbies, lobbies_guest, lobbies_owner) {
@@ -225,9 +294,14 @@ function buildLobbyRow(id, name, owner, guest, username) {
 				+ name
 				+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
 	} else {
-		newLobby += "<button id=\"start_btn_lobby_"
-				+ name
-				+ "\" type=\"button\" onclick=\"startGame('#id_lobby_"+ name+"')\" class=\"btn btn-warning btn-lg float-right\">Start</button>";
+		
+		newLobby += "<input id=\"created_lobby\" type=\"hidden\" value=\"created\" />";
+		newLobby += "<button id=\"start_button\" type=\"button\" onclick=\"startGame()\" class=\"btn btn-warning btn-lg float-right hidden-field\">Start</button>";
+		newLobby += "<div id=\"join_alert\" class=\"alert alert-info hidden-field\" role=\"alert\">A player joined to lobby</div>";
+		newLobby += "<div id=\"leave_alert\" class=\"alert alert-danger hidden-field\" role=\"alert\">The player leaved the lobby</div>";
+		newLobby += "<form style=\"display: hidden\" action=\"forward_to_game\"	method=\"post\" id=\"ftg_form\">";
+		newLobby += "<input type=\"hidden\" id=\"lobby_name\" name=\"lobby_name\" value=\""+ name +"\" />";
+		newLobby += "</form>";
 	}
 	newLobby += "</div>" + "</li>";
 	return newLobby;

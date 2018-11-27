@@ -20,14 +20,16 @@ public class GameController{
     @Autowired
     EventsService eventsService;
 
-    @GetMapping("game")
+    @GetMapping("/game")
     public String goToGame(Model m,HttpSession session){
+        System.out.println("IN GAME" + session.getAttribute("player"));
         m.addAttribute("randomGrid", gameService.initNewGame((Integer) session.getAttribute("gameId")));
+        System.out.println("IN Game dopo" + session.getAttribute("player"));
         return "Game";
     }
 
     @GetMapping("endgame")
-    public String goToEndGame(Model m,HttpSession session){
+    public String getToEndGameTest(){
         return "EndGame";
     }
 
@@ -37,10 +39,13 @@ public class GameController{
             @RequestParam int new_position,@RequestParam String piece,HttpSession session){
         Integer gameId = (Integer) session.getAttribute("gameId");
         String player = (String) session.getAttribute("player");
-        gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position, piece);
-        Integer progress = gameService.getProgressFor(gameId, player);
         try {
-            eventsService.addEventFor(gameId, player, progress);
+            if (gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position, piece))
+                eventsService.addEventEndGame(gameId);
+            else {
+                String progress = gameService.getProgressFor(gameId, player);
+                eventsService.addEventFor(gameId, player, progress);
+            }
         } catch (InterruptedException e) {
             System.out.println("non riesco ad aggiungere");
             e.printStackTrace();
@@ -49,17 +54,56 @@ public class GameController{
 
     @PostMapping("get_progress")
     @ResponseBody
-    public DeferredResult<Integer> getEvents(HttpSession session){
+    public DeferredResult<String> getEvents(HttpSession session){
         Integer gameId = (Integer) session.getAttribute("gameId");
         String player = (String) session.getAttribute("player");
-        DeferredResult<Integer> outputProgress = new DeferredResult<>();
+        DeferredResult<String> outputProgress = new DeferredResult<>();
         ForkJoinPool.commonPool().submit(()-> {
             try {
-                outputProgress.setResult(eventsService.nextEvent(gameId, player));
+                outputProgress.setResult(eventsService.nextGameEventFor(gameId, player));
             } catch (InterruptedException e) {
-                outputProgress.setResult(-1000);
+                outputProgress.setResult(-1000 + "");
             }
         });
         return outputProgress;
+    }
+
+    @GetMapping("end_game")
+    public String goToEndGame(HttpSession session){
+        Integer gameId = (Integer) session.getAttribute("gameId");
+        String player = (String) session.getAttribute("player");
+        session.removeAttribute("gameId");
+        session.removeAttribute("player");
+        eventsService.detachListenerInGame(gameId, player);
+        return "EndGame";
+    }
+
+    @GetMapping("leave_game")
+    @ResponseBody
+    public void leaveGame(HttpSession session){
+        Integer gameId = (Integer) session.getAttribute("gameId");
+        String player = (String) session.getAttribute("player");
+        session.removeAttribute("gameId");
+        session.removeAttribute("player");
+        try {
+            eventsService.addEventLeaveGameBy(gameId, player);
+            eventsService.detachListenerInGame(gameId, player);
+        } catch (InterruptedException e) {
+            System.out.println("non riesco ad aggiungere");
+            e.printStackTrace();
+        }
+    }
+
+    @PostMapping("send_message")
+    @ResponseBody
+    public void sendMessage(@RequestParam String message,HttpSession session){
+        Integer gameId = (Integer) session.getAttribute("gameId");
+        String player = (String) session.getAttribute("player");
+        try {
+            eventsService.addMessageFor(gameId, player, message);
+        } catch (InterruptedException e) {
+            System.out.println("non riesco ad aggiungere");
+            e.printStackTrace();
+        }
     }
 }
