@@ -11,10 +11,12 @@ import it.mat.unical.asde.project2_puzzle.model.Lobby;
 
 @Service
 public class LobbyService {
-	List<Lobby> lobbies;
+	private List<Lobby> lobbies;
+	private int currentlyShowed;
 
 	@PostConstruct
 	public void init() {
+		this.currentlyShowed = 0;
 		this.lobbies = new LinkedList<>();
 		for (int i = 0; i <= 100; i++) {
 			this.lobbies.add(new Lobby("Lobby" + (i + 1), "user" + (int) (Math.random() * 100), ""));
@@ -38,7 +40,6 @@ public class LobbyService {
 
 	// user with "username" leave the lobby where it is
 	public void leaveIfInOtherLobby(String username) {
-		// System.out.println("LEAVE if in other lobby: " + username);
 		for (int i = 0; i < this.lobbies.size(); i++) {
 			Lobby lobby = this.lobbies.get(i);
 			String guest = lobby.getGuest();
@@ -77,7 +78,7 @@ public class LobbyService {
 		// TODO can't add lobby with name with spaces
 		boolean added = false;
 		if (!this.lobbies.contains(newLobby)) {
-			this.lobbies.add(0, newLobby);
+			this.lobbies.add(newLobby);
 			added = true;
 		}
 		return added;
@@ -91,12 +92,56 @@ public class LobbyService {
 			if (typeOfSearch.equals(SearchBy.LOBBY_NAME)) {
 				condition = lobby.getName().equals(name);
 			} else if (typeOfSearch.equals(SearchBy.USERNAME)) {
-				condition = lobby.getOwner().equals(name);
+				condition = lobby.getOwner().equals(name) || lobby.getGuest().equals(name);
 			}
 			if (condition) {
 				return lobby;
 			}
 		}
 		return null;
+	}
+
+	public List<Lobby> getNextMLobbies(int m) {
+		List<Lobby> fromTo = new LinkedList<>();
+		int toIndex = this.currentlyShowed + m;
+		try {
+			// System.out.println("TRY get from:" + this.currentlyShowed + " to:" +
+			// toIndex);
+			fromTo = this.lobbies.subList(this.currentlyShowed, toIndex);
+			this.currentlyShowed += m;
+		} catch (IndexOutOfBoundsException e) {
+//			if (this.currentlyShowed < 0) {
+//				this.currentlyShowed = 0;
+//			} else if (this.currentlyShowed > this.lobbies.size()) {
+//				this.currentlyShowed = this.lobbies.size();
+//			}
+//			if (toIndex < this.currentlyShowed) {
+//				toIndex = this.currentlyShowed;
+//			} else if (toIndex > this.lobbies.size()) {
+//				toIndex = this.lobbies.size();
+//			}
+//			fromTo = this.lobbies.subList(this.currentlyShowed, toIndex);
+			// System.out.println("CATCH get from:" + this.currentlyShowed + " to:" +
+			// toIndex);
+		}
+		return fromTo;
+	}
+
+	public void resetCurrentlyShowed() {
+		this.currentlyShowed = 0;
+	}
+
+	public List<Lobby> getLobbiesBy(String username, PlayerType p) {
+		// System.out.println("LOBBIES by:" + p);
+		List<Lobby> tmp = new LinkedList<>();
+		for (Lobby lobby : this.lobbies) {
+			// System.out.println("LOBBY " + lobby);
+			if (p.equals(PlayerType.OWNER) && lobby.getOwner().equals(username)) {
+				tmp.add(lobby);
+			} else if (p.equals(PlayerType.GUEST) && lobby.getGuest().equals(username)) {
+				tmp.add(lobby);
+			}
+		}
+		return tmp;
 	}
 }
