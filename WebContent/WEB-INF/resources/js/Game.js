@@ -22,6 +22,8 @@ document.addEventListener("dragenter", function(event) {
 	}
 }, false);
 
+
+
 document.addEventListener("dragleave", function(event) {
 	if (!event.target.hasChildNodes()
 			&& event.target.getAttribute("class") == "box_piece") {
