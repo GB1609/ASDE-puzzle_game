@@ -118,7 +118,9 @@ public class EventsService {
 //			return null;
 		}
 		String b = join.get(lobbyName).poll(29, TimeUnit.SECONDS);
-		if (b != null) {
+		if (b != null) {// TODO problem, now this listener is used also for the leave join, so find
+						// another solution for this. Now when a player leave the lobby already joined
+						// is put
 			if (b.equals("already-joined"))
 				join.remove(lobbyName);
 			else

@@ -18,6 +18,9 @@
 }
 </style>
 
+
+
+
 </head>
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
