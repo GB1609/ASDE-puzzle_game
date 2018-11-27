@@ -1,5 +1,6 @@
 var listElm;
 var user;
+var currentlyShowed;
 $(document).ready(	function() {
 	listElm = document.querySelector('#lobbies_div');
 	listElm.addEventListener('scroll',
@@ -14,6 +15,7 @@ $(document).ready(	function() {
 		var lobby_name = $.trim($("#created_lobby").parent().prev().text());
 		listenForJoinToLobby(lobby_name);
 	}
+	currentlyShowed = 0;
 	getLobbies(true);
 	// $('#base').addClass($('#base').attr('value'));
 });
@@ -52,11 +54,15 @@ function listenForStartGame(lobby_name) {
 }
 
 function getLobbies(reset) {
+	if(reset){
+		currentlyShowed = 0;
+	}
+	alert("currentlyShowed : " + currentlyShowed);
 	$.ajax({
 		url : "get_lobbies",
 		type : "POST",
 		data : ({
-			"reset_counter" : reset
+			"currently_showed" : currentlyShowed
 		}),
 		success : function(resultData) {
 			console.log("refresh ok: " + resultData);
@@ -65,6 +71,9 @@ function getLobbies(reset) {
 				alert("ERROR: " + r.err_msg);
 			} else {
 				user = r.username;
+				if(Object.keys(r.lobbies).length){
+					currentlyShowed += Object.keys(r.lobbies).length;
+				}
 				reloadList(reset, r.lobbies, r.lobbies_guest, r.lobbies_owner);
 			}
 		},
