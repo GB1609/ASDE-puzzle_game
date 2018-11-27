@@ -6,10 +6,12 @@ function allowDrop(ev) {
 }
 var hintUsed=0;
 function allowHint() {
-	if(hitUsed<3)
+	if(hintUsed<3)
 	{
 		hintUsed++;
 		$('#show-modal').modal("toggle");
+		if(hintUsed===3)
+			$('#show-image-button').prop("disabled",true);
 	}
 }
 
