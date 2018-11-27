@@ -91,8 +91,8 @@
 								</div>
 							</div>
 							<div class="row justify-content-center col-md-12">
-								<button type="button" class="btn btn-warning btn-lg button-in-row" data-toggle="modal" data-target="#show-modal">Show Image</button>
-								<div class="modal fade " id="show-modal">
+								<button type="button" class="btn btn-warning btn-lg button-in-row" onclick="allowHint()" data-toggle="modal" data-target="#show-modal">Show Image</button>
+								<div class="modal fade " id="show-modal" >
 									<div class="modal-dialog">
 										<div class="modal-content card-with-shadow">
 											<div class="modal-header">

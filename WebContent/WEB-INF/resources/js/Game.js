@@ -4,6 +4,14 @@ function allowDrop(ev) {
     ev.preventDefault();
   }
 }
+var hintUsed=0;
+function allowHint() {
+	if(hitUsed<3)
+	{
+		hintUsed++;
+		$('#show-modal').modal("toggle");
+	}
+}
 
 function drag(ev) {
   ev.dataTransfer.setData("pieceMoved", ev.target.id);
