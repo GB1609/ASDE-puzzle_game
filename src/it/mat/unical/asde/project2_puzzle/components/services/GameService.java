@@ -14,7 +14,7 @@ public class GameService {
 
 	public Grid initNewGame(Integer gameId) {
 		if (!initalGrids.containsKey(gameId)) {
-			initalGrids.put(gameId, new Grid(0, "Gatto"));
+			initalGrids.put(gameId, new Grid(0, "0"));
 			if (!runningGames.containsKey(gameId))
 				runningGames.put(gameId, new RunningGame(initalGrids.get(gameId).getDim()));
 			return initalGrids.get(gameId);

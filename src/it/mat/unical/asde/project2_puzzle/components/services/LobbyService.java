@@ -1,6 +1,7 @@
 package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,10 +15,12 @@ import it.mat.unical.asde.project2_puzzle.model.Lobby;
 public class LobbyService {
 	// TODO refactor: change structure from list to set in order to avoid for
 	List<Lobby> lobbies;
+	HashMap<String, String> previousLobby;
 
 	@PostConstruct
 	public void init() {
 		this.lobbies = new LinkedList<>();
+		this.previousLobby = new HashMap<>();
 		for (int i = 0; i <= 5; i++) {
 			this.lobbies.add(new Lobby("Lobby" + (i + 1), "user" + (int) (Math.random() * 100), ""));
 		}
@@ -45,17 +48,24 @@ public class LobbyService {
 					lobby.setOwner(guest);
 					lobby.setGuest(null);
 					System.out.println("LEAVE LOBBY: " + lobby);
+					previousLobby.put(username, lobby.getName());
 				} else {
 					this.lobbies.remove(i);
 					System.out.println("REMOVE LOBBY: " + lobby);
+					previousLobby.put(username, lobby.getName() + "player2");
 				}
 			} else if (guest != null) {
 				if (guest.equals(username)) {
 					System.out.println("LEAVE LOBBY: " + lobby);
 					lobby.setGuest(null);
+					previousLobby.put(username, lobby.getName());
 				}
 			}
 		}
+	}
+
+	public String checkPreviousLobby(String username) {
+		return previousLobby.remove(username);
 	}
 
 	public void putLobbyOnTop(int index) {

@@ -50,7 +50,8 @@ public class LobbyController {
 
 	@PostMapping("delete_lobby_by_name")
 	@ResponseBody
-	public String deleteLobbyByName(Model model, @RequestParam String lobby_name) {
+	public String deleteLobbyByName(Model model, @RequestParam String lobby_name) {// TODO send message delete lobby to
+																					// joiner
 		JSONObject result = new JSONObject().put("error", false);
 		boolean deleted = this.lobbyService.removeLobbyByName(lobby_name);
 		System.out.println("DELETED lobby with name: " + lobby_name + ".");
@@ -79,6 +80,9 @@ public class LobbyController {
 		session.setAttribute("player", "player2");
 		try {
 			this.eventService.addEventJoin(lobby_name);
+			String previousJoined = lobbyService.checkPreviousLobby(username);
+			if (previousJoined != null)
+				this.eventService.addEventLeaveJoin(previousJoined);
 		} catch (Exception e) {
 
 			System.out.println("I can't join to lobby" + lobby_name);

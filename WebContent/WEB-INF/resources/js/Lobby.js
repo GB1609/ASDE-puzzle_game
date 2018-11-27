@@ -1,5 +1,4 @@
 function listenForStartGame(lobby_name) {
-	alert("in join")
 	var xhr = $.ajax({
 		url : "check_start",
 		type : "post",
@@ -10,7 +9,12 @@ function listenForStartGame(lobby_name) {
 			if (!$.trim(result))
 				listenForStartGame(lobby_name);
 			else {
-				window.location.href = "/ASDE-puzzle_game/game";
+				var r = JSON.parse(result);
+				if (r.start) {
+					window.location.href = "/ASDE-puzzle_game/game";
+				} else if (r.leave) {
+					alert("Lobby destruct");// TODO make alert
+				}
 				// TODO listen for leave lobby
 				// $("#start_button").removeClass("hidden-field");
 				// $("#lobby_name").val(lobby_name);
@@ -58,23 +62,6 @@ function joinLobby(ev) {
 }
 
 function startGame(ev) {
-	// console.log("ENTRATO IN START GAME");
-	// $
-	// .ajax({
-	// url : "game",
-	// type : "GET",
-	// async : false,
-	// success : function(resultData) {
-	// console.log("Start game ok: " + resultData);
-	// deleteLobby(ev);
-	// window.location.href = "http://localhost:8080/ASDE-puzzle_game/game";
-	// },
-	// error : function(e) {
-	// console.log(e.responseText);
-	// console.log("START GAME ERROR: ", e);
-	// }
-	// });
-	// $("#lobby_name").val(lobby_name);
 	$("#ftg_form").submit();
 }
 
@@ -87,14 +74,25 @@ function listenForJoinToLobby(lobby_name) {
 			"lobby_name" : lobby_name
 		}),
 		success : function(result) {
-			if (!$.trim(result))
-				listenForJoinToLobby(lobby_name);
-			else {
-				// TODO listen for leave lobby
-				$("#start_button").removeClass("hidden-field");
+			if ($.trim(result) && !(result === "already-joined")) {
+				var r = JSON.parse(result);
+				if (r.join) {
+					// TODO listen for leave lobby
+					$("#start_button").removeClass("hidden-field");
+					$('#join_alert').fadeIn('slow', function() {
+						$('#join_alert').delay(5000).fadeOut();
+					});
+				} else if (r.leave) {
+					$("#start_button").addClass("hidden-field");
+					$('#leave_alert').fadeIn('slow', function() {
+						$('#leave_alert').delay(5000).fadeOut();
+					});
+				}
 				// $("#lobby_name").val(lobby_name);
 				// $("#ftg_form").submit();
 			}
+			listenForJoinToLobby(lobby_name);
+
 		},
 		error : function(e) {
 			console.log(e.responseText);
