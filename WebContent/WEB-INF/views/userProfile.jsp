@@ -26,12 +26,12 @@
 					<div class="profile-userpic">
 
 						<c:choose>
-							<c:when test="${avatar =='avatar.svg'}">
-								<img src="resources/images/${avatar}" class="img-responsive"
+							<c:when test="${user.avatar =='avatar.svg'}">
+								<img src="resources/images/${user.avatar}" class="img-responsive"
 									alt="">
 							</c:when>
 							<c:otherwise>
-								<img src="resources/images/avatars/${avatar}" class="img-responsive"
+								<img src="resources/images/avatars/${user.avatar}" class="img-responsive"
 									alt="">
 							</c:otherwise>
 						</c:choose>
@@ -39,7 +39,7 @@
 					<!-- END SIDEBAR USERPIC -->
 					<!-- SIDEBAR USER TITLE -->
 					<div class="profile-usertitle">
-						<div class="profile-usertitle-name">${username}</div>
+						<div class="profile-usertitle-name">${user.username}</div>
 					</div>
 
 
@@ -85,10 +85,10 @@
 							<h2 style="text-align: center;">Matches History</h2>
 						</div>
 						<c:choose>
-							<c:when test="${not empty matches}">
+							<c:when test="${not empty user.matches}">
 								<ul class="list-group"
 									style="overflow: auto; max-height: 23.8em;">
-									<c:forEach items="${matches}" var="match">
+									<c:forEach items="${user.matches}" var="match">
 										<%@include file="template/matchItem.jsp"%>
 									</c:forEach>
 								</ul>

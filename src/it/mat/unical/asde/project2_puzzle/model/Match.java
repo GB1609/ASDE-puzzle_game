@@ -1,10 +1,18 @@
 package it.mat.unical.asde.project2_puzzle.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,12 +22,15 @@ public class Match {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@Column(nullable = false)
-	private String user1;
-	@Column(nullable = false)
-	private String user2;
-	@Column(nullable = false)
-	private int winner;
+
+	@ManyToMany(mappedBy = "matches", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private Set<User> users = new HashSet<User>();
+
+
+	@ManyToOne(optional = false)
+	@JoinColumn(nullable = false)
+	private User winner;
+
 	@Column(nullable = false)
 	private int time;
 
@@ -27,36 +38,23 @@ public class Match {
 		super();
 	}
 
-	public Match(String user1, String user2, int winner, int time) {
+	public Match(User winner, int time) {
 		super();
-		this.user1 = user1;
-		this.user2 = user2;
-		this.winner = winner;
+		setWinner(winner);
 		this.time = time;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Match other = (Match) obj;
-		if (user1 == null) {
-			if (other.user1 != null)
-				return false;
-		} else if (!user1.equals(other.user1))
-			return false;
-		if (user2 == null) {
-			if (other.user2 != null)
-				return false;
-		} else if (!user2.equals(other.user2))
-			return false;
-		if (id != other.id)
-			return false;
-		return true;
+	public String toString() {
+		return "Match [id=" + id + ", users=" + users + ", winner=" + winner + ", time=" + time + "]";
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 	public long getId() {
@@ -71,34 +69,23 @@ public class Match {
 		this.time = time;
 	}
 
-	public String getUser1() {
-		return user1;
+	public Set<User> getUsers() {
+		return users;
 	}
 
-	public String getUser2() {
-		return user2;
+	public User getWinner() {
+		return winner;
 	}
 
-	public String getWinner() {
-		return (winner == 0) ? user1 : user2;
+	public void addUser(User user) {
+		if (!users.contains(user))
+			this.users.add(user);
 	}
 
-	public void setUser1(String user1) {
-		this.user1 = user1;
-	}
-
-	public void setUser2(String user2) {
-		this.user2 = user2;
-	}
-
-	public void setWinner(int winner) {
+	public void setWinner(User winner) {
+		if (!users.contains(winner))
+			users.add(winner);
 		this.winner = winner;
 	}
 
-	public void setWinner(String user) {
-		if (user.equals(user1))
-			winner = 0;
-		if (user.equals(user2))
-			winner = 1;
-	}
 }

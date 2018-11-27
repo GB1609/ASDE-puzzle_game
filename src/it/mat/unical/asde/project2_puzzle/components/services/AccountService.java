@@ -40,7 +40,7 @@ public class AccountService {
 	public boolean accountCreated(String firstName, String lastName, String username, String password, String avatar) {
 		boolean value = credentialsDAO.save(new Credentials(username, password));
 		if (value)
-			value = userDAO.save(new User(username, firstName, lastName,avatar));
+			value = userDAO.save(new User(username, firstName, lastName, avatar));
 		return value;
 	}
 
@@ -56,6 +56,10 @@ public class AccountService {
 		return userDAO.getUser(username);
 
 	}
+	
+	private User getUserMatches(String username) {
+		return userDAO.getUserMatches(username);
+	}
 
 	public Credentials getCredentials(String username) {
 		return credentialsDAO.getCredentials(username);
@@ -69,13 +73,11 @@ public class AccountService {
 	}
 
 	public void fillUserInformation(String username, Model model) {
+//		User user = getUserMatches(username);
 		User user = getUser(username);
 		Credentials credentials = getCredentials(username);
-		model.addAttribute("firstname", user.getFirstName());
-		model.addAttribute("lastname", user.getLastName());
+		model.addAttribute("user", user);
 		model.addAttribute("password", credentials.getPassword());
-		model.addAttribute("avatar", user.getAvatar());
-		model.addAttribute("matches", getMatches(username));
 
 	}
 
@@ -86,13 +88,12 @@ public class AccountService {
 
 	private ArrayList<String> loadAvatarsList() {
 		ArrayList<String> avatars = new ArrayList<String>();
-		File dir = new File(servletContext.getRealPath("/WEB-INF/"+AvatarsFolder));
+		File dir = new File(servletContext.getRealPath("/WEB-INF/" + AvatarsFolder));
 		File[] filesList = dir.listFiles();
 		for (File file : filesList) {
 			if (file.isFile()) {
 				avatars.add(file.getName());
-				
-				
+
 			}
 		}
 		return avatars;
