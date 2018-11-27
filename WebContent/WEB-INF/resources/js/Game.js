@@ -12,8 +12,9 @@ function allowHint() {
 		$('#show-modal').modal("toggle");
 		if (numHint === 0)
 			$('#show-image-button').prop("disabled", true);
+		$("#numHint").text("Hint remains: " + numHint);
 	}
-	$("#numHint").text(numHint);
+
 }
 
 
@@ -219,5 +220,5 @@ $(document).ready(function () {
 	}
 	getEventsFromServer();
 	initProgressBar();
-	$("#numHint").text(numHint);
+	$("#numHint").text("Hint remains: " + numHint);
 });
