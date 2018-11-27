@@ -338,13 +338,3 @@ function htmlToElement(html) {
 	template.innerHTML = html;
 	return template.content.firstChild;
 }
-// 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-/*
- * function refreshDivByID(resultData, id_div) { ) { var r =
- * JSON.parse(resultData); if (r.error) { alert("ERROR: " + r.err_msg); } else {
- * simpleRefreshByID(id_div); } }
- * 
- * function simpleRefreshByID(id_div){ //alert("SIMPLE refresh: "+id_div);
- * console.log("REFRESH LOBBIES LIST"); $("#" + id_div).load(location.href + " #" +
- * id_div + ">*", ""); }
- */

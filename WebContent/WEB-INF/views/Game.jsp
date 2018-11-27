@@ -76,7 +76,7 @@
 									<div id="initial_location" class="myGrid ${randomGrid.difficulty}">
 										<c:forEach items="${randomGrid.nameImages}" var="piece">
 											<span class="box_piece" ondrop="drop(event)" ondragover="allowDrop(event)">
-												<img draggable="true" ondragstart="drag(event)" id="${piece}" class="piece" src="resources/images/${randomGrid.subjectName}/${randomGrid.difficulty}/${piece }.png "
+												<img draggable="true" ondragstart="drag(event)" id="${piece}" class="piece" src="resources/images/puzzles/${randomGrid.subjectName}/${randomGrid.difficulty}/${piece }.png"
 												/>
 											</span>
 										</c:forEach>
@@ -90,18 +90,37 @@
 									</div>
 								</div>
 							</div>
+							<div class="row justify-content-center col-md-12">
+								<button type="button" class="btn btn-warning btn-lg button-in-row" data-toggle="modal" data-target="#show-modal">Show Image</button>
+								<div class="modal fade " id="show-modal">
+									<div class="modal-dialog">
+										<div class="modal-content card-with-shadow">
+											<div class="modal-header">
+												<h4 class="modal-title">image to compose</h4>
+												<button type="button" class="close" data-dismiss="modal">&times;</button>
+											</div>
+											<div class="modal-header">
+												<img alt="imageToCompse" src="resources/images/puzzles/${randomGrid.subjectName}/${randomGrid.subjectName}.jpg" width="100%"
+												    height="auto">
+											</div>
+											<div class="modal-footer">
+												<button type="button" data-dismiss="modal" class="btn btn-warning btn-sm">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="row minimal-row col-12 col-md-3 col-sm-12 col-xs-12 game_info card-with-shadow">
 							<div class="row minimal-row fit-row">
+								<label for="progress_name_text" style="color: white;">Opponent's progress</label>
 								<div id="dynamic">
 									<!-- PROGRESS BAR -->
 								</div>
 								<div class="row">
 									<!-- CHAT -->
 									<div class="chat">
-										<div class="row chat-list scrollbar-ripe-malinka" id="chat_content">
-
-										</div>
+										<div class="row chat-list scrollbar-ripe-malinka" id="chat_content"></div>
 										<div class="row input-chat ">
 											<input type="text" class="form-control col-9 card-with-shadow" id="message_text" placeholder="Message to send">
 											<button type="button" onclick="sendMessage()" class="btn btn-warning button-send btn-sm col-2">
