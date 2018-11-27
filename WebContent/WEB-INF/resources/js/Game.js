@@ -78,6 +78,7 @@ function appendMessage(message, isSender){
 		node.style.background="darkorange";
 	document.getElementById("chat_content").appendChild(node);	
 }
+
 function getEventsFromServer() {
 	// var gameId = $("#gameId").val();
 	$.ajax({
