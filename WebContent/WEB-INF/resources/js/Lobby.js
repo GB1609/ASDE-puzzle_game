@@ -1,22 +1,38 @@
 var listElm;
 var user;
-$(document).ready(	function() {
-	listElm = document.querySelector('#lobbies_div');
-	listElm.addEventListener('scroll',
-	function() {
-		if (listElm.scrollTop
-				+ listElm.clientHeight >= (listElm.scrollHeight - 1)) {
-			getLobbies(false);
-		}
-		});
-		var created_lobby = $("#created_lobby");
-	if (performance.navigation.type == 1 && created_lobby.val() === "created") {
-		var lobby_name = $.trim($("#created_lobby").parent().prev().text());
-		listenForJoinToLobby(lobby_name);
-	}
-	getLobbies(true);
-	// $('#base').addClass($('#base').attr('value'));
-});
+$(document)
+		.ready(
+				function() {
+					listElm = document.querySelector('#lobbies_div');
+					listElm
+							.addEventListener(
+									'scroll',
+									function() {
+										if (listElm.scrollTop
+												+ listElm.clientHeight >= (listElm.scrollHeight - 1)) {
+											getLobbies(false);
+										}
+									});
+					var created_lobby = $("#created_lobby");
+					if (performance.navigation.type == 1
+							&& created_lobby.val() === "created") {
+						var lobby_name = $.trim($("#created_lobby").parent()
+								.prev().text());
+						listenForJoinToLobby(lobby_name);
+					}
+					getLobbies(true);
+					// $('#base').addClass($('#base').attr('value'));
+				});
+
+var grid = false;
+function changeTypeList() {
+	var element = document.getElementById("id_lobbies_list_ul");
+	if (grid)
+		element.classList.remove("grid-list-view");
+	else
+		element.classList.add("grid-list-view");
+}
+
 function listenForStartGame(lobby_name) {
 	var xhr = $.ajax({
 		url : "check_start",
@@ -84,7 +100,7 @@ function joinLobby(ev, id_lobby) {
 			"lobby_name" : lobby_name
 		}),
 		success : function(resultData) {
-			console.log("join ok");//: " + resultData);
+			console.log("join ok");// : " + resultData);
 
 			var r = JSON.parse(resultData);
 			if (r.error) {
@@ -101,7 +117,6 @@ function joinLobby(ev, id_lobby) {
 	});
 	ev.preventDefault();
 }
-
 
 function startGame(ev) {
 	$("#ftg_form").submit();
@@ -156,7 +171,7 @@ function createLobby(ev) {
 			"lobby_name" : lobby_name
 		}),
 		success : function(resultData) {
-			console.log("lobby create ok");//: " + resultData);
+			console.log("lobby create ok");// : " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
 				alert("ERROR: " + r.err_msg);
@@ -184,12 +199,12 @@ function searchLobby(ev, searchBy) {
 			"search_by" : searchBy
 		}),
 		success : function(resultData) {
-			console.log("lobby search ok");//: " + resultData);
+			console.log("lobby search ok");// : " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
 				alert("ERROR: " + r.err_msg);
 			} else {
-				var jsonArray = [r.lobby_searched];
+				var jsonArray = [ r.lobby_searched ];
 				putLobbyOnTop(jsonArray);
 			}
 		},
@@ -200,43 +215,44 @@ function searchLobby(ev, searchBy) {
 	});
 }
 
-
 // 0000000000000000000000000000000000000000000000000000000000000000000000000000000
-// 00000000000000000000000 - UTILITY - 0000000000000000000000000000000000000000000
+// 00000000000000000000000 - UTILITY -
+// 0000000000000000000000000000000000000000000
 // 0000000000000000000000000000000000000000000000000000000000000000000000000000000
 
-var reloadList = function (reset, lobbies, lobbies_guest, lobbies_owner){
-	if(reset){
+var reloadList = function(reset, lobbies, lobbies_guest, lobbies_owner) {
+	if (reset) {
 		clearLobbiesList();
 	}
 	loadMore(lobbies, lobbies_guest, lobbies_owner);
 }
 
-var clearLobbiesList = function () {
+var clearLobbiesList = function() {
 	var list = document.getElementById("id_lobbies_list_ul");
 	while (list.firstChild) {
 		list.removeChild(list.firstChild);
 	}
-	
+
 }
 
 var loadMore = function(lobbies, lobbies_guest, lobbies_owner) {
 	var list = document.getElementById("id_lobbies_list_ul");
-	console.log("ENTERED ON loadMore");//:"+lobbies);
-	for(var i in lobbies){
+	console.log("ENTERED ON loadMore");// :"+lobbies);
+	for ( var i in lobbies) {
 		var lobby = lobbies[i];
 		var id = lobby.id;
 		var name = lobby.name;
 		var owner = lobby.owner;
 		var guest = lobby.guest;
 		var newLobby = buildLobbyRow(id, name, owner, guest, user);
-		if(conteinedIn(lobby, lobbies_guest) === false && conteinedIn(lobby, lobbies_owner) === false){
+		if (conteinedIn(lobby, lobbies_guest) === false
+				&& conteinedIn(lobby, lobbies_owner) === false) {
 			list.append(htmlToElement(newLobby));
 		}
 	}
 	putLobbyOnTop(lobbies_guest);
 	putLobbyOnTop(lobbies_owner);
-	
+
 }
 function conteinedIn(lobby, list) {
 	for ( var i in list) {
@@ -250,18 +266,18 @@ function conteinedIn(lobby, list) {
 }
 function putLobbyOnTop(lobbies) {
 	var list = document.getElementById("id_lobbies_list_ul");
-	for(var i in lobbies){
+	for ( var i in lobbies) {
 		var lobby = lobbies[i];
 		var id = lobby.id;
 		var name = lobby.name;
 		var owner = lobby.owner;
 		var guest = lobby.guest;
 		var newLobby = buildLobbyRow(id, name, owner, guest, user);
-		if($("#id_lobby_" + name)!== undefined){
-			$("#id_lobby_" + name).remove();	
-			console.log("loadputLobbyOnTop...removed:"+name);
+		if ($("#id_lobby_" + name) !== undefined) {
+			$("#id_lobby_" + name).remove();
+			console.log("loadputLobbyOnTop...removed:" + name);
 		}
-		console.log("loadputLobbyOnTop:"+name);
+		console.log("loadputLobbyOnTop:" + name);
 		list.prepend(htmlToElement(newLobby));
 	}
 }
@@ -294,13 +310,13 @@ function buildLobbyRow(id, name, owner, guest, username) {
 				+ name
 				+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
 	} else {
-		
 		newLobby += "<input id=\"created_lobby\" type=\"hidden\" value=\"created\" />";
 		newLobby += "<button id=\"start_button\" type=\"button\" onclick=\"startGame()\" class=\"btn btn-warning btn-lg float-right hidden-field\">Start</button>";
 		newLobby += "<div id=\"join_alert\" class=\"alert alert-info hidden-field\" role=\"alert\">A player joined to lobby</div>";
 		newLobby += "<div id=\"leave_alert\" class=\"alert alert-danger hidden-field\" role=\"alert\">The player leaved the lobby</div>";
 		newLobby += "<form style=\"display: hidden\" action=\"forward_to_game\"	method=\"post\" id=\"ftg_form\">";
-		newLobby += "<input type=\"hidden\" id=\"lobby_name\" name=\"lobby_name\" value=\""+ name +"\" />";
+		newLobby += "<input type=\"hidden\" id=\"lobby_name\" name=\"lobby_name\" value=\""
+				+ name + "\" />";
 		newLobby += "</form>";
 	}
 	newLobby += "</div>" + "</li>";

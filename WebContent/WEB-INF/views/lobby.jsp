@@ -80,6 +80,7 @@
 				<div id="lobbies_div" class=" card scrollbar-ripe-malinka">
 					<div class="card-body" id="id_lobbies_list_div">
 						<ul class="list-group" id="id_lobbies_list_ul">
+						
 						</ul>
 					</div>
 				</div>
@@ -89,59 +90,3 @@
 </body>
 
 </html>
-<!-- 					<c:if test="${not empty error}">
-							<div class="alert alert-danger alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert"
-									aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-								<strong>${error}</strong>
-							</div>
-						</c:if>
-						<c:if test="${not empty lobbies}">
-							<ul class="list-group" id="lobbies_list">
-								<c:forEach items="${lobbies}" var="lobby">
-									<li class="list-group-item card-with-shadow lobby_row" id="id_lobby_${lobby.name}">
-										<div class="text-center" id="lobby_name_div">${lobby.name}</div>
-										<div class=" text-center">
-											<img src="resources/images/avatar.svg" class="img-circle"
-												height="64" width="64" alt="Avatar">
-											<c:choose>
-												<c:when test="${not empty lobby.owner}">${lobby.owner}</c:when>
-												<c:otherwise>empty</c:otherwise>
-											</c:choose>
-											<img
-												style="max-height: 1cm; max-width: 1cm; margin-left: 0%;"
-												src="resources/img/vs.jpg">
-											<c:choose>
-												<c:when test="${not empty lobby.guest}">${lobby.guest}</c:when>
-												<c:otherwise>empty</c:otherwise>
-											</c:choose>
-											<img src="resources/images/avatar.svg" class="img-circle"
-												height="64" width="64" alt="Avatar">
-
-											<c:choose>
-												<c:when test="${sessionScope.username eq lobby.owner}">
-													<input id="created_lobby" type="hidden" value="created" />
-													<button id="start_button" type="button"
-														onclick="startGame()"
-														class="btn btn-primary float-right hidden-field">Start</button>
-													<div id="join_alert" class="alert alert-info hidden-field" role="alert">A player joined to lobby</div>
-													<div id="leave_alert" class="alert alert-danger hidden-field" role="alert">The player leaved the lobby</div>
-													<form style="display: hidden" action="forward_to_game"
-														method="post" id="ftg_form">
-														<input type="hidden" id="lobby_name" name="lobby_name"
-															value="${lobby.name}" />
-													</form>
-												</c:when>
-												<c:otherwise>
-													<button type="button" onclick="joinLobby(event,'id_lobby_${lobby.name}')"
-														class="btn btn-warning btn-lg float-right">Join</button>
-												</c:otherwise>
-											</c:choose>
-										</div>
-									</li>
-								</c:forEach>
-							</ul>
-						</c:if>
-						 -->
