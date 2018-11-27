@@ -13,25 +13,31 @@ import org.springframework.stereotype.Service;
 public class EventsService {
 	private Map<String, BlockingQueue<String>> events = new HashMap<>();
 	private Map<String, BlockingQueue<String>> join = new HashMap<>();
+	private MessageMaker maker = new MessageMaker();
 
-	////////////////////////// EVENT IN GAME/////////////////////////
+	/////////////////////////////////// ADD
+	/////////////////////////////////// EVENTS//////////////////////////////////////////////
 	private void addEvent(String progress, String key) throws InterruptedException {
 		if (!events.containsKey(key))
 			events.put(key, new LinkedBlockingQueue<>());
 		events.get(key).put(progress);
 	}
 
+	private void addGeneralEventLobby(String key, String message_type) throws InterruptedException {
+		if (!join.containsKey(key))
+			throw new RuntimeException("No join found for this lobby");
+		join.get(key).put(maker.makeMessage(message_type));
+	}
+
+	////////////////////////// EVENT IN GAME/////////////////////////
 	public void addEventFor(Integer gameID, String player, String progress) throws InterruptedException {
 		String key = gameID + (player.equals("player1") ? "player2" : "player1");
-		JSONObject JsonMessage = new JSONObject().put("message", false).put("progress", progress);
-		addEvent(JsonMessage.toString(), key);
+		addEvent(maker.makeMessage(MessageMaker.UPDATE_MESSAGE, MessageMaker.PROGRESS_MESSAGE, progress), key);
 	}
 
 	public void addMessageFor(Integer gameId, String player, String message) throws InterruptedException {
 		String key = gameId + (player.equals("player1") ? "player2" : "player1");
-		JSONObject JsonMessage = new JSONObject().put("message", true).put("message_text", message);
-		addEvent(JsonMessage.toString(), key);
-
+		addEvent(maker.makeMessage(MessageMaker.CHAT_MESSAGE, MessageMaker.TEXT_MESSAGE, message), key);
 	}
 
 	public void addEventEndGame(Integer gameId) throws InterruptedException {
@@ -44,6 +50,20 @@ public class EventsService {
 		String key = gameID + (player.equals("player1") ? "player2" : "player1");
 		addEvent("END-GAME", key);
 
+	}
+
+	////////////////////////// EVENT BEFORE GAME/////////////////////////
+	public void addEventStartGame(String lobby_name) throws InterruptedException {
+		String key = lobby_name + "player2";
+		addGeneralEventLobby(key, MessageMaker.START_MESSAGE);
+	}
+
+	public void addEventJoin(String lobbyName) throws InterruptedException {
+		addGeneralEventLobby(lobbyName, MessageMaker.JOIN_MESSAGE);
+	}
+
+	public void addEventLeaveJoin(String previousJoined) throws InterruptedException {
+		addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);
 	}
 
 	public void attachListenerToJoin(String lobby_name) {
@@ -71,31 +91,18 @@ public class EventsService {
 		}
 	}
 
-	public void addEventStartGame(String lobby_name) throws InterruptedException {
-		String key = lobby_name + "player2";
-		if (!join.containsKey(key))
-			throw new RuntimeException("No join found for this lobby");
-		JSONObject JsonMessage = new JSONObject().put("start", true);
-		join.get(key).put(JsonMessage.toString());
-	}
-
-	public void addEventJoin(String lobbyName) throws InterruptedException {
-		if (!join.containsKey(lobbyName))
-			throw new RuntimeException("This lobby isn't present in the list");
-		JSONObject JsonMessage = new JSONObject().put("join", true);
-		join.get(lobbyName).put(JsonMessage.toString());
-	}
-
-	public void addEventLeaveJoin(String previousJoined) throws InterruptedException {
-		JSONObject JsonMessage = new JSONObject().put("leave", true);
-		join.get(previousJoined).put(JsonMessage.toString());
-	}
-
 	public void detachListenerForJoin(String lobby_name) {
 		join.remove(lobby_name);
 	}
 
-	public String nextEventProgress(Integer gameId, String player) throws InterruptedException {
+	public void detachListenerInGame(Integer gameId, String player) {
+		String key = gameId + player;
+		events.remove(key);
+	}
+
+	/////////////////////////////////// GET
+	/////////////////////////////////// EVENTS//////////////////////////////////////////////
+	public String nextGameEventFor(Integer gameId, String player) throws InterruptedException {
 		String key = gameId + player;
 		if (!events.containsKey(key))
 			events.put(key, new LinkedBlockingQueue<>());
@@ -137,5 +144,24 @@ public class EventsService {
 				join.get(key).put("already-started");
 		}
 		return b;
+	}
+
+	private class MessageMaker {
+		public final static String JOIN_MESSAGE = "join";
+		public final static String START_MESSAGE = "start";
+		public final static String LEAVE_MESSAGE = "leave";
+		public final static String CHAT_MESSAGE = "message";
+		public final static String UPDATE_MESSAGE = "update";
+		public final static String PROGRESS_MESSAGE = "progress";
+		public final static String TEXT_MESSAGE = "message_text";
+
+		public String makeMessage(String message_type) {
+			return (new JSONObject().put(message_type, true)).toString();
+		}
+
+		public String makeMessage(String message_type, String message, String message_content) {
+			return (new JSONObject().put(message_type, true).put(message, message_content)).toString();
+		}
+
 	}
 }

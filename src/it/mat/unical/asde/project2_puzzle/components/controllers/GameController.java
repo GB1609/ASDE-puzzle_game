@@ -62,7 +62,7 @@ public class GameController {
 		DeferredResult<String> outputProgress = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
-				outputProgress.setResult(eventsService.nextEventProgress(gameId, player));
+				outputProgress.setResult(eventsService.nextGameEventFor(gameId, player));
 			} catch (InterruptedException e) {
 				outputProgress.setResult(-1000 + "");
 			}
@@ -72,7 +72,12 @@ public class GameController {
 	}
 
 	@GetMapping("end_game")
-	public String goToEndGame() {
+	public String goToEndGame(HttpSession session) {
+		Integer gameId = (Integer) session.getAttribute("gameId");
+		String player = (String) session.getAttribute("player");
+		session.removeAttribute("gameId");
+		session.removeAttribute("player");
+		eventsService.detachListenerInGame(gameId, player);
 		return "EndGame";
 	}
 
@@ -81,8 +86,11 @@ public class GameController {
 	public void leaveGame(HttpSession session) {
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		String player = (String) session.getAttribute("player");
+		session.removeAttribute("gameId");
+		session.removeAttribute("player");
 		try {
 			eventsService.addEventLeaveGameBy(gameId, player);
+			eventsService.detachListenerInGame(gameId, player);
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
 			e.printStackTrace();
