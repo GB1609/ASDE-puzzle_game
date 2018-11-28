@@ -2,7 +2,7 @@ var endGame = false;
 var bar;
 var value;
 var numHint = 3;
-
+var timer;
 function allowHint() {
 
 	if (numHint > 0) {
@@ -87,8 +87,10 @@ function createMessageNode(message) {
 
 function appendMessage(message, isSender) {
 	var node = createMessageNode(message);
-	if (isSender)
-		node.style.background = "#DAA520";
+	node.className += " col-12";
+	if (isSender){
+		node.className += " justify-content-end";
+		node.style.background = "#DAA520";}
 	else
 		node.style.background = "#C8C8C8";
 	node.style.color = "black";
@@ -170,6 +172,7 @@ window.onbeforeunload = function () {
 		return;
 };
 window.onunload = function () {
+	alert(!endGame);
 	if (!endGame)
 		$.ajax({
 			url: "leave_game",
@@ -220,4 +223,65 @@ $(document).ready(function () {
 	getEventsFromServer();
 	initProgressBar();
 	$("#numHint").text("Hint remains: " + numHint);
+	timer= new Timer();
+	 timer.start();
+	 timer.addEventListener('secondsUpdated', function (e) {
+	 $('#time').html(timer.getTimeValues().toString());
+	 });
 });
+
+
+
+
+//
+// $(function(){
+//
+// var t = undefined;
+// var cl_thousandths = $("#thousandths");
+// var cl_seconds = $("#seconds");
+// var cl_minutes = $("#minutes");
+//	
+// function showTimer() {
+// if(Number(cl_thousandths.html())%999>0.8){
+// cl_thousandths.html("0.00");
+// printDigit(cl_seconds);
+// if(Number(cl_seconds.html())>59){
+// cl_seconds.html("00");
+// printDigit(cl_minutes);
+//
+// }
+//       
+// }
+// else cl_thousandths.html((+cl_thousandths.html() + 0.015).toFixed(2));
+//		
+// }
+//	
+// function initTimer() {
+// t=setInterval(showTimer, 20);
+// }
+// function printDigit(digit){
+//     
+// var number = Number(digit.html().replace(/\s+/g, "")) + 1;
+// var numberString;
+//     
+// (number<10)?numberString="0"+number : numberString=String(number);
+//     
+// if(numberString.substring(1,2)==="1"){
+// if(number<10)
+// digit.html("0 "+number);
+// else
+// digit.html(numberString.split("").join(" "));
+// }
+//     
+// else{
+// if(number<10)
+// digit.html("0"+number);
+// else
+// digit.html(number);
+// }
+// }
+//
+// initTimer();
+//	
+// });
+//

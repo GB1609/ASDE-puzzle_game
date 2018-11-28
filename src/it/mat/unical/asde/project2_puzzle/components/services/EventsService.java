@@ -29,6 +29,13 @@ public class EventsService {
 		join.get(key).put(maker.makeMessage(message_type));
 	}
 
+	private void addGeneralEventLobby(String key, String message_type, String message, String message_content)
+			throws InterruptedException {
+		if (!join.containsKey(key))
+			throw new RuntimeException("No join found for this lobby");
+		join.get(key).put(maker.makeMessage(message_type, message, message_content));
+	}
+
 	////////////////////////// EVENT IN GAME/////////////////////////
 	public void addEventFor(Integer gameID, String player, String progress) throws InterruptedException {
 		String key = gameID + (player.equals("player1") ? "player2" : "player1");
@@ -54,12 +61,13 @@ public class EventsService {
 
 	////////////////////////// EVENT BEFORE GAME/////////////////////////
 	public void addEventStartGame(String lobby_name) throws InterruptedException {
-		String key = lobby_name + "player2";
+		String key = lobby_name.toLowerCase() + "player2";
 		addGeneralEventLobby(key, MessageMaker.START_MESSAGE);
 	}
 
-	public void addEventJoin(String lobbyName) throws InterruptedException {
-		addGeneralEventLobby(lobbyName, MessageMaker.JOIN_MESSAGE);
+	public void addEventJoin(String lobbyName, String username) throws InterruptedException {
+
+		addGeneralEventLobby(lobbyName.toLowerCase(), MessageMaker.JOIN_MESSAGE, MessageMaker.WHO_JOIN, username);
 	}
 
 	public void addEventLeaveJoin(String previousJoined) throws InterruptedException {
@@ -79,7 +87,7 @@ public class EventsService {
 	}
 
 	public void attachListenerToStart(String lobby_name) {
-		String key = lobby_name + "player2";
+		String key = lobby_name.toLowerCase() + "player2";
 
 		if (join.containsKey(key))
 			/* throw new RuntimeException */System.out
@@ -92,7 +100,7 @@ public class EventsService {
 	}
 
 	public void detachListenerForJoin(String lobby_name) {
-		join.remove(lobby_name);
+		join.remove(lobby_name.toLowerCase());
 	}
 
 	public void detachListenerInGame(Integer gameId, String player) {
@@ -110,6 +118,7 @@ public class EventsService {
 	}
 
 	public String getEventJoin(String lobbyName) throws InterruptedException {
+		lobbyName = lobbyName.toLowerCase();
 		if (!join.containsKey(lobbyName)) {
 			// TODO THROW EXCEPTION
 			join.put(lobbyName, new LinkedBlockingQueue<>());
@@ -130,7 +139,7 @@ public class EventsService {
 	}
 
 	public String getEventStartGame(String lobbyName) throws InterruptedException {
-		String key = lobbyName + "player2";
+		String key = lobbyName.toLowerCase() + "player2";
 		if (!join.containsKey(key)) {
 			join.put(key, new LinkedBlockingQueue<>());
 
@@ -156,6 +165,7 @@ public class EventsService {
 		public final static String UPDATE_MESSAGE = "update";
 		public final static String PROGRESS_MESSAGE = "progress";
 		public final static String TEXT_MESSAGE = "message_text";
+		public final static String WHO_JOIN = "joiner";
 
 		public String makeMessage(String message_type) {
 			return (new JSONObject().put(message_type, true)).toString();

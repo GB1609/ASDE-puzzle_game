@@ -19,9 +19,9 @@ public class LobbyService {
 	public void init() {
 		this.lobbies = new LinkedList<>();
 		this.previousLobby = new HashMap<>();
-		for (int i = 0; i <= 10; i++) {
-			this.lobbies.add(new Lobby("Lobby" + (i + 1), "user" + (int) (Math.random() * 100), ""));
-		}
+//		for (int i = 0; i <= 10; i++) {
+//			this.lobbies.add(new Lobby("Lobby" + (i + 1), "user" + (int) (Math.random() * 100), ""));
+//		}
 	}
 
 	public List<Lobby> getLobbies() {
@@ -29,6 +29,7 @@ public class LobbyService {
 	}
 
 	public Integer joinToLobby(String lobby_name, String username) {
+		lobby_name = lobby_name.toLowerCase();
 		this.leaveIfInOtherLobby(username);
 		Lobby lobbyToJoin = this.getLobby(lobby_name, SearchBy.LOBBY_NAME);
 		if (lobbyToJoin.getGuest().isEmpty()) {
@@ -74,6 +75,7 @@ public class LobbyService {
 	}
 
 	public boolean removeLobbyByName(String lobby_name) {
+		lobby_name = lobby_name.toLowerCase();
 		for (Lobby lobby : this.lobbies) {
 			if (lobby.getName().equals(lobby_name)) {
 				return this.lobbies.remove(lobby);
@@ -83,6 +85,7 @@ public class LobbyService {
 	}
 
 	public Integer destrucLobby(String lobby_name) {
+		lobby_name = lobby_name.toLowerCase();
 		for (Lobby lobby : this.lobbies) {
 			if (lobby.getName().equals(lobby_name)) {
 				Integer lobbyId = lobby.getLobbyID();
@@ -131,11 +134,11 @@ public class LobbyService {
 			// toIndex);
 			fromTo = this.lobbies.subList(currentlyShowed, toIndex);
 			currentlyShowed += m;
-			for (Lobby lobby : fromTo) {
-				System.out.println(lobby);
-			}
+//			for (Lobby lobby : fromTo) {
+//				System.out.println(lobby);
+//			}
 		} catch (IndexOutOfBoundsException e) {
-			System.out.println("NO MORE LOBBIES...from:" + currentlyShowed + " to:" + toIndex);
+//			System.out.println("NO MORE LOBBIES...from:" + currentlyShowed + " to:" + toIndex);
 			if (currentlyShowed < 0) {
 				currentlyShowed = 0;
 			} else if (currentlyShowed > this.lobbies.size()) {
@@ -147,7 +150,7 @@ public class LobbyService {
 				toIndex = this.lobbies.size();
 			}
 			fromTo = this.lobbies.subList(currentlyShowed, toIndex);
-			System.out.println("CATCH get from:" + currentlyShowed + " to:" + toIndex);
+//			System.out.println("CATCH get from:" + currentlyShowed + " to:" + toIndex);
 			for (Lobby lobby : fromTo) {
 				System.out.println(lobby);
 			}
