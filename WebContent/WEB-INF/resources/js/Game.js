@@ -1,8 +1,6 @@
 var endGame = false;
 var bar;
 var value;
-
-
 var numHint = 3;
 
 function allowHint() {
@@ -172,6 +170,7 @@ window.onbeforeunload = function () {
 		return;
 };
 window.onunload = function () {
+	if (!endGame)
 	$.ajax({
 		url: "leave_game",
 		async: false,
@@ -215,9 +214,9 @@ function initProgressBar() {
 
 }
 $(document).ready(function () {
-	if (performance.navigation.type == 1) {
-		window.location.href = "/ASDE-puzzle_game/end_game";
-	}
+// if (performance.navigation.type == 1) {
+// window.location.href = "/ASDE-puzzle_game/end_game";
+// }
 	getEventsFromServer();
 	initProgressBar();
 	$("#numHint").text("Hint remains: " + numHint);

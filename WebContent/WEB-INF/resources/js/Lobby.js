@@ -91,8 +91,9 @@ function getLobbies(reset) {
 	});
 }
 
-function joinLobby(ev, id_lobby) {
-	var lobby_name = $("#" + id_lobby).children('#lobby_name_div').text();
+function joinLobby(lobby_name) {
+	// var lobby_name = $("#" + id_lobby).children('#lobby_name_div').text();
+	console.log("in join lobby");
 	$.ajax({
 		url : "join_lobby",
 		type : "POST",
@@ -306,7 +307,7 @@ function buildLobbyRow(id, name, owner, guest, username) {
 	if (username != owner) {
 		newLobby += "<button id=\"join_btn_lobby_"
 				+ name
-				+ "\" type=\"button\" onclick=\"joinLobby(event,'id_lobby_"
+				+ "\" type=\"button\" onclick=\"joinLobby('"
 				+ name
 				+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
 	} else {
