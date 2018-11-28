@@ -1,24 +1,42 @@
 var listElm;
 var user;
 var currentlyShowed;
-$(document).ready(	function() {
-	listElm = document.querySelector('#lobbies_div');
-	listElm.addEventListener('scroll',
-	function() {
-		if (listElm.scrollTop
-				+ listElm.clientHeight >= (listElm.scrollHeight - 1)) {
-			getLobbies(false);
-		}
-		});
-		var created_lobby = $("#created_lobby");
-	if (performance.navigation.type == 1 && created_lobby.val() === "created") {
-		var lobby_name = $.trim($("#created_lobby").parent().prev().text());
-		listenForJoinToLobby(lobby_name);
+$(document)
+		.ready(
+				function() {
+					listElm = document.querySelector('#lobbies_div');
+					listElm
+							.addEventListener(
+									'scroll',
+									function() {
+										if (listElm.scrollTop
+												+ listElm.clientHeight >= (listElm.scrollHeight - 1)) {
+											getLobbies(false);
+										}
+									});
+					var created_lobby = $("#created_lobby");
+					if (performance.navigation.type == 1
+							&& created_lobby.val() === "created") {
+						var lobby_name = $.trim($("#created_lobby").parent()
+								.prev().text());
+						listenForJoinToLobby(lobby_name);
+					}
+					currentlyShowed = 0;
+					getLobbies(true);
+					// $('#base').addClass($('#base').attr('value'));
+				});
+
+var grid=false;
+function changeTypeList() {
+	var element = document.getElementById("id_lobbies_list_ul");
+	if (grid) {
+		element.classList.remove("grid-list-view");
+		grid = false;
+	} else {
+		element.classList.add("grid-list-view");
+		grid = true;
 	}
-	currentlyShowed = 0;
-	getLobbies(true);
-	// $('#base').addClass($('#base').attr('value'));
-});
+}
 function listenForStartGame(lobby_name) {
 	var xhr = $.ajax({
 		url : "check_start",
@@ -84,8 +102,9 @@ function getLobbies(reset) {
 	});
 }
 
-function joinLobby(ev, id_lobby) {
-	var lobby_name = $("#" + id_lobby).children('#lobby_name_div').text();
+function joinLobby(lobby_name) {
+	// var lobby_name = $("#" + id_lobby).children('#lobby_name_div').text();
+	console.log("in join lobby");
 	$.ajax({
 		url : "join_lobby",
 		type : "POST",
@@ -299,7 +318,7 @@ function buildLobbyRow(id, name, owner, guest, username) {
 	if (username != owner) {
 		newLobby += "<button id=\"join_btn_lobby_"
 				+ name
-				+ "\" type=\"button\" onclick=\"joinLobby(event,'id_lobby_"
+				+ "\" type=\"button\" onclick=\"joinLobby('"
 				+ name
 				+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
 	} else {

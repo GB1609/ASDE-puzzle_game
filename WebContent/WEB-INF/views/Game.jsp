@@ -65,7 +65,7 @@
 											</div>
 										</div>
 									</div>
-									<h4 class="modal-title">Hint remains:</h4><h4 id="numHint"></h4>
+									<h6 align="center" id="numHint"></h6>
 								</div>
 							</div>
 						</div>
