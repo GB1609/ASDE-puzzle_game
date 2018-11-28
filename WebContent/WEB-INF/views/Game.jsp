@@ -11,13 +11,6 @@
 				<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
 				<link rel="stylesheet" type="text/css" media="all" href="resources/css/style_game.css" />
 				<title>Game Page</title>
-				<style type="text/css">
-					#container {
-						margin: 20px;
-						width: 200px;
-						height: 100px;
-					}
-				</style>
 		</head>
 
 		<body class="wsmenucontainer">
@@ -70,20 +63,30 @@
 							</div>
 						</div>
 						<div class="row minimal-row col-12 col-md-3 col-sm-12 col-xs-12 game_info card-with-shadow">
-							<div class="row minimal-row fit-row">
-								<label for="progress_name_text" style="color: white;">Opponent's progress
-								</label>
-								<div id="dynamic">
-									<!-- PROGRESS BAR -->
+							<div class="row minimal-row ">
+								<div class="row col-xs-6 margin-automatic">
+									<label for="progress_name_text" style="color: white;">Opponent's progress
+									</label>
+									<div id="dynamic">
+										<!-- PROGRESS BAR -->
+									</div>
 								</div>
-								<div class="row">
+								<div class="row col-xs-6 margin-automatic">
 									<!-- CHAT -->
 									<div class="chat">
-										<div class="row chat-list scrollbar-ripe-malinka" id="chat_content"></div>
-										<div class="row input-chat ">
-											<input type="text" class="form-control col-9 card-with-shadow" id="message_text" placeholder="Message to send">
-											<button type="button" onclick="sendMessage()" class="btn btn-warning button-send btn-sm col-2">
-												<img src="resources/images/icons/send.png" class="piece" width="-webkit-fill-available" height="-webkit-fill-available" />
+										<div class="row col-12 force-max-heigth">
+											<div class="row chat-list scrollbar scrollbar-primary">
+												<div class=" force-overflow">
+													<ul class="list-group" id="chat_content">
+
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="row input-chat col-12">
+											<input type="text" class="form-control col-10 card-with-shadow" id="message_text" placeholder="Message to send">
+											<button type="button" onclick="sendMessage()" class="btn btn-warning button-send col-2">
+												<i class="fas fa-comment"></i>
 											</button>
 										</div>
 									</div>

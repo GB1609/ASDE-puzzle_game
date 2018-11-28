@@ -97,19 +97,16 @@ span:hover {
 }
 
 .minimal-row {
-	padding-left: 0px;
-	margin-left: 0px;
-	left: auto;
+	margin: 1%;
 	justify-content: center;
 }
 
 .card-with-shadow {
+	min-width: auto;
 	color: white;
 	background: #212529ba;
 	border-radius: 10px;
 	display: inline-block;
-	margin-top: 1rem;
-	margin-bottom: 1rem;
 	padding: 1rem;
 	position: relative;
 	/* width: fit-content;*/
@@ -124,33 +121,40 @@ span:hover {
 }
 
 .chat {
-    position: absolute;
-    bottom: 6%;
-    left: 0;
-    margin: auto;
-    padding: 10%;
-    height: 60%;
-    width: 100%;
-}
-
-.close{
-	color: #DAA520;
-}
-
-.close:not(:disabled):not(.disabled):focus, .close:not(:disabled):not(.disabled):hover {
-    color: #DAA520;
-    text-decoration: none;
-    opacity: .75;
-}
-
-.modal-footer,.modal-header{
+	/* bottom: 6%; */
+	left: 0;
+	margin: 2%;
+	padding: 2%;
+	height: 48vh;
+	width: 100%;
 	justify-content: center;
 }
 
-.close:not(:disabled):not(.disabled):focus, .close:not(:disabled):not(.disabled):focus {
-    color: #DAA520;
-    text-decoration: none;
-    opacity: .75;
+.margin-automatic {
+	margin: auto;
+}
+
+.close {
+	color: #DAA520;
+}
+
+.close:not(:disabled):not(.disabled):focus,
+.close:not(:disabled):not(.disabled):hover {
+	color: #DAA520;
+	text-decoration: none;
+	opacity: .75;
+}
+
+.modal-footer,
+.modal-header {
+	justify-content: center;
+}
+
+.close:not(:disabled):not(.disabled):focus,
+.close:not(:disabled):not(.disabled):focus {
+	color: #DAA520;
+	text-decoration: none;
+	opacity: .75;
 }
 
 .input-chat.col-9 {
@@ -159,78 +163,78 @@ span:hover {
 
 .input-chat {
 	/* padding:2%; */
-	justify-content: center;
+	/* justify-content: center; */
+	margin: 0;
+	padding: 0;
 }
 
-.scrollbar-ripe-malinka::-webkit-scrollbar-track {
-	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-	box-shadow: none;
-	background-color: #F5F5F5;
+.force-max-heigth {
+	max-height: 90%;
+	margin: 0;
+	padding: 0;
+	margin-bottom: 3%;
+}
+
+.scrollbar {
+	max-height: 100%;
+	float: left;
+	width: 100%;
+	min-width: 40%;
+	background: #fff;
+	overflow-y: scroll;
+	margin-bottom: 25px;
 	border-radius: 10px;
 }
 
-.scrollbar-ripe-malinka::-webkit-scrollbar {
-	width: 16px;
+.force-overflow {
+	min-height: 450px;
+	width: 100%;
+	min-width: 150px;
 }
 
-.scrollbar-ripe-malinka::-webkit-scrollbar-thumb {
+.scrollbar-primary::-webkit-scrollbar {
+	width: 12px;
+	background-color: white;
+	border-radius: 10px;
+}
+
+.scrollbar-primary::-webkit-scrollbar-thumb {
 	border-radius: 10px;
 	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-	box-shadow: none;
-	background-image: -webkit-linear-gradient(330deg, #f093fb 0%, #f5576c 100%);
-	background-image: linear-gradient(120deg, #DAA520 0%, #FF8C00 100%);
-}
-
-.bordered-deep-purple::-webkit-scrollbar-track {
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	border: 1px solid black;
-}
-
-.bordered-deep-purple::-webkit-scrollbar-thumb {
-	-webkit-box-shadow: none;
-	box-shadow: none;
-}
-
-.bordered-cyan::-webkit-scrollbar-track {
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	border: 1px solid black;
-}
-
-.bordered-cyan::-webkit-scrollbar-thumb {
-	-webkit-box-shadow: none;
-	box-shadow: none;
-}
-
-.square::-webkit-scrollbar-track {
-	border-radius: 0 !important;
-}
-
-.square::-webkit-scrollbar-thumb {
-	border-radius: 0 !important;
-}
-
-.thin::-webkit-scrollbar {
-	width: 6px;
+	background-color: #DAA520;
 }
 
 .chat-list {
-	height: 100%;
 	background-color: rgba(0, 0, 0, 0.45);
 	border-width: 5px;
 	border-style: solid;
 	border-color: black;
 	border-radius: 10px;
+	margin: 0;
+	padding: 0;
 }
 
 .button-send {
 	border-style: solid;
 	border-color: black;
-	border-width: 3px;
+	border-width: 2px;
 	border-radius: 25%;
+}
+
+#chat_content {
+	width: 100%;
+}
+
+.message-box-card {
+	height: fit-content;
+	position: relative;
+	border-width: 5px;
+	border-style: solid;
+	border-color: black;
+	border-radius: 10%;
+	color: black;
 	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
-	margin: auto;
-	margin-top: 1%;
-	margin-bottom: 1%;
+	background-color: #f1f1f1;
+	margin-right: 2%;
+	margin-left: 2%;
 }

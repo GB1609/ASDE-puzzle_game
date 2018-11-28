@@ -12,12 +12,11 @@ function allowHint() {
 			$('#show-image-button').prop("disabled", true);
 		$("#numHint").text("Hint remains: " + numHint);
 	}
-
 }
 
 
 function allowDrop(ev) {
-	if (!ev.target.hasChildNodes() &&
+	if ( /*!ev.target.hasChildNodes() &&*/
 		ev.target.getAttribute("class") == "box_piece") {
 		ev.preventDefault();
 	}
@@ -65,7 +64,6 @@ function drop(ev) {
 			console.log("ok" + resultData);
 		},
 		error: function (e) {
-
 			console.log("old position" + old_position + "\n" +
 				"new_location   " +
 				ev.target.parentElement.getAttribute("id") + "\n" +
@@ -73,17 +71,18 @@ function drop(ev) {
 				"new_position   " +
 				$(ev.target).prevAll(".box_piece").length);
 			console.log(e.responseText);
-
 			console.log("ERROR: ", e);
 		}
 	});
 }
 
 function createMessageNode(message) {
-	var div = document.createElement("DIV");
+	var li = document.createElement("LI");
+	li.classList.add("list-group-item");
+	li.classList.add("message-box-card");
 	var t = document.createTextNode(message);
-	div.appendChild(t);
-	return div;
+	li.appendChild(t);
+	return li;
 }
 
 function appendMessage(message, isSender) {
@@ -91,7 +90,8 @@ function appendMessage(message, isSender) {
 	if (isSender)
 		node.style.background = "#DAA520";
 	else
-		node.style.background = "darkorange";
+		node.style.background = "#C8C8C8";
+	node.style.color = "black";
 	document.getElementById("chat_content").appendChild(node);
 }
 
@@ -171,11 +171,11 @@ window.onbeforeunload = function () {
 };
 window.onunload = function () {
 	if (!endGame)
-	$.ajax({
-		url: "leave_game",
-		async: false,
-		data: ({})
-	});
+		$.ajax({
+			url: "leave_game",
+			async: false,
+			data: ({})
+		});
 }
 
 function initProgressBar() {
@@ -214,9 +214,9 @@ function initProgressBar() {
 
 }
 $(document).ready(function () {
-// if (performance.navigation.type == 1) {
-// window.location.href = "/ASDE-puzzle_game/end_game";
-// }
+	// if (performance.navigation.type == 1) {
+	// window.location.href = "/ASDE-puzzle_game/end_game";
+	// }
 	getEventsFromServer();
 	initProgressBar();
 	$("#numHint").text("Hint remains: " + numHint);
