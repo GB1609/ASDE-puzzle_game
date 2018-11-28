@@ -67,6 +67,7 @@ function listenForStartGame(lobby_name) {
 			}, 5000);
 		}
 	});
+	
 	console.log(xhr);
 
 }
