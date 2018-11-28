@@ -149,6 +149,7 @@ function listenForJoinToLobby(lobby_name) {
 				if (r.join) {
 					// TODO listen for leave lobby
 					$("#start_button").removeClass("hidden-field");
+					$("#empty_slot").text(r.joiner);
 					$('#join_alert').fadeIn('slow', function() {
 						$('#join_alert').delay(5000).fadeOut();
 					});
@@ -313,19 +314,26 @@ function buildLobbyRow(id, name, owner, guest, username) {
 	if (guest != "") {
 		newLobby += "<span>" + guest + "</span>";
 	} else {
-		newLobby += "<span>EMPTY</span>";
+		if (username !== owner)
+			newLobby += "<span>EMPTY</span>";
+		else
+			newLobby += "<span id=\"empty_slot\">EMPTY</span>";
 	}
 	newLobby += "<img src=\"resources/images/avatar.svg\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">"
 	if (username != owner) {
-		newLobby += "<button id=\"join_btn_lobby_"
-				+ name
-				+ "\" type=\"button\" onclick=\"joinLobby('"
-				+ name
-				+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
+		if (guest === "")
+			newLobby += "<button id=\"join_btn_lobby_"
+					+ name
+					+ "\" type=\"button\" onclick=\"joinLobby('"
+					+ name
+					+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
 	} else {
 
 		newLobby += "<input id=\"created_lobby\" type=\"hidden\" value=\"created\" />";
-		newLobby += "<button id=\"start_button\" type=\"button\" onclick=\"startGame()\" class=\"btn btn-warning btn-lg float-right hidden-field\">Start</button>";
+		newLobby += "<button id=\"start_button\" type=\"button\" onclick=\"startGame()\" class=\"btn btn-warning btn-lg float-right ";
+		if (guest === "")
+			newLobby += "hidden-field";
+		newLobby += "\">Start</button>";
 		newLobby += "<div id=\"join_alert\" class=\"alert alert-info hidden-field\" role=\"alert\">A player joined to lobby</div>";
 		newLobby += "<div id=\"leave_alert\" class=\"alert alert-danger hidden-field\" role=\"alert\">The player leaved the lobby</div>";
 		newLobby += "<form style=\"display: hidden\" action=\"forward_to_game\"	method=\"post\" id=\"ftg_form\">";

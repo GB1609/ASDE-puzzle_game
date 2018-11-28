@@ -59,7 +59,7 @@ public class LobbyController {
 		session.setAttribute("gameId", lobbyID);
 		session.setAttribute("player", "player2");
 		try {
-			this.eventService.addEventJoin(lobby_name);
+			this.eventService.addEventJoin(lobby_name, username);
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
 			if (previousJoined != null) {
 				this.eventService.addEventLeaveJoin(previousJoined);

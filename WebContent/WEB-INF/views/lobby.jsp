@@ -18,7 +18,7 @@
 					<div class="row center-content-row">
 						<div class="dropdown col-sm-6 row">
 							<div class="col">
-								<button type="button" class="btn btn-warning btn-lg button-in-row" onclick="getLobbies('True')">Refresh</button>
+								<button type="button" class="btn btn-warning btn-lg button-in-row" onclick="getLobbies('true')">Refresh</button>
 							</div>
 
 							<button type="button" class="btn btn-warning btn-lg button-in-row" data-toggle="modal" data-target="#create-modal">Create</button>

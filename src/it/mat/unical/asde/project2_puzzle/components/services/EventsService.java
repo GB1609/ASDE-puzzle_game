@@ -29,6 +29,13 @@ public class EventsService {
 		join.get(key).put(maker.makeMessage(message_type));
 	}
 
+	private void addGeneralEventLobby(String key, String message_type, String message, String message_content)
+			throws InterruptedException {
+		if (!join.containsKey(key))
+			throw new RuntimeException("No join found for this lobby");
+		join.get(key).put(maker.makeMessage(message_type, message, message_content));
+	}
+
 	////////////////////////// EVENT IN GAME/////////////////////////
 	public void addEventFor(Integer gameID, String player, String progress) throws InterruptedException {
 		String key = gameID + (player.equals("player1") ? "player2" : "player1");
@@ -58,8 +65,9 @@ public class EventsService {
 		addGeneralEventLobby(key, MessageMaker.START_MESSAGE);
 	}
 
-	public void addEventJoin(String lobbyName) throws InterruptedException {
-		addGeneralEventLobby(lobbyName.toLowerCase(), MessageMaker.JOIN_MESSAGE);
+	public void addEventJoin(String lobbyName, String username) throws InterruptedException {
+
+		addGeneralEventLobby(lobbyName.toLowerCase(), MessageMaker.JOIN_MESSAGE, MessageMaker.WHO_JOIN, username);
 	}
 
 	public void addEventLeaveJoin(String previousJoined) throws InterruptedException {
@@ -157,6 +165,7 @@ public class EventsService {
 		public final static String UPDATE_MESSAGE = "update";
 		public final static String PROGRESS_MESSAGE = "progress";
 		public final static String TEXT_MESSAGE = "message_text";
+		public final static String WHO_JOIN = "joiner";
 
 		public String makeMessage(String message_type) {
 			return (new JSONObject().put(message_type, true)).toString();
