@@ -36,11 +36,10 @@ public class AccountService {
 
 	@PostConstruct
 	public void init() {
-		
+
 		credentialsDAO.save(new Credentials("Ciccio", "ciccio"));
 		credentialsDAO.save(new Credentials("Giovanni", "giovanni"));
-		
-		
+
 		User ciccio = new User("Ciccio", "Francesco", "Pasticcio", "avatar.svg");
 		User giovanni = new User("Giovanni", "giovanni", "giovanni", "avatar_1.png");
 
@@ -103,8 +102,6 @@ public class AccountService {
 	}
 
 	public boolean updateUserInformation(String firstname, String lastname, String password, String username) {
-		System.out.println("-------------------------------------------------");
-		// TODO avatar nell'ultimo campo
 		boolean status = userDAO.updateUserInformation(firstname, lastname, username, "");
 		if (status)
 			status = credentialsDAO.updateUserPassword(password, username);
@@ -116,6 +113,7 @@ public class AccountService {
 		Credentials credentials = getCredentials(username);
 		model.addAttribute("user", user);
 		model.addAttribute("password", credentials.getPassword());
+		model.addAttribute("avatars", loadAvatarsList());
 
 	}
 
