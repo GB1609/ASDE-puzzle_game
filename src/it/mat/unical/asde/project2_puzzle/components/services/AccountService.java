@@ -101,8 +101,8 @@ public class AccountService {
 		return credentialsDAO.getCredentials(username);
 	}
 
-	public boolean updateUserInformation(String firstname, String lastname, String password, String username) {
-		boolean status = userDAO.updateUserInformation(firstname, lastname, username, "");
+	public boolean updateUserInformation(String firstname, String lastname, String password, String username,String avatar) {
+		boolean status = userDAO.updateUserInformation(firstname, lastname, username,avatar);
 		if (status)
 			status = credentialsDAO.updateUserPassword(password, username);
 		return status;

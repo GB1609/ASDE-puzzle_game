@@ -55,7 +55,7 @@ public class UserController {
 			@RequestParam String username, @RequestParam String password, @RequestParam String avatar,
 			HttpSession session, Model model) {
 
-		if (accountService.accountCreated(firstName, lastName, username, password,avatar)) {
+		if (accountService.accountCreated(firstName, lastName, username, password, avatar)) {
 			session.setAttribute("username", username);
 			return "redirect:/";
 		}
@@ -76,7 +76,8 @@ public class UserController {
 	@PostMapping("updateUserInformation")
 	@ResponseBody
 	public void updateUserInformation(@RequestParam String firstname, @RequestParam String lastname,
-			@RequestParam String password, HttpServletResponse response, HttpSession session) {
+			@RequestParam String password, @RequestParam String avatar, HttpServletResponse response,
+			HttpSession session) {
 
 		JSONObject json = new JSONObject();
 		response.setContentType("application/json");
@@ -84,7 +85,7 @@ public class UserController {
 		String username = (String) session.getAttribute("username");
 
 		try {
-			if (accountService.updateUserInformation(firstname, lastname, password, username))
+			if (accountService.updateUserInformation(firstname, lastname, password, username, avatar))
 				json.append("status", "success");
 			else
 				json.append("status", "error");

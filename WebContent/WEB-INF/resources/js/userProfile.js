@@ -3,6 +3,9 @@ var settings, settingsDiv;
 var matchHistory, matchHistoryDiv;
 var showPasswordLabel;
 var password;
+var chooseAvatarDiv;
+var chooseAvatarButton;
+
 
 var newPassword, newFirstName, newLastName, repeatNewPassword;
 
@@ -16,7 +19,10 @@ $(document).ready(function() {
 	matchHistory = $('li[class = matchHistory-button]');
 	matchHistoryDiv = $('#matchHistory-div');
 	matchHistory.click(matchClick);
-	
+	chooseAvatarDiv = $('#choose-avatar-div');
+	chooseAvatarButton = $('#changeAvatar-button');
+	chooseAvatarButton.click(avatarClick);
+
 	showPasswordLabel = $('#showPassLabel');
 	password = document.getElementById("password").value;
 	getFields();
@@ -43,6 +49,13 @@ function matchClick(e) {
 	e.preventDefault();
 }
 
+function avatarClick(e) {
+	hideAll();
+	chooseAvatarButton.addClass('active');
+	chooseAvatarDiv.toggleClass('hidden');
+	e.preventDefault();
+}
+
 function hideAll() {
 	overviewDiv.addClass('hidden');
 	overview.removeClass('active');
@@ -50,8 +63,19 @@ function hideAll() {
 	settings.removeClass('active');
 	matchHistoryDiv.addClass('hidden');
 	matchHistory.removeClass('active');
+	chooseAvatarDiv.addClass('hidden');
+	chooseAvatarButton.removeClass('active');
 
 }
+
+function selectAvatar(e) {
+	document.getElementById("avatar").value = e.id;
+	$('.avatar_grid p').removeClass("avatar_selected");
+	var p = e.closest('p');
+	$(p).addClass("avatar_selected");
+	// $('#imageSection').addClass('no-visible');
+}
+
 
 function showPassword() {
 	document.getElementById("showPassLabel").innerHTML = password;
@@ -101,7 +125,7 @@ function updateSettings() {
 		return;
 	}
 	if (newFirstName.value == "" && newLastName.value == ""
-			&& newPassword.value == "") {
+			&& newPassword.value == "" && newAvatar.value=="") {
 		alert("Nothing to update!!!");
 		return;
 	}
@@ -114,10 +138,10 @@ function getFields() {
 	newLastName = document.getElementById('lastname-field');
 	newPassword = document.getElementById('password-field');
 	repeatNewPassword = document.getElementById('reenter-password-field');
+	newAvatar = document.getElementById('avatar');
 }
-function openAvatarGrid()
-{
-	
+function openAvatarGrid() {
+
 }
 
 function update() {
@@ -129,7 +153,8 @@ function update() {
 		data : ({
 			"firstname" : newFirstName.value,
 			"lastname" : newLastName.value,
-			"password" : newPassword.value
+			"password" : newPassword.value,
+			"avatar": newAvatar.value
 		}),
 		success : function(data) {
 			if (data.status == "success")
