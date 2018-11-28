@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css?family=Iceland);
 #view {
 	/*min-height: 100vh;*/
 	padding: 1em;
@@ -234,3 +235,27 @@ span:hover {
 	margin-top: 1%;
 	margin-bottom: 1%;
 }
+
+#chronometer span#seconds{
+  text-align:right;
+}
+
+	#chronometer{
+	 font-family: 'Iceland', sans-serif;
+		    font-size: 137px;
+        white-space:nowrap;
+		    padding: 20px;
+	    overflow: hidden;
+	    display: inline-block;
+      letter-spacing:-10px;
+      text-shadow:0 0 10px rgba(23, 140, 140, 0.75);
+	    border: 2px solid #222;
+	    border-radius: 5px;
+	    position: relative;
+	    box-shadow: 0px -2px 10px 1px rgba(23, 140, 140, 0.75) inset, 0px 5px 20px -10px #000;
+	    width: 620px;
+      color: #ffffff; 
+	    background: #182227;
+
+	}
+	

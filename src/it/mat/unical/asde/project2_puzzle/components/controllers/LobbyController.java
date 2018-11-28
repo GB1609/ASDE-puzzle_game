@@ -76,8 +76,10 @@ public class LobbyController {
 	@ResponseBody
 	public String createLobby(HttpSession session, @RequestParam String lobby_name) {
 		String username = (String) session.getAttribute("username");
-		return this.initJSOONResponse(username)
-				.put("error", !this.lobbyService.addLobby(new Lobby(lobby_name, username), username)).toString();
+		boolean added = false;
+		if ((added = this.lobbyService.addLobby(new Lobby(lobby_name, username), username)))
+			eventService.attachListenerToStart(lobby_name);
+		return this.initJSOONResponse(username).put("error", !added).toString();
 	}
 
 	@PostMapping("search_lobby")
@@ -91,8 +93,12 @@ public class LobbyController {
 	@PostMapping("delete_lobby_by_name")
 	@ResponseBody
 	public String deleteLobbyByName(HttpSession session, @RequestParam String lobby_name) {
-		return this.initJSOONResponse((String) session.getAttribute("username"))
-				.put("error", !this.lobbyService.removeLobbyByName(lobby_name)).toString();
+		boolean deleted = this.lobbyService.removeLobbyByName(lobby_name);
+		if (deleted) {
+			eventService.detachListenerForJoin(lobby_name);
+		}
+
+		return this.initJSOONResponse((String) session.getAttribute("username")).put("error", !deleted).toString();
 	}
 
 	@PostMapping("check_join")
