@@ -1,10 +1,8 @@
 package it.mat.unical.asde.project2_puzzle.components.persistence;
 
-import javax.annotation.PostConstruct;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,12 +16,6 @@ public class CredentialsDAO {
 
 	@Autowired
 	private DBManager dbManager;
-
-	@PostConstruct
-	public void init() {
-		dbManager.save(new Credentials("Ciccio", "ciccio"));
-		dbManager.save(new Credentials("Giovanni", "giovanni"));
-	}
 
 	public boolean save(Credentials credentials) {
 		return dbManager.save(credentials);
@@ -51,19 +43,13 @@ public class CredentialsDAO {
 	}
 
 	public boolean updateUserPassword(String password, String username) {
-		
-		if(password=="")
+
+		if (password == "")
 			return true;
 		
-		Session openSession = session.openSession();
-		Transaction tx = null;
-		tx = openSession.beginTransaction();
-
-		int query = openSession.createQuery("update Credentials as c set c.password = :p where c.username = :u")
-				.setParameter("u", username).setParameter("p", password).executeUpdate();
-		tx.commit();
-		openSession.close();
-		return query > 0;
+		Credentials credentials = getCredentials(username);
+		credentials.setPassword(password);
+		return dbManager.update(credentials);
 
 	}
 

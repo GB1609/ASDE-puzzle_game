@@ -9,7 +9,6 @@
 				style="margin-left: 6%;"> 
 				<c:forEach items="${match.users}" var="user" varStatus="loop">
 					<c:if test="${loop.index=='0'}">${user.username}</c:if>
-					${loop.index}
 				</c:forEach>
 			</label>
 			<div class="col-md-1" style="display: inline;">

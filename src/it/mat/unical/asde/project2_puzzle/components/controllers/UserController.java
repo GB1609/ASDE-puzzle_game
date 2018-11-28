@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import it.mat.unical.asde.project2_puzzle.components.services.AccountService;
-import it.mat.unical.asde.project2_puzzle.components.services.GameService;
 
 @Controller
 public class UserController {
@@ -22,16 +21,11 @@ public class UserController {
 	@Autowired
 	private AccountService accountService;
 
-	@Autowired
-	private GameService gameService;
-
 	@GetMapping("/")
 	public String index(HttpSession session, Model model) {
 
 		if (checkUserName(session))
 			return goToProfileSettings(session, model);
-
-		model.addAttribute("randomGrid", gameService.getRandomGrid());
 
 		return goToIndex(session, model);
 
@@ -60,7 +54,7 @@ public class UserController {
 	public String creationAccount(@RequestParam String firstName, @RequestParam String lastName,
 			@RequestParam String username, @RequestParam String password, @RequestParam String avatar,
 			HttpSession session, Model model) {
-		System.out.println(avatar);
+
 		if (accountService.accountCreated(firstName, lastName, username, password,avatar)) {
 			session.setAttribute("username", username);
 			return "redirect:/";

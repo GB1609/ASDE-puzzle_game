@@ -7,12 +7,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.JoinColumn;
 
 @Entity
 @Table
@@ -31,9 +28,9 @@ public class User {
 	@Column(nullable = false)
 	private String avatar;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "User_Match", joinColumns = { @JoinColumn(name = "username") }, inverseJoinColumns = {
-			@JoinColumn(name = "id") })
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+//	@JoinTable(name = "User_Match", joinColumns = { @JoinColumn(name = "username") }, inverseJoinColumns = {
+//			@JoinColumn(name = "id") })
 	private Set<Match> matches = new HashSet<Match>();
 
 	public User() {
@@ -42,7 +39,6 @@ public class User {
 	}
 
 	public User(String username, String firstName, String lastName, String avatar) {
-
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -54,7 +50,15 @@ public class User {
 	}
 
 	public void addMatch(Match match) {
-		matches.add(match);
+		if (!matches.contains(match)) {
+			matches.add(match);
+			match.addUser(this);
+		}
+	}
+
+	public void removeMatch(Match match) {
+		matches.remove(match);
+		match.removeUser(this);
 	}
 
 	public void setMatches(Set<Match> matches) {
@@ -94,18 +98,14 @@ public class User {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		// self check
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (this == o) {
 			return true;
-		// null check
-		if (obj == null)
+		}
+		if (o == null || getClass() != o.getClass()) {
 			return false;
-		// type check and cast
-		if (getClass() != obj.getClass())
-			return false;
-		User user = (User) obj;
-		// field comparison
+		}
+		User user = (User) o;
 		return Objects.equals(username, user.username) && Objects.equals(firstName, user.firstName)
 				&& Objects.equals(lastName, user.lastName) && Objects.equals(avatar, user.avatar);
 	}

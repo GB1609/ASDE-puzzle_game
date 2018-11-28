@@ -1,12 +1,12 @@
 package it.mat.unical.asde.project2_puzzle.model;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,12 +23,11 @@ public class Match {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@ManyToMany(mappedBy = "matches", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany(mappedBy = "matches")
 	private Set<User> users = new HashSet<User>();
 
-
-	@ManyToOne(optional = false)
-	@JoinColumn(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "winner", foreignKey = @ForeignKey(name = "USER_FK"))
 	private User winner;
 
 	@Column(nullable = false)
@@ -38,9 +37,8 @@ public class Match {
 		super();
 	}
 
-	public Match(User winner, int time) {
+	public Match(int time) {
 		super();
-		setWinner(winner);
 		this.time = time;
 	}
 
@@ -78,14 +76,35 @@ public class Match {
 	}
 
 	public void addUser(User user) {
-		if (!users.contains(user))
-			this.users.add(user);
+		if(!users.contains(user))
+		{
+			users.add(user);
+			user.addMatch(this);
+		}
 	}
 
 	public void setWinner(User winner) {
-		if (!users.contains(winner))
-			users.add(winner);
 		this.winner = winner;
+	}
+
+	public void removeWinner() {
+		this.winner = null;
+	}
+
+	public void removeUser(User user) {
+		users.remove(user);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Match match = (Match) o;
+		return Objects.equals(time, match.time);
 	}
 
 }

@@ -3,6 +3,7 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,41 @@ public class AccountService {
 	@Autowired
 	private ServletContext servletContext;
 
+	@PostConstruct
+	public void init() {
+		
+		credentialsDAO.save(new Credentials("Ciccio", "ciccio"));
+		credentialsDAO.save(new Credentials("Giovanni", "giovanni"));
+		
+		
+		User ciccio = new User("Ciccio", "Francesco", "Pasticcio", "avatar.svg");
+		User giovanni = new User("Giovanni", "giovanni", "giovanni", "avatar_1.png");
+
+		userDAO.save(ciccio);
+		userDAO.save(giovanni);
+
+		Match match = new Match(132);
+		match.addUser(giovanni);
+		match.addUser(ciccio);
+		match.setWinner(ciccio);
+
+		matchDAO.save(match);
+
+		Match match1 = new Match(132);
+		match1.addUser(giovanni);
+		match1.addUser(ciccio);
+		match1.setWinner(giovanni);
+
+		matchDAO.save(match1);
+
+		Match match2 = new Match(80);
+		match2.addUser(giovanni);
+		match2.addUser(ciccio);
+		match2.setWinner(ciccio);
+
+		matchDAO.save(match2);
+	}
+
 	public boolean loginAccepted(String username, String password) {
 		return credentialsDAO.exists(new Credentials(username, password));
 	}
@@ -56,9 +92,10 @@ public class AccountService {
 		return userDAO.getUser(username);
 
 	}
-	
-	private User getUserMatches(String username) {
-		return userDAO.getUserMatches(username);
+
+	public User getFullUser(String username) {
+		return userDAO.getFullUser(username);
+
 	}
 
 	public Credentials getCredentials(String username) {
@@ -66,15 +103,16 @@ public class AccountService {
 	}
 
 	public boolean updateUserInformation(String firstname, String lastname, String password, String username) {
-		boolean status = userDAO.updateUserInformation(firstname, lastname, username);
+		System.out.println("-------------------------------------------------");
+		// TODO avatar nell'ultimo campo
+		boolean status = userDAO.updateUserInformation(firstname, lastname, username, "");
 		if (status)
 			status = credentialsDAO.updateUserPassword(password, username);
 		return status;
 	}
 
 	public void fillUserInformation(String username, Model model) {
-//		User user = getUserMatches(username);
-		User user = getUser(username);
+		User user = getFullUser(username);
 		Credentials credentials = getCredentials(username);
 		model.addAttribute("user", user);
 		model.addAttribute("password", credentials.getPassword());
