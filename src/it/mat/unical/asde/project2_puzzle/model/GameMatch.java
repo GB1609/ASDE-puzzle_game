@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Match {
+public class GameMatch {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,11 +33,11 @@ public class Match {
 	@Column(nullable = false)
 	private int time;
 
-	public Match() {
+	public GameMatch() {
 		super();
 	}
 
-	public Match(int time) {
+	public GameMatch(int time) {
 		super();
 		this.time = time;
 	}
@@ -103,7 +103,7 @@ public class Match {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		Match match = (Match) o;
+		GameMatch match = (GameMatch) o;
 		return Objects.equals(time, match.time);
 	}
 

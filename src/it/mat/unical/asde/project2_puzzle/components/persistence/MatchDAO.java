@@ -9,7 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import it.mat.unical.asde.project2_puzzle.model.Match;
+import it.mat.unical.asde.project2_puzzle.model.GameMatch;
 import it.mat.unical.asde.project2_puzzle.model.User;
 
 @Repository
@@ -21,7 +21,7 @@ public class MatchDAO {
 	@Autowired
 	private DBManager dbManager;
 
-	public boolean save(Match match) {
+	public boolean save(GameMatch match) {
 
 		boolean result = dbManager.save(match);
 		if (result) {
@@ -36,10 +36,10 @@ public class MatchDAO {
 
 	}
 
-	public ArrayList<Match> getMatches(String username) {
+	public ArrayList<GameMatch> getMatches(String username) {
 		Session openSession = session.openSession();
-		Query<Match> query = openSession.createQuery("from Match m LEFT JOIN FETCH m.users ", Match.class);
-		ArrayList<Match> results = new ArrayList<Match>(query.getResultList());
+		Query<GameMatch> query = openSession.createQuery("from Match m LEFT JOIN FETCH m.users ", GameMatch.class);
+		ArrayList<GameMatch> results = new ArrayList<GameMatch>(query.getResultList());
 		openSession.close();
 		return results;
 	}

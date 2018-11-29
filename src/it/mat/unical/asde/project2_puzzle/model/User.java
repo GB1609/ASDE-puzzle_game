@@ -31,7 +31,7 @@ public class User {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 //	@JoinTable(name = "User_Match", joinColumns = { @JoinColumn(name = "username") }, inverseJoinColumns = {
 //			@JoinColumn(name = "id") })
-	private Set<Match> matches = new HashSet<Match>();
+	private Set<GameMatch> matches = new HashSet<GameMatch>();
 
 	public User() {
 		super();
@@ -45,23 +45,23 @@ public class User {
 		this.avatar = avatar;
 	}
 
-	public Set<Match> getMatches() {
+	public Set<GameMatch> getMatches() {
 		return matches;
 	}
 
-	public void addMatch(Match match) {
+	public void addMatch(GameMatch match) {
 		if (!matches.contains(match)) {
 			matches.add(match);
 			match.addUser(this);
 		}
 	}
 
-	public void removeMatch(Match match) {
+	public void removeMatch(GameMatch match) {
 		matches.remove(match);
 		match.removeUser(this);
 	}
 
-	public void setMatches(Set<Match> matches) {
+	public void setMatches(Set<GameMatch> matches) {
 		this.matches = matches;
 	}
 
