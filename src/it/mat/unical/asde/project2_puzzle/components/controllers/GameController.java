@@ -48,7 +48,7 @@ public class GameController {
 		Integer player = (Integer) session.getAttribute("player");
 		try {
 			if (gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position,
-					piece))
+					piece, timer))
 				eventsService.addEventEndGame(gameId, gameService.getCurrentPlayer(gameId));
 			else {
 				String progress = gameService.getProgressFor(gameId, player);
@@ -83,6 +83,7 @@ public class GameController {
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
 		eventsService.detachListenerInGame(gameId, player);
+		gameService.storeMatch(gameId);
 		return "EndGame";
 	}
 

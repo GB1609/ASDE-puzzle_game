@@ -157,7 +157,7 @@ a {
 
 .card-with-shadow {
 	color: white;
-	background: #212529ba;
+	background: black;
 	width: 100%;
 	border-radius: 10px;
 	display: inline-block;

@@ -6,6 +6,7 @@ public class GridToComplete {
 	private int[][] matrix;
 	private int height;
 	private int width;
+	private String timer;
 
 	public GridToComplete(int dim) {
 		super();
@@ -89,5 +90,9 @@ public class GridToComplete {
 				a++;
 			}
 		return (progress * 100) / (height * width);
+	}
+
+	public void setTimer(String timer) {
+		this.timer = timer;
 	}
 }

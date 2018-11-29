@@ -33,7 +33,7 @@ public class EventsService {
 
 	private void addGeneralEventLobby(String key, String message_type) throws InterruptedException {
 		if (!join.containsKey(key))
-			throw new RuntimeException("No join found for this lobby");
+			throw new RuntimeException("No join found for this lobby" + key);
 		join.get(key).put(maker.makeMessage(message_type));
 	}
 

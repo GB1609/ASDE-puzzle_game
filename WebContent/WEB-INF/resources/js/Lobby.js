@@ -43,6 +43,7 @@ function toggleModal() {
 }
 
 function listenForStartGame(lobby_name) {
+	console.log("listenStartfor" + lobby_name);
 	var xhr = $.ajax({
 		url : "check_start",
 		type : "post",
@@ -53,6 +54,7 @@ function listenForStartGame(lobby_name) {
 			if (!$.trim(result))
 				listenForStartGame(lobby_name);
 			else {
+				console.log(result);
 				var r = JSON.parse(result);
 				if (r.start) {
 					window.location.href = "/ASDE-puzzle_game/game";
@@ -76,6 +78,8 @@ function listenForStartGame(lobby_name) {
 }
 function listenForJoinToLobby(lobby_name) {
 	// console.log("in join")
+	console.log("listenForJoinToLobby" + lobby_name);
+
 	var xhr = $.ajax({
 		url : "check_join",
 		type : "post",

@@ -23,9 +23,9 @@ public class GameService {
 	}
 
 	public boolean updateStateGame(Integer gameId, Integer player, String old_location, int old_position,
-			String new_location, int new_position, String piece) {
+			String new_location, int new_position, String piece, String timer) {
 		return runningGames.get(gameId).updateSateGame(player, old_location, old_position, new_location, new_position,
-				piece);
+				piece, timer);
 	}
 
 	public String getProgressFor(Integer gameId, Integer player) {
@@ -34,5 +34,9 @@ public class GameService {
 
 	public Integer getCurrentPlayer(Integer gameId) {
 		return runningGames.get(gameId).getCurrentPlayer();
+	}
+
+	public void storeMatch(Integer gameId) {
+
 	}
 }
