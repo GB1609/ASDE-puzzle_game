@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -66,12 +68,27 @@ public class EventsService {
 	}
 
 	public void addEventJoin(String lobbyName, String username) throws InterruptedException {
-
 		addGeneralEventLobby(lobbyName.toLowerCase(), MessageMaker.JOIN_MESSAGE, MessageMaker.WHO_JOIN, username);
 	}
 
 	public void addEventLeaveJoin(String previousJoined) throws InterruptedException {
-		addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);
+		Pattern p = Pattern.compile("(.+)player2$");
+		Matcher meMatcher = p.matcher(previousJoined);
+		if (meMatcher.matches()) {
+			String s = meMatcher.group(1);
+			System.out.println("GROUP1: " + s);
+			addGeneralEventLobby(s, MessageMaker.LEAVE_MESSAGE, MessageMaker.WHO_LEAVE, MessageMaker.OWNER);
+			if (join.containsKey(previousJoined))
+				addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);// TODO FIND A WAY TO DELETE THIS KEY,
+			// rimane sporca la chiave lobby+player2 perchè come riceve la risposta inizia
+			// ad ascoltare sulla chiave lobby name.
+//			join.remove(s);
+		} else {
+			System.out.println("A JOINER has leave");
+			join.remove(previousJoined + "player2");
+			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);
+
+		}
 	}
 
 	public void attachListenerToJoin(String lobby_name) {
@@ -158,6 +175,8 @@ public class EventsService {
 	}
 
 	private class MessageMaker {
+		public static final String OWNER = "owner";
+		public static final String WHO_LEAVE = "by";
 		public final static String JOIN_MESSAGE = "join";
 		public final static String START_MESSAGE = "start";
 		public final static String LEAVE_MESSAGE = "leave";

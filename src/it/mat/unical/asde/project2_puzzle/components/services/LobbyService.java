@@ -50,7 +50,7 @@ public class LobbyService {
 					lobby.setOwner(guest);
 					lobby.setGuest("");
 					System.out.println("LEAVE LOBBY: " + lobby);
-					this.previousLobby.put(username, lobby.getName());
+					this.previousLobby.put(username, lobby.getName() + "player2");
 				} else {
 					this.lobbies.remove(i);
 					System.out.println("REMOVE LOBBY: " + lobby);

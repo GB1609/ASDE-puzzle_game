@@ -45,6 +45,31 @@
 									</div>
 								</div>
 							</div>
+							
+							<!-- MODAL FOR LEAVE LOBBY -->
+							<div class="modal fade" id="alert-modal">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title">INFO</h4>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+											<div class="modal-header center-content-row">
+													The Lobby's owner leaved it!<br> Now you are the new owner
+											</div>
+											<div class="modal-footer center-content-row">
+												<button type="button" onclick="toggleModal()" class="btn btn-warning btn-sm">OK</button>
+											</div>
+
+									</div>
+								</div>
+							</div>
+							
+							
+							<!-- END MODAL FOR LEAVE LOBBY -->
+							
+							
+							
 
 							<div class="dropdown col">
 								<button type="button" class="btn btn-warning btn-lg dropdown-toggle button-in-row" aria-haspopup="true" data-toggle="dropdown">Search Lobby</button>

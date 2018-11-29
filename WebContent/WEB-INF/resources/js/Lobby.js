@@ -37,6 +37,11 @@ function changeTypeList() {
 		grid = true;
 	}
 }
+
+function toggleModal() {
+	$("#alert-modal").modal("toggle");
+}
+
 function listenForStartGame(lobby_name) {
 	var xhr = $.ajax({
 		url : "check_start",
@@ -52,12 +57,10 @@ function listenForStartGame(lobby_name) {
 				if (r.start) {
 					window.location.href = "/ASDE-puzzle_game/game";
 				} else if (r.leave) {
+					toggleModal();
+					listenForJoinToLobby(lobby_name);
 					console.log("Lobby destruct");// TODO make alert
 				}
-				// TODO listen for leave lobby
-				// $("#start_button").removeClass("hidden-field");
-				// $("#lobby_name").val(lobby_name);
-				// $("#ftg_form").submit();
 			}
 		},
 		error : function(e) {
@@ -68,6 +71,48 @@ function listenForStartGame(lobby_name) {
 		}
 	});
 
+	console.log(xhr);
+
+}
+function listenForJoinToLobby(lobby_name) {
+	// console.log("in join")
+	var xhr = $.ajax({
+		url : "check_join",
+		type : "post",
+		data : ({
+			"lobby_name" : lobby_name
+		}),
+		success : function(result) {
+			if ($.trim(result) && !(result === "already-joined")) {
+				var r = JSON.parse(result);
+				if (r.join) {
+					// TODO listen for leave lobby
+					$("#start_button").removeClass("hidden-field");
+					$("#empty_slot").text(r.joiner);
+					$('#join_alert').fadeIn('slow', function() {
+						$('#join_alert').delay(5000).fadeOut();
+					});
+				} else if (r.leave) {
+					if (r.by === "owner")
+						return;
+					$("#start_button").addClass("hidden-field");
+					$('#leave_alert').fadeIn('slow', function() {
+						$('#leave_alert').delay(5000).fadeOut();
+					});
+				}
+				// $("#lobby_name").val(lobby_name);
+				// $("#ftg_form").submit();
+			}
+			listenForJoinToLobby(lobby_name);
+
+		},
+		error : function(e) {
+			console.log(e.responseText);
+			setTimeout(function() {
+				listenForJoinToLobby(lobby_name);
+			}, 5000);
+		}
+	});
 	console.log(xhr);
 
 }
