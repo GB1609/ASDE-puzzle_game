@@ -11,7 +11,7 @@
 				Name</label>
 			<div class="col-md-12" align="center">
 				<label class="col-md-12 control-label customLabel" for="firstname-field"
-					>${firstname}</label>
+					>${user.firstName}</label>
 			</div>
 		</div>
 		<!-- Text  Lastname -->
@@ -20,7 +20,7 @@
 				Name</label>
 			<div class="col-md-12" align="center">
 				<label class="col-md-12 control-label customLabel" for="lastname-field"
-					>${lastname}</label>
+					>${user.lastName}</label>
 			</div>
 		</div>
 		<!-- Text  Password -->

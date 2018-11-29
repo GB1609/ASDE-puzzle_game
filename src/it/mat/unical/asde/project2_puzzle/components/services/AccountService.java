@@ -3,6 +3,7 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,40 @@ public class AccountService {
 	@Autowired
 	private ServletContext servletContext;
 
+	@PostConstruct
+	public void init() {
+
+		credentialsDAO.save(new Credentials("Ciccio", "ciccio"));
+		credentialsDAO.save(new Credentials("Giovanni", "giovanni"));
+
+		User ciccio = new User("Ciccio", "Francesco", "Pasticcio", "avatar.svg");
+		User giovanni = new User("Giovanni", "giovanni", "giovanni", "avatar_1.png");
+
+		userDAO.save(ciccio);
+		userDAO.save(giovanni);
+
+		Match match = new Match(132);
+		match.addUser(giovanni);
+		match.addUser(ciccio);
+		match.setWinner(ciccio);
+
+		matchDAO.save(match);
+
+		Match match1 = new Match(132);
+		match1.addUser(giovanni);
+		match1.addUser(ciccio);
+		match1.setWinner(giovanni);
+
+		matchDAO.save(match1);
+
+		Match match2 = new Match(80);
+		match2.addUser(giovanni);
+		match2.addUser(ciccio);
+		match2.setWinner(ciccio);
+
+		matchDAO.save(match2);
+	}
+
 	public boolean loginAccepted(String username, String password) {
 		return credentialsDAO.exists(new Credentials(username, password));
 	}
@@ -40,7 +75,7 @@ public class AccountService {
 	public boolean accountCreated(String firstName, String lastName, String username, String password, String avatar) {
 		boolean value = credentialsDAO.save(new Credentials(username, password));
 		if (value)
-			value = userDAO.save(new User(username, firstName, lastName,avatar));
+			value = userDAO.save(new User(username, firstName, lastName, avatar));
 		return value;
 	}
 
@@ -57,25 +92,28 @@ public class AccountService {
 
 	}
 
+	public User getFullUser(String username) {
+		return userDAO.getFullUser(username);
+
+	}
+
 	public Credentials getCredentials(String username) {
 		return credentialsDAO.getCredentials(username);
 	}
 
-	public boolean updateUserInformation(String firstname, String lastname, String password, String username) {
-		boolean status = userDAO.updateUserInformation(firstname, lastname, username);
+	public boolean updateUserInformation(String firstname, String lastname, String password, String username,String avatar) {
+		boolean status = userDAO.updateUserInformation(firstname, lastname, username,avatar);
 		if (status)
 			status = credentialsDAO.updateUserPassword(password, username);
 		return status;
 	}
 
 	public void fillUserInformation(String username, Model model) {
-		User user = getUser(username);
+		User user = getFullUser(username);
 		Credentials credentials = getCredentials(username);
-		model.addAttribute("firstname", user.getFirstName());
-		model.addAttribute("lastname", user.getLastName());
+		model.addAttribute("user", user);
 		model.addAttribute("password", credentials.getPassword());
-		model.addAttribute("avatar", user.getAvatar());
-		model.addAttribute("matches", getMatches(username));
+		model.addAttribute("avatars", loadAvatarsList());
 
 	}
 
@@ -86,13 +124,12 @@ public class AccountService {
 
 	private ArrayList<String> loadAvatarsList() {
 		ArrayList<String> avatars = new ArrayList<String>();
-		File dir = new File(servletContext.getRealPath("/WEB-INF/"+AvatarsFolder));
+		File dir = new File(servletContext.getRealPath("/WEB-INF/" + AvatarsFolder));
 		File[] filesList = dir.listFiles();
 		for (File file : filesList) {
 			if (file.isFile()) {
 				avatars.add(file.getName());
-				
-				
+
 			}
 		}
 		return avatars;
