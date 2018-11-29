@@ -42,7 +42,8 @@ public class GameController {
 	@ResponseBody
 	public void movePiece(@RequestParam String old_location, @RequestParam int old_position,
 			@RequestParam String new_location, @RequestParam int new_position, @RequestParam String piece,
-			HttpSession session) {
+			@RequestParam String timer, HttpSession session) {
+		System.out.println(timer);
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		Integer player = (Integer) session.getAttribute("player");
 		try {
@@ -107,7 +108,7 @@ public class GameController {
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		Integer player = (Integer) session.getAttribute("player");
 		try {
-			eventsService.addMessageFor(gameId, player,gameService.getCurrentPlayer(gameId) ,message);
+			eventsService.addMessageFor(gameId, player, gameService.getCurrentPlayer(gameId), message);
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
 			e.printStackTrace();

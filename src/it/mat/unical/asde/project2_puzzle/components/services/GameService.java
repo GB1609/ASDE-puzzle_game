@@ -11,12 +11,10 @@ import it.mat.unical.asde.project2_puzzle.model.services_utility.RunningGame;
 public class GameService {
 	HashMap<Integer, RunningGame> runningGames = new HashMap<>();
 
-	public Grid initNewGame(Integer gameId) {
-		synchronized (runningGames) {
-			if (!runningGames.containsKey(gameId)) {
-				runningGames.put(gameId, new RunningGame(0));
-				System.out.println("init");
-			}
+	synchronized public Grid initNewGame(Integer gameId) {
+		if (!runningGames.containsKey(gameId)) {
+			runningGames.put(gameId, new RunningGame(0));
+			System.out.println("init");
 		}
 		RunningGame rgGame = runningGames.get(gameId);
 		rgGame.addPlayer();

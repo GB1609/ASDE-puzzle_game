@@ -59,7 +59,8 @@ function drop(ev) {
 			"old_position": old_position,
 			"new_location": ev.target.parentElement.getAttribute("id"),
 			"new_position": $(ev.target).prevAll(".box_piece").length,
-			"piece": data
+			"piece": data,
+			"timer": timer.getTimeValues().toString()
 		}),
 		success: function (resultData) {
 			console.log("ok" + resultData);
@@ -229,59 +230,3 @@ $(document).ready(function () {
 	 $('#time').html(timer.getTimeValues().toString());
 	 });
 });
-
-
-
-
-//
-// $(function(){
-//
-// var t = undefined;
-// var cl_thousandths = $("#thousandths");
-// var cl_seconds = $("#seconds");
-// var cl_minutes = $("#minutes");
-//	
-// function showTimer() {
-// if(Number(cl_thousandths.html())%999>0.8){
-// cl_thousandths.html("0.00");
-// printDigit(cl_seconds);
-// if(Number(cl_seconds.html())>59){
-// cl_seconds.html("00");
-// printDigit(cl_minutes);
-//
-// }
-//       
-// }
-// else cl_thousandths.html((+cl_thousandths.html() + 0.015).toFixed(2));
-//		
-// }
-//	
-// function initTimer() {
-// t=setInterval(showTimer, 20);
-// }
-// function printDigit(digit){
-//     
-// var number = Number(digit.html().replace(/\s+/g, "")) + 1;
-// var numberString;
-//     
-// (number<10)?numberString="0"+number : numberString=String(number);
-//     
-// if(numberString.substring(1,2)==="1"){
-// if(number<10)
-// digit.html("0 "+number);
-// else
-// digit.html(numberString.split("").join(" "));
-// }
-//     
-// else{
-// if(number<10)
-// digit.html("0"+number);
-// else
-// digit.html(number);
-// }
-// }
-//
-// initTimer();
-//	
-// });
-//
