@@ -11,8 +11,6 @@ public class RunningGame {
 	private List<GridToComplete> gamePlayer;
 	private Grid initialGrid;
 	private int dim;
-//	private GridToComplete gamePlayer1;
-//	private GridToComplete gamePlayer2;
 	private String user1;
 	private String user2;
 
@@ -21,8 +19,6 @@ public class RunningGame {
 		initialGrid = new Grid(difficulty, "" + randomPuzzle);
 		this.dim = initialGrid.getDim();
 		gamePlayer = new ArrayList<>();
-//		gamePlayer1 = new GridToComplete(dim);
-//		gamePlayer2 = new GridToComplete(dim);
 	}
 
 	public boolean updateSateGame(Integer player, String old_location, int old_position, String new_location,
