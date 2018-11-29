@@ -15,32 +15,33 @@
 
 		<body class="wsmenucontainer">
 			<%@include file="includes/navbar.jsp"%>
-				<div class="no_margin">
-					<div class="row justify-content-md-end cover_all no_margin">
-						<div id="view" class="row justify-content-center align-items-center col-md-9 col-sm-12 col-xs-12">
-							<div class="row justify-content-center col-md-12">
-								<div class="board col-md-auto">
-									<input id="difficulty" class="hidden-field" value="${randomGrid.difficulty}" />
-									<div id="initial_location" class="myGrid ${randomGrid.difficulty}">
-										<c:forEach items="${randomGrid.nameImages}" var="piece">
-											<span class="box_piece" ondrop="drop(event)" ondragover="allowDrop(event)">
-												<img draggable="true" ondragstart="drag(event)" id="${piece}" class="piece" src="resources/images/puzzles/${randomGrid.subjectName}/${randomGrid.difficulty}/${piece}.png"
-												/>
-											</span>
-										</c:forEach>
-									</div>
-								</div>
-								<div class="board col-md-auto offset-0 offset-md-1">
-									<div id="to_complete" class="myGrid cinque">
-										<c:forEach items="${randomGrid.nameImages}" var="piece">
-											<span class="box_piece" ondrop="drop(event)" ondragover="allowDrop(event)"></span>
-										</c:forEach>
-									</div>
+
+				<div class="row col-12">
+					<div class="col-lg-9 col-md-12 col-sm-12 col-12">
+						<div class="row minimal-row">
+							<div class="board col-md-auto">
+								<input id="difficulty" class="hidden-field" value="${randomGrid.difficulty}" />
+								<div id="initial_location" class="myGrid ${randomGrid.difficulty}">
+									<c:forEach items="${randomGrid.nameImages}" var="piece">
+										<span class="box_piece" ondrop="drop(event)" ondragover="allowDrop(event)">
+											<img draggable="true" ondragstart="drag(event)" id="${piece}" class="piece" src="resources/images/puzzles/${randomGrid.subjectName}/${randomGrid.difficulty}/${piece}.png"
+											/>
+										</span>
+									</c:forEach>
 								</div>
 							</div>
-							<div class="row justify-content-center col-md-12">
-								<div class="row card-with-shadow">
-									<button id="show-image-button" type="button" class="btn btn-warning btn-lg button-in-row" onclick="allowHint()" data-target="#show-modal">Show Image</button>
+							<div class="board col-md-auto offset-0 offset-md-1">
+								<div id="to_complete" class="myGrid cinque">
+									<c:forEach items="${randomGrid.nameImages}" var="piece">
+										<span class="box_piece" ondrop="drop(event)" ondragover="allowDrop(event)"></span>
+									</c:forEach>
+								</div>
+							</div>
+						</div>
+						<div class="row card-with-shadow">
+							<div class="col-6 col-md-6 col-lg-6 col-sm-6">
+								<div class="row col-6 margin-automatic">
+									<button id="show-image-button" type="button" class="btn btn-warning button-in-row" onclick="allowHint()" data-target="#show-modal">Show Image</button>
 									<div class="modal fade " id="show-modal">
 										<div class="modal-dialog">
 											<div class="modal-content card-with-shadow">
@@ -58,38 +59,39 @@
 											</div>
 										</div>
 									</div>
+								</div>
+								<div class="row col-6 margin-automatic">
 									<h6 align="center" id="numHint"></h6>
 								</div>
 							</div>
+							<div class="col-6 col-md-6 col-lg-6 col-sm-6 margin-automatic">
+								<label id="time" class="center-label" style="font-size: xx-large;">00:00:00</label>
+							</div>
 						</div>
-						<div class="row minimal-row col-12 col-md-3 col-sm-12 col-xs-12 game_info card-with-shadow">
-							<div class="row minimal-row ">
-								<div class="row col-xs-6 margin-automatic">
-									<label for="progress_name_text" style="color: white;">Opponent's progress
-									</label>
-									<div id="dynamic">
-										<!-- PROGRESS BAR -->
+					</div>
+					<div class="col-lg-3 col-md-12 col-sm-12 col-12 card-with-shadow">
+						<div class="col-lg-12 col-md-6 col-sm-6 col-6">
+							<label for="progress_name_text" class="center-label">Opponent's progress
+							</label>
+							<div id="dynamic">
+							</div>
+						</div>
+						<div class="col-lg-12 col-md-6 col-sm-6 col-6">
+							<div class="chat">
+								<div class="row force-max-heigth">
+									<div class="row chat-list scrollbar scrollbar-primary">
+										<div class=" force-overflow">
+											<ul class="list-group" id="chat_content">
+
+											</ul>
+										</div>
 									</div>
 								</div>
-								<div class="row col-xs-6 margin-automatic">
-									<!-- CHAT -->
-									<div class="chat">
-										<div class="row col-12 force-max-heigth">
-											<div class="row chat-list scrollbar scrollbar-primary">
-												<div class=" force-overflow">
-													<ul class="list-group" id="chat_content">
-
-													</ul>
-												</div>
-											</div>
-										</div>
-										<div class="row input-chat col-12">
-											<input type="text" class="form-control col-10 card-with-shadow" id="message_text" placeholder="Message to send">
-											<button type="button" onclick="sendMessage()" class="btn btn-warning button-send col-2">
-												<i class="fas fa-comment"></i>
-											</button>
-										</div>
-									</div>
+								<div class="row input-chat">
+									<input type="text" class="form-control col-10 card-with-shadow" id="message_text" placeholder="Message to send">
+									<button type="button" onclick="sendMessage()" class="btn btn-warning button-send col-2">
+										<i class="fas fa-comment"></i>
+									</button>
 								</div>
 							</div>
 						</div>

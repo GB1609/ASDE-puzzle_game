@@ -56,11 +56,11 @@
 
 .card-with-shadow {
 	color: white;
-	background: #212529ba;
+	background: gba(33,37,40,0.73);
 	display: inline-block;
 	height: fit-content;
 	margin-top: 1rem;
-	margin-down: 1rem;
+	margin-bottom: 1rem;
 	min-width: fit-content; position : relative;
 	width: 100%;
 	border-width: 5px;
