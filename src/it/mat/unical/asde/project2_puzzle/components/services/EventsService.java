@@ -20,7 +20,7 @@ public class EventsService {
 	/////////////////////////////////// ADD
 	/////////////////////////////////// EVENTS//////////////////////////////////////////////
 	private void addEvent(String progress, String key) throws InterruptedException {
-		if (!events.containsKey(key))
+		if (!events.containsKey(key))// TODO if a player leave the game I can't add a listener
 			events.put(key, new LinkedBlockingQueue<>());
 		events.get(key).put(progress);
 	}
@@ -39,26 +39,45 @@ public class EventsService {
 	}
 
 	////////////////////////// EVENT IN GAME/////////////////////////
-	public void addEventFor(Integer gameID, String player, String progress) throws InterruptedException {
-		String key = gameID + (player.equals("player1") ? "player2" : "player1");
-		addEvent(maker.makeMessage(MessageMaker.UPDATE_MESSAGE, MessageMaker.PROGRESS_MESSAGE, progress), key);
+	public void addEventFor(Integer gameID, Integer player, Integer currentPlayers, String progress)
+			throws InterruptedException {
+		// add message for other players
+		for (int i = 1; i <= currentPlayers; i++) {
+			String key = gameID + "player" + i;
+			if (i != player)
+				addEvent(maker.makeMessage(MessageMaker.UPDATE_MESSAGE, MessageMaker.PROGRESS_MESSAGE, progress), key);
+
+		}
+
 	}
 
-	public void addMessageFor(Integer gameId, String player, String message) throws InterruptedException {
-		String key = gameId + (player.equals("player1") ? "player2" : "player1");
-		addEvent(maker.makeMessage(MessageMaker.CHAT_MESSAGE, MessageMaker.TEXT_MESSAGE, message), key);
+	public void addMessageFor(Integer gameId, Integer player, Integer currentPlayers, String message)
+			throws InterruptedException {
+
+		for (int i = 1; i <= currentPlayers; i++) {
+			String key = gameId + "player" + i;
+			if (i != player)
+				addEvent(maker.makeMessage(MessageMaker.CHAT_MESSAGE, MessageMaker.TEXT_MESSAGE, message), key);
+
+		}
 	}
 
-	public void addEventEndGame(Integer gameId) throws InterruptedException {
+	public void addEventEndGame(Integer gameId, Integer currentPlayers) throws InterruptedException {
 		String event = "END-GAME";
-		addEvent(event, gameId + "player1");
-		addEvent(event, gameId + "player2");
+		for (int i = 1; i <= currentPlayers; i++) {
+			String key = gameId + "player" + i;
+			addEvent(event, key);
+		}
+
 	}
 
-	public void addEventLeaveGameBy(Integer gameID, String player) throws InterruptedException {
-		String key = gameID + (player.equals("player1") ? "player2" : "player1");
-		addEvent("END-GAME", key);
-
+	public void addEventLeaveGameBy(Integer gameID, Integer player, Integer currentPlayers)
+			throws InterruptedException {
+		for (int i = 1; i <= currentPlayers; i++) {// TODO SEND END GAME ONLY IF THERE IS 2 PLAYER
+			String key = gameID + "player" + i;
+			if (i != player)
+				addEvent("END-GAME", key);
+		}
 	}
 
 	////////////////////////// EVENT BEFORE GAME/////////////////////////
@@ -120,15 +139,15 @@ public class EventsService {
 		join.remove(lobby_name.toLowerCase());
 	}
 
-	public void detachListenerInGame(Integer gameId, String player) {
-		String key = gameId + player;
+	public void detachListenerInGame(Integer gameId, Integer player) {
+		String key = gameId + "player" + player;
 		events.remove(key);
 	}
 
 	/////////////////////////////////// GET
 	/////////////////////////////////// EVENTS//////////////////////////////////////////////
-	public String nextGameEventFor(Integer gameId, String player) throws InterruptedException {
-		String key = gameId + player;
+	public String nextGameEventFor(Integer gameId, Integer player) throws InterruptedException {
+		String key = gameId + "player" + player;
 		if (!events.containsKey(key))
 			events.put(key, new LinkedBlockingQueue<>());
 		return events.get(key).poll(29, TimeUnit.SECONDS);

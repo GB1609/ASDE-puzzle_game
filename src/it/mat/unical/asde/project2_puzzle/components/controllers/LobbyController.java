@@ -57,7 +57,7 @@ public class LobbyController {
 			return this.initJSOONResponse(username).put("error", true).toString();
 		}
 		session.setAttribute("gameId", lobbyID);
-		session.setAttribute("player", "player2");
+		// session.setAttribute("player", "player2");
 		try {
 			this.eventService.addEventJoin(lobby_name, username);
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
@@ -136,7 +136,7 @@ public class LobbyController {
 			throw new RuntimeException("no lobby found");
 		}
 		session.setAttribute("gameId", lobbyID);
-		session.setAttribute("player", "player1");
+		// session.setAttribute("player", "player1");
 		this.eventService.detachListenerForJoin(lobby_name);
 		try {
 			this.eventService.addEventStartGame(lobby_name);
