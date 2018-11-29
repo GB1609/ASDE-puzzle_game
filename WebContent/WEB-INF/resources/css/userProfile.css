@@ -1,3 +1,53 @@
+.box_avatar {
+	box-shadow: inset 3px 3px 0 rgba(255, 255, 255, 0.05), inset -2px -2px 0
+		#d5e1df;
+	min-width: 10px !important;
+}
+
+.piece {
+	padding: 1px;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.avatar_grid {
+	display: grid;
+	grid-template-columns: 6em 6em 6em 6em !important;
+	grid-template-rows: auto;
+	min-width: 10%;
+}
+
+.avatar_board {
+	margin-left: 2.1em;
+	padding: 0%;
+	min-width: 10em;
+	max-height: 24em;
+	overflow: scroll;
+	border: 12px solid #a2b9bc;
+	border-radius: 12px;
+	border-width: 5px;
+	border-style: outset;
+	background-color: rgba(0, 0, 0, .6);
+	padding: 0%;
+}
+
+.avatar_selected {
+	background-color: #C37500;
+	border-width: 2px;
+	border-style: outset;
+}
+
+.avatar {
+	padding: 23%;
+	max-width: 100%;
+	max-height: 100%;
+	min-width: 30%;
+}
+
+.avatar_grid p {
+	margin: 0 !important;
+}
+
 .profile {
 	margin: 20px 0;
 }
@@ -8,14 +58,13 @@
 	background: #fff;
 }
 
-.profile-userpic
-{
+.profile-userpic {
 	max-height: 6em;
 	max-width: 6em;
 	margin-left: 5em;
 }
+
 .profile-userpic img {
-	
 	margin-left: 4.5em;
 	padding-top: 1em;
 	float: none;
@@ -25,6 +74,23 @@
 	-webkit-border-radius: 50% !important;
 	-moz-border-radius: 50% !important;
 	border-radius: 50% !important;
+}
+
+.tilt {
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+.tilt:hover {
+	-webkit-transform: rotate(-20deg);
+	-moz-transform: rotate(-20deg);
+	-o-transform: rotate(-20deg);
+	-ms-transform: rotate(-20deg);
+	transform: rotate(-20deg);
+	
 }
 
 .profile-usertitle {
@@ -110,7 +176,18 @@
 	padding-top: 3%;
 	padding-bottom: 3%;
 }
-
+/*.changeAvatar-button a {
+	color: #93a3b5;
+	font-size: 16px;
+	font-weight: 339;
+	border-radius: 251px;
+	width: 100%;
+	padding-left: 20% !important;
+	padding-right: 20% !important;
+	padding-top: 3%;
+	padding-bottom: 3%;
+}
+*/
 .profile-usermenu ul li a {
 	background-color: rgba(0, 0, 0, 0.45);
 	color: #e0a800;
@@ -146,10 +223,9 @@
 	margin-left: 0px;
 }
 
-.customLabel
-{
-	color: #e0a800; 
-	border-radius: 10px; 
+.customLabel {
+	color: #e0a800;
+	border-radius: 10px;
 	background-color: rgba(0, 0, 0, 0.45);
 }
 
