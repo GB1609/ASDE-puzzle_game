@@ -56,7 +56,7 @@
 
 .card-with-shadow {
 	color: white;
-	background: gba(33,37,40,0.73);
+	background: rgba(33,37,40,0.73);
 	display: inline-block;
 	height: fit-content;
 	margin-top: 1rem;

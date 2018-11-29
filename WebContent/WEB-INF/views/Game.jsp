@@ -38,10 +38,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="row card-with-shadow">
-							<div class="col-6 col-md-6 col-lg-6 col-sm-6">
-								<div class="row col-6 margin-automatic">
-									<button id="show-image-button" type="button" class="btn btn-warning button-in-row" onclick="allowHint()" data-target="#show-modal">Show Image</button>
+						<div class="row information-game">
+							<div class="col-6 col-md-6 col-lg-6 col-sm-6 col-12">
+								<div class="center-label">
+									<button id="show-image-button" type="button" class="btn btn-warning" onclick="allowHint()" data-target="#show-modal">
+										<div id="numHint"></div>
+									</button>
 									<div class="modal fade " id="show-modal">
 										<div class="modal-dialog">
 											<div class="modal-content card-with-shadow">
@@ -54,44 +56,44 @@
 													    height="auto">
 												</div>
 												<div class="modal-footer">
+													<div id="numHint"></div>
 													<button type="button" data-dismiss="modal" class="btn btn-warning btn-sm">Close</button>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="row col-6 margin-automatic">
-									<h6 align="center" id="numHint"></h6>
-								</div>
 							</div>
-							<div class="col-6 col-md-6 col-lg-6 col-sm-6 margin-automatic">
-								<label id="time" class="center-label" style="font-size: xx-large;">00:00:00</label>
+							<div class="col-6 col-md-6 col-lg-6 col-sm-6 col-12">
+								<label id="time" class="center-label">00:00:00</label>
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-3 col-md-12 col-sm-12 col-12 card-with-shadow">
-						<div class="col-lg-12 col-md-6 col-sm-6 col-6">
-							<label for="progress_name_text" class="center-label">Opponent's progress
-							</label>
-							<div id="dynamic">
+					<div class="col-lg-3 col-md-12 col-sm-12 col-12">
+						<div class="row minimal-row card-with-shadow">
+							<div class="col-lg-12 col-md-6 col-sm-6 col-12">
+								<label for="progress_name_text" class="centreLabel">Opponent's progress
+								</label>
+								<div id="dynamic">
+								</div>
 							</div>
-						</div>
-						<div class="col-lg-12 col-md-6 col-sm-6 col-6">
-							<div class="chat">
-								<div class="row force-max-heigth">
-									<div class="row chat-list scrollbar scrollbar-primary">
-										<div class=" force-overflow">
-											<ul class="list-group" id="chat_content">
+							<div class="col-lg-12 col-md-6 col-sm-6 col-12">
+								<div class="chat">
+									<div class="row force-max-heigth">
+										<div class="row chat-list scrollbar scrollbar-primary">
+											<div class=" force-overflow">
+												<ul class="list-group" id="chat_content">
 
-											</ul>
+												</ul>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="row input-chat">
-									<input type="text" class="form-control col-10 card-with-shadow" id="message_text" placeholder="Message to send">
-									<button type="button" onclick="sendMessage()" class="btn btn-warning button-send col-2">
-										<i class="fas fa-comment"></i>
-									</button>
+									<div class="row input-chat">
+										<input type="text" class="form-control col-lg-9 col-md-9 col-sm-9 col-9" id="message_text" placeholder="Message to send">
+										<button type="button" onclick="sendMessage()" class="form-control btn btn-warning button-send  col-lg-2 col-md-2 col-sm-2 col-2">
+											<i class="fas fa-comment"></i>
+										</button>
+									</div>
 								</div>
 							</div>
 						</div>

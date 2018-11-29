@@ -43,6 +43,7 @@ public class UserController {
 
 		if (accountService.loginAccepted(username, password)) {
 			session.setAttribute("username", username);
+			session.setAttribute("avatar", accountService.getAvatarUser(username));
 			return goToProfileSettings(session, model);
 		}
 

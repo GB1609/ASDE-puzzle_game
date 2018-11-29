@@ -58,7 +58,7 @@ public class DispatcherConfiguration implements WebMvcConfigurer {
 		prop.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 		prop.put("hibernate.show_sql", true);
 		prop.put("hibernate.format_sql", true);
-		prop.put("hibernate.hbm2ddl.auto", "create");
+//		prop.put("hibernate.hbm2ddl.auto", "create");
 		return prop;
 	}
 }

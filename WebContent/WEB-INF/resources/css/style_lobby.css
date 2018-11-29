@@ -51,7 +51,7 @@ a {
 
 .button-in-row {
 	padding: 15px;
-	margin: 14px;
+	margin: 15px;
 }
 
 .scrollbar-ripe-malinka::-webkit-scrollbar-track {
@@ -130,7 +130,7 @@ a {
 
 .card-with-shadow {
 	color: white;
-	background: gba(33,37,40,0.73);
+	background: rgba(33,37,40,0.73);
 	width: 100%;
 	border-radius: 10px;
 	display: inline-block;
@@ -155,7 +155,9 @@ a {
 	padding: 1rem;
 }
 
+
 .row-search-lobby {
 	padding-left: 15px;
 	padding-right: 15px;
+	width: max-content;
 }

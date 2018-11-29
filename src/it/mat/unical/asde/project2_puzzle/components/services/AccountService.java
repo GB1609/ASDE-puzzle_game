@@ -34,40 +34,6 @@ public class AccountService {
 	@Autowired
 	private ServletContext servletContext;
 
-	@PostConstruct
-	public void init() {
-
-		credentialsDAO.save(new Credentials("Ciccio", "ciccio"));
-		credentialsDAO.save(new Credentials("Giovanni", "giovanni"));
-
-		User ciccio = new User("Ciccio", "Francesco", "Pasticcio", "avatar.svg");
-		User giovanni = new User("Giovanni", "giovanni", "giovanni", "avatar_1.png");
-
-		userDAO.save(ciccio);
-		userDAO.save(giovanni);
-
-		GameMatch match = new GameMatch(132);
-		match.addUser(giovanni);
-		match.addUser(ciccio);
-		match.setWinner(ciccio);
-
-		matchDAO.save(match);
-
-		GameMatch match1 = new GameMatch(132);
-		match1.addUser(giovanni);
-		match1.addUser(ciccio);
-		match1.setWinner(giovanni);
-
-		matchDAO.save(match1);
-
-		GameMatch match2 = new GameMatch(80);
-		match2.addUser(giovanni);
-		match2.addUser(ciccio);
-		match2.setWinner(ciccio);
-
-		matchDAO.save(match2);
-	}
-
 	public boolean loginAccepted(String username, String password) {
 		return credentialsDAO.exists(new Credentials(username, password));
 	}
@@ -92,6 +58,10 @@ public class AccountService {
 
 	}
 
+	public String getAvatarUser(String username) {
+		return AvatarsFolder + userDAO.getUser(username).getAvatar();
+	}
+
 	public User getFullUser(String username) {
 		return userDAO.getFullUser(username);
 
@@ -101,8 +71,9 @@ public class AccountService {
 		return credentialsDAO.getCredentials(username);
 	}
 
-	public boolean updateUserInformation(String firstname, String lastname, String password, String username,String avatar) {
-		boolean status = userDAO.updateUserInformation(firstname, lastname, username,avatar);
+	public boolean updateUserInformation(String firstname, String lastname, String password, String username,
+			String avatar) {
+		boolean status = userDAO.updateUserInformation(firstname, lastname, username, avatar);
 		if (status)
 			status = credentialsDAO.updateUserPassword(password, username);
 		return status;
