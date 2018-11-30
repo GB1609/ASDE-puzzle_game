@@ -13,7 +13,7 @@ public class GridToComplete {
 	private Date timer = new Date();
 	private String player;
 	private boolean leaved;
-	private int access = 0;// TODO remove -> only for testing end game
+	// private int access = 0;// TODO remove -> only for testing end game
 
 	public GridToComplete(int dim, String player) {
 		super();
@@ -27,9 +27,9 @@ public class GridToComplete {
 	}
 
 	public boolean checkPuzzleTermination() {
-		if (player.equals("a") && access == 5)
-			return true;
-		access++;
+//		if (player.equals("a") && access == 5)
+//			return true;
+//		access++;
 		int a = 0;
 		for (int i = 0; i < height; i++)
 			for (int k = 0; k < width; k++) {
