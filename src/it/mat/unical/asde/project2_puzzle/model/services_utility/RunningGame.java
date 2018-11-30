@@ -77,7 +77,7 @@ public class RunningGame {
 
 				if (statusG1 == statusG2)
 					return 0;
-				return statusG1 < statusG2 ? -1 : 1;
+				return statusG1 > statusG2 ? -1 : 1;
 			}
 			return g1.getDate().before(g2.getDate()) ? -1 : 1;
 		});
