@@ -17,7 +17,7 @@ public class RunningGame {
 
 	public RunningGame(int difficulty, String lobbyName) {
 		int randomPuzzle = new Random().nextInt(13);
-		initialGrid = new Grid(difficulty, "" + 0/* randomPuzzle */);
+		initialGrid = new Grid(difficulty, "" + randomPuzzle);
 		this.dim = initialGrid.getDim();
 		this.lobbyName = lobbyName;
 		gamePlayer = new ArrayList<>();
