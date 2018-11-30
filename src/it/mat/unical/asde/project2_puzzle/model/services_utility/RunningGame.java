@@ -10,14 +10,16 @@ public class RunningGame {
 
 	private List<GridToComplete> gamePlayer;
 	private List<GridToComplete> scoresOrder;
+	private String lobbyName;
 	private int currentPlayer = 0;
 	private Grid initialGrid;
 	private int dim;
 
-	public RunningGame(int difficulty) {
+	public RunningGame(int difficulty, String lobbyName) {
 		int randomPuzzle = new Random().nextInt(13);
 		initialGrid = new Grid(difficulty, "" + 0/* randomPuzzle */);
 		this.dim = initialGrid.getDim();
+		this.lobbyName = lobbyName;
 		gamePlayer = new ArrayList<>();
 	}
 
@@ -49,7 +51,7 @@ public class RunningGame {
 		return ++currentPlayer;
 	}
 
-	public void addPlayer(String playerToAdd) {
+	synchronized public void addPlayer(String playerToAdd) {
 		gamePlayer.add(new GridToComplete(dim, playerToAdd));
 
 	}
@@ -69,7 +71,7 @@ public class RunningGame {
 					return 0;
 				return statusG1 < statusG2 ? -1 : 1;
 			}
-			return g1.getTimer().before(g2.getTimer()) ? -1 : 1;
+			return g1.getDate().before(g2.getDate()) ? -1 : 1;
 		});
 		return scoresOrder.get(0).getPlayer();
 
@@ -83,7 +85,11 @@ public class RunningGame {
 	}
 
 	public String getTime() {
-		return scoresOrder.get(0).getTimer().toString();
+		return (scoresOrder.get(0).getTimer());
+	}
+
+	public String getLobbyName() {
+		return this.lobbyName;
 	}
 
 }

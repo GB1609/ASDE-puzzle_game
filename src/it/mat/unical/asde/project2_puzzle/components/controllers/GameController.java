@@ -27,7 +27,7 @@ public class GameController {
 	public String goToGame(Model m, HttpSession session) {
 //		System.out.println("IN GAME" + session.getAttribute("player"));
 		Integer gameId = (Integer) session.getAttribute("gameId");
-		m.addAttribute("randomGrid", gameService.initNewGame(gameId, (String) session.getAttribute("username")));
+		m.addAttribute("randomGrid", gameService.getGameForPlayer(gameId, (String) session.getAttribute("username")));
 		session.setAttribute("player", gameService.getCurrentPlayer(gameId));
 		System.out.println("IN Game dopo" + session.getAttribute("player"));
 		return "Game";
@@ -95,6 +95,7 @@ public class GameController {
 		Integer player = (Integer) session.getAttribute("player");
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
+		System.out.println("in leave game" + gameId + player);
 		try {
 			eventsService.addEventLeaveGameBy(gameId, player, gameService.getCurrentPlayer(gameId));
 			eventsService.detachListenerInGame(gameId, player);

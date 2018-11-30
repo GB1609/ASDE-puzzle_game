@@ -84,8 +84,11 @@ public class EventsService {
 		if (currentPlayers == 2 || (alreadyLeaved != null && (alreadyLeaved.size() - currentPlayers) == 2))
 			for (int i = 1; i <= currentPlayers; i++) {
 				String key = gameID + "player" + i;
-				if (i != player)
+				if (i != player) {
+					System.out.println("Send end game for" + gameID + "player" + player);
+
 					addEvent("END-GAME", key, gameID);
+				}
 			}
 		else
 			addLeaved(gameID, player);
@@ -109,7 +112,7 @@ public class EventsService {
 	}
 
 	public void addEventLeaveJoin(String previousJoined) throws InterruptedException {
-		Pattern p = Pattern.compile("(.+)player2$");
+		Pattern p = Pattern.compile("(.+)player2$");// TODO transorm to N
 		Matcher meMatcher = p.matcher(previousJoined);
 		if (meMatcher.matches()) {
 			String s = meMatcher.group(1);

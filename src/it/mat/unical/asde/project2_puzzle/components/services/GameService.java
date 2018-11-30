@@ -22,11 +22,14 @@ public class GameService {
 	@Autowired
 	private MatchDAO matchDao;
 
-	synchronized public Grid initNewGame(Integer gameId, String forPlayer) {
+	public void initNewGame(Integer gameId, String lobbyName) {
 		if (!runningGames.containsKey(gameId)) {
-			runningGames.put(gameId, new RunningGame(0));
+			runningGames.put(gameId, new RunningGame(0, lobbyName));
 			System.out.println("init");
 		}
+	}
+
+	public Grid getGameForPlayer(Integer gameId, String forPlayer) {
 		RunningGame rgGame = runningGames.get(gameId);
 		rgGame.addPlayer(forPlayer);
 		return rgGame.getInitialGrid(gameId);
@@ -66,6 +69,7 @@ public class GameService {
 			m.addUser(new User(s, s, s, "avatar_1.png"));
 		}
 		m.setTime(runningGames.get(gameId).getTime());
+		m.setLobbyName(runningGames.get(gameId).getLobbyName());
 		matches.put(gameId, m);
 	}
 

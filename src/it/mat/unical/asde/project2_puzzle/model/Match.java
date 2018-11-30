@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table
@@ -32,6 +33,9 @@ public class Match {
 
 	@Column(nullable = false)
 	private String time;
+
+	@Transient
+	private String lobbyName;
 
 	public Match() {
 		super();
@@ -92,6 +96,14 @@ public class Match {
 
 	public void removeUser(User user) {
 		users.remove(user);
+	}
+
+	public void setLobbyName(String lobby_name) {
+		this.lobbyName = lobby_name;
+	}
+
+	public String getLobbyName() {
+		return this.lobbyName;
 	}
 
 	@Override

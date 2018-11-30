@@ -102,9 +102,13 @@ public class GridToComplete {
 		return (progress * 100) / (height * width);
 	}
 
-	public Date getTimer() {
+	public Date getDate() {
 		System.out.println("INGET:" + timer);
 		return this.timer;
+	}
+
+	public String getTimer() {
+		return parser.format(this.timer);
 	}
 
 	public void setTimer(String timer) {
