@@ -31,7 +31,7 @@ public class User {
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return this.firstName;
 	}
 
 	public void setFirstName(String firstName) {
@@ -39,7 +39,13 @@ public class User {
 	}
 
 	public String getAvatar() {
-		return avatar;
+		return this.avatar;
+	}
+
+	@Override
+	public String toString() {
+		return "User [username=" + this.username + ", firstName=" + this.firstName + ", lastName=" + this.lastName
+				+ ", avatar=" + this.avatar + "]";
 	}
 
 	public void setAvatar(String avatar) {
@@ -47,7 +53,7 @@ public class User {
 	}
 
 	public String getLastName() {
-		return lastName;
+		return this.lastName;
 	}
 
 	public void setLastName(String lastName) {
@@ -55,7 +61,7 @@ public class User {
 	}
 
 	public String getUsername() {
-		return username;
+		return this.username;
 	}
 
 	public void setUsername(String username) {

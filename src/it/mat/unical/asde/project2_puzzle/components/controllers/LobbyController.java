@@ -8,18 +8,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import it.mat.unical.asde.project2_puzzle.components.services.AccountService;
 import it.mat.unical.asde.project2_puzzle.components.services.EventsService;
 import it.mat.unical.asde.project2_puzzle.components.services.LobbyService;
-import it.mat.unical.asde.project2_puzzle.components.services.PlayerType;
-import it.mat.unical.asde.project2_puzzle.components.services.SearchBy;
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
+import it.mat.unical.asde.project2_puzzle.model.User;
+import it.mat.unical.asde.project2_puzzle.model.services_utility.PlayerType;
+import it.mat.unical.asde.project2_puzzle.model.services_utility.SearchBy;
 
 @Controller
 public class LobbyController {
@@ -27,25 +28,48 @@ public class LobbyController {
 	LobbyService lobbyService;
 	@Autowired
 	EventsService eventService;
+	@Autowired
+	AccountService accountService;
 
 	@GetMapping("lobby")
-	public String showLobbies(Model model) {
+	public String showLobbies() {
 		return "lobby";
-	}
-
-	private JSONObject initJSOONResponse(String username) {
-		return new JSONObject().put("error", false)
-				.put("lobbies_owner", new JSONArray(this.lobbyService.getLobbiesBy(username, PlayerType.OWNER)))
-				.put("lobbies_guest", new JSONArray(this.lobbyService.getLobbiesBy(username, PlayerType.GUEST)));
 	}
 
 	@PostMapping("get_lobbies")
 	@ResponseBody
 	public String getLobbies(HttpSession session, @RequestParam int currently_showed) {
 		String username = (String) session.getAttribute("username");
-		return this.initJSOONResponse(username)
-				.put("lobbies", new JSONArray(this.lobbyService.getNextMLobbies(currently_showed, 20)))
-				.put("username", username).toString();
+		JSONArray avatars = new JSONArray();
+		for (Lobby lobby : this.lobbyService.getNextMLobbies(currently_showed, 20)) {
+			String owner = lobby.getOwner();
+			String guest = lobby.getGuest();
+			if (owner != null) {
+				if (owner != "") {
+					User user = this.accountService.getUser(owner);
+					System.out.println("OWNER:" + user);
+					JSONObject userAvatar = new JSONObject();
+					userAvatar.put("user", owner);
+					userAvatar.put("avatar", user.getAvatar());
+					avatars.put(userAvatar);
+				}
+			}
+			if (guest != null) {
+				if (guest != "") {
+					User user = this.accountService.getUser(guest);
+					System.out.println("GUEST:" + user);
+					JSONObject userAvatar = new JSONObject();
+					userAvatar.put("user", guest);
+					userAvatar.put("avatar", user.getAvatar());
+					avatars.put(userAvatar);
+				}
+			}
+		}
+		return new JSONObject().put("error", false)
+				.put("lobbies_owner", this.lobbyService.getLobbiesBy(username, PlayerType.OWNER))
+				.put("lobbies_guest", this.lobbyService.getLobbiesBy(username, PlayerType.GUEST))
+				.put("lobbies", this.lobbyService.getNextMLobbies(currently_showed, 20)).put("username", username)
+				.put("avatars", avatars).toString();
 	}
 
 	@PostMapping("join_lobby")
@@ -54,7 +78,7 @@ public class LobbyController {
 		String username = (String) session.getAttribute("username");
 		Integer lobbyID = this.lobbyService.joinToLobby(lobby_name, username);
 		if (lobbyID == -1) {
-			return this.initJSOONResponse(username).put("error", true).toString();
+			return new JSONObject().put("error", true).toString();
 		}
 		session.setAttribute("gameId", lobbyID);
 		// session.setAttribute("player", "player2");
@@ -69,7 +93,7 @@ public class LobbyController {
 		}
 		System.out.println("User: " + username + " join to Lobby: " + lobby_name);
 		this.eventService.attachListenerToStart(lobby_name);
-		return this.initJSOONResponse(username).put("error", false).toString();
+		return new JSONObject().put("error", false).toString();
 	}
 
 	@PostMapping("create_lobby")
@@ -77,17 +101,17 @@ public class LobbyController {
 	public String createLobby(HttpSession session, @RequestParam String lobby_name) {
 		String username = (String) session.getAttribute("username");
 		boolean added = false;
-		if ((added = this.lobbyService.addLobby(new Lobby(lobby_name, username), username)))
-			eventService.attachListenerToStart(lobby_name);
-		return this.initJSOONResponse(username).put("error", !added).toString();
+		if (added = this.lobbyService.addLobby(new Lobby(lobby_name, username), username)) {
+			this.eventService.attachListenerToStart(lobby_name);
+		}
+		return new JSONObject().put("error", !added).toString();
 	}
 
 	@PostMapping("search_lobby")
 	@ResponseBody
 	public String searchLobby(HttpSession session, @RequestParam String search_txt, @RequestParam String search_by) {
 		Lobby newLobby = this.lobbyService.getLobby(search_txt, SearchBy.valueOf(search_by));
-		return this.initJSOONResponse((String) session.getAttribute("username")).put("error", newLobby == null)
-				.put("lobby_searched", new JSONObject(newLobby)).toString();
+		return new JSONObject().put("error", newLobby == null).put("lobby_searched", newLobby).toString();
 	}
 
 	@PostMapping("delete_lobby_by_name")
@@ -95,10 +119,10 @@ public class LobbyController {
 	public String deleteLobbyByName(HttpSession session, @RequestParam String lobby_name) {
 		boolean deleted = this.lobbyService.removeLobbyByName(lobby_name);
 		if (deleted) {
-			eventService.detachListenerForJoin(lobby_name);
+			this.eventService.detachListenerForJoin(lobby_name);
 		}
 
-		return this.initJSOONResponse((String) session.getAttribute("username")).put("error", !deleted).toString();
+		return new JSONObject().put("error", !deleted).toString();
 	}
 
 	@PostMapping("check_join")

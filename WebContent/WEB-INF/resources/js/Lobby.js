@@ -138,7 +138,7 @@ function getLobbies(reset) {
 				if (Object.keys(r.lobbies).length) {
 					currentlyShowed += Object.keys(r.lobbies).length;
 				}
-				reloadList(reset, r.lobbies, r.lobbies_guest, r.lobbies_owner);
+				reloadList(reset, r.lobbies, r.lobbies_guest, r.lobbies_owner, r.avatars);
 			}
 		},
 		error : function(e) {
@@ -279,11 +279,11 @@ function searchLobby(ev, searchBy) {
 // 0000000000000000000000000000000000000000000
 // 0000000000000000000000000000000000000000000000000000000000000000000000000000000
 
-var reloadList = function(reset, lobbies, lobbies_guest, lobbies_owner) {
+var reloadList = function(reset, lobbies, lobbies_guest, lobbies_owner, avatars) {
 	if (reset) {
 		clearLobbiesList();
 	}
-	loadMore(lobbies, lobbies_guest, lobbies_owner);
+	loadMore(lobbies, lobbies_guest, lobbies_owner, avatars);
 }
 
 var clearLobbiesList = function() {
@@ -294,7 +294,19 @@ var clearLobbiesList = function() {
 
 }
 
-var loadMore = function(lobbies, lobbies_guest, lobbies_owner) {
+function getAvatar(username, avatars){
+	//alert("Username:"+username);
+	for(var i in avatars){
+		var obj = avatars[i];
+		if(obj.user === username){
+			alert("Obj.name:"+obj.user+"__avatar:"+obj.avatar);
+			return obj.avatar; 
+		}
+	}
+	return "";
+}
+
+var loadMore = function(lobbies, lobbies_guest, lobbies_owner, avatars) {
 	var list = document.getElementById("id_lobbies_list_ul");
 	console.log("ENTERED ON loadMore");// :"+lobbies);
 	for ( var i in lobbies) {
@@ -303,14 +315,16 @@ var loadMore = function(lobbies, lobbies_guest, lobbies_owner) {
 		var name = lobby.name;
 		var owner = lobby.owner;
 		var guest = lobby.guest;
-		var newLobby = buildLobbyRow(id, name, owner, guest, user);
+		var avatarOwner = getAvatar(owner, avatars);
+		var avatarGuest = getAvatar(guest, avatars);
+		var newLobby = buildLobbyRow(id, name, owner, guest, user, avatarOwner, avatarGuest);
 		if (conteinedIn(lobby, lobbies_guest) === false
 				&& conteinedIn(lobby, lobbies_owner) === false) {
 			list.append(htmlToElement(newLobby));
 		}
 	}
-	putLobbyOnTop(lobbies_guest);
-	putLobbyOnTop(lobbies_owner);
+	putLobbyOnTop(lobbies_guest, avatars);
+	putLobbyOnTop(lobbies_owner, avatars);
 
 }
 function conteinedIn(lobby, list) {
@@ -323,7 +337,7 @@ function conteinedIn(lobby, list) {
 	}
 	return false;
 }
-function putLobbyOnTop(lobbies) {
+function putLobbyOnTop(lobbies, avatars) {
 	var list = document.getElementById("id_lobbies_list_ul");
 	for ( var i in lobbies) {
 		var lobby = lobbies[i];
@@ -331,7 +345,9 @@ function putLobbyOnTop(lobbies) {
 		var name = lobby.name;
 		var owner = lobby.owner;
 		var guest = lobby.guest;
-		var newLobby = buildLobbyRow(id, name, owner, guest, user);
+		var avatarOwner = getAvatar(owner, avatars);
+		var avatarGuest = getAvatar(guest, avatars);
+		var newLobby = buildLobbyRow(id, name, owner, guest, user, avatarOwner, avatarGuest);
 		if ($("#id_lobby_" + name) !== undefined) {
 			$("#id_lobby_" + name).remove();
 			console.log("loadputLobbyOnTop...removed:" + name);
@@ -340,7 +356,8 @@ function putLobbyOnTop(lobbies) {
 		list.prepend(htmlToElement(newLobby));
 	}
 }
-function buildLobbyRow(id, name, owner, guest, username) {
+function buildLobbyRow(id, name, owner, guest, username, avatarOwner, avatarGuest) {
+	alert("name:"+name+"__Owner:"+avatarOwner+"___Guest:"+avatarGuest);
 	var newLobby = "";
 	newLobby += "<li class=\"list-group-item card-with-shadow lobby_row\" id=\"id_lobby_"
 			+ name
@@ -348,23 +365,30 @@ function buildLobbyRow(id, name, owner, guest, username) {
 			+ "<div class=\"text-center\" id=\"lobby_name_div\">"
 			+ name
 			+ "</div>"
-			+ "<div class=\" text-center\">"
-			+ "<img src=\"resources/images/avatar.svg\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">";
+			+ "<div class=\" text-center\">";
 	if (owner != "") {
-		newLobby += "<span>" + owner + "</span>";
+		newLobby += "<img src=\"resources/images/avatars/"+avatarOwner+"\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">"
+		+ "<span>" + owner + "</span>";
 	} else {
-		newLobby += "<span>EMPTY</span>";
+		newLobby +=  "<img src=\"resources/images/avatar.svg\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">"
+		+ "<span>EMPTY</span>";
 	}
-	newLobby += "<img style=\"max-height: 1cm; max-width: 1cm; margin-left: 0%;\" src=\"resources/img/vs.jpg\">";
+	newLobby += "<img style=\"max-height: 1cm; max-width: 1cm; margin-left: 0%;\" src=\"resources/images/vs.png\">";
+	//alert("GUEST ========= "+guest);
 	if (guest != "") {
-		newLobby += "<span>" + guest + "</span>";
+		//alert("GUEST != \"\"");
+		newLobby += "<span>" + guest + "</span>"
+		+ "<img src=\"resources/images/avatars/"+avatarOwner+"\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">";
 	} else {
-		if (username !== owner)
-			newLobby += "<span>EMPTY</span>";
-		else
-			newLobby += "<span id=\"empty_slot\">EMPTY</span>";
+		//alert("GUEST == \"\"");
+//		if (username !== owner){
+//			newLobby += "<span>EMPTY</span>"
+//		}
+//		else{
+			newLobby += "<span id=\"empty_slot\">EMPTY</span>"
+			+ "<img src=\"resources/images/avatar.svg\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">";
+//		}
 	}
-	newLobby += "<img src=\"resources/images/avatar.svg\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">"
 	if (username != owner) {
 		if (guest === "")
 			newLobby += "<button id=\"join_btn_lobby_"
@@ -374,10 +398,11 @@ function buildLobbyRow(id, name, owner, guest, username) {
 					+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
 	} else {
 
-		newLobby += "<input id=\"created_lobby\" type=\"hidden\" value=\"created\" />";
-		newLobby += "<button id=\"start_button\" type=\"button\" onclick=\"startGame()\" class=\"btn btn-warning btn-lg float-right ";
-		if (guest === "")
+		newLobby += "<input id=\"created_lobby\" type=\"hidden\" value=\"created\" />"
+		+ "<button id=\"start_button\" type=\"button\" onclick=\"startGame()\" class=\"btn btn-warning btn-lg float-right ";
+		if (guest === ""){
 			newLobby += "hidden-field";
+		}
 		newLobby += "\">Start</button>";
 		newLobby += "<div id=\"join_alert\" class=\"alert alert-info hidden-field\" role=\"alert\">A player joined to lobby</div>";
 		newLobby += "<div id=\"leave_alert\" class=\"alert alert-danger hidden-field\" role=\"alert\">The player leaved the lobby</div>";
