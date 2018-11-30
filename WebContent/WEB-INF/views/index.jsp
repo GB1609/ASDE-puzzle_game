@@ -33,7 +33,7 @@
 
 			<input id=failed value="${creationFailed}" style="display: none">
 			<input id=failedLogin value="${loginFailed}" style="display: none">
-			<div id="cd-login" style="background: rgba(0, 0, 0, 0.45);">
+			<div id="cd-login" class="login-class">
 				<!-- log in form -->
 
 				<form id="login-form" class="cd-form" action="login" method="post"
@@ -116,21 +116,7 @@
 					</p>
 					<!-- Image selection  on user creation-->
 
-					<div id="imageSection" class="row col-md-12"
-						style="margin-left: -1.9em;">
-						<div class="row" style="padding-left: 0.1em">
-							<div class="avatar_board">
-								<div class="avatar_grid">
-									<c:forEach items="${avatars}" var="avatar">
-										<p class="box_avatar">
-											<img onclick="selectAvatar(this)" id="${avatar}"
-												class="avatar" src="resources/images/avatars/${avatar}" />
-										</p>
-									</c:forEach>
-								</div>
-							</div>
-						</div>
-					</div>
+					<%@include file="template/avatarSection.jsp"%>
 
 					<!-- Image selection  on user creation-->
 
@@ -150,9 +136,6 @@
 		<!-- cd-user-modal-container -->
 	</div>
 	<!-- cd-user-modal -->
-
-
-
 
 </body>
 </html>

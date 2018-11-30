@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
+import it.mat.unical.asde.project2_puzzle.model.services_utility.PlayerType;
+import it.mat.unical.asde.project2_puzzle.model.services_utility.SearchBy;
 
 @Service
 public class LobbyService {

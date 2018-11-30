@@ -24,6 +24,9 @@
 					<a class="dropdown-item" href="userProfile">View Profile</a> <a
 						class="dropdown-item" href="logout">Logout</a>
 				</div></li>
+
 		</ul>
+		<div class="ml-auto" style="max-width: 64px;align-self: center;"><img
+			src="${avatar}" height="80%" width="80%" alt="Avatar"></div>
 	</div>
 </nav>

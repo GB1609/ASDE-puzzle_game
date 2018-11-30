@@ -1,6 +1,5 @@
 package it.mat.unical.asde.project2_puzzle.components.persistence;
 
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

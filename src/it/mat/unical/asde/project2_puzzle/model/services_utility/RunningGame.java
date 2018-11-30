@@ -71,15 +71,12 @@ public class RunningGame {
 				return 1;
 			if (g2.leaved() && !g1.leaved())
 				return -1;
-			if (g1.getTimer().equals(g2.getTimer())) {
-				Integer statusG1 = g1.getStatus();
-				Integer statusG2 = g2.getStatus();
-
-				if (statusG1 == statusG2)
-					return 0;
-				return statusG1 > statusG2 ? -1 : 1;
-			}
-			return g1.getDate().before(g2.getDate()) ? -1 : 1;
+			Integer statusG1 = g1.getStatus();
+			Integer statusG2 = g2.getStatus();
+			System.out.println("Nessuno lascia e il tempo e uguale");
+			if (statusG1 == statusG2)
+				return 0;
+			return statusG1 > statusG2 ? -1 : 1;
 		});
 		return scoresOrder.get(0).getPlayer();
 

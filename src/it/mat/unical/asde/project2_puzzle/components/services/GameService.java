@@ -2,20 +2,22 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.util.HashMap;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.mat.unical.asde.project2_puzzle.components.persistence.MatchDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
+import it.mat.unical.asde.project2_puzzle.model.GameMatch;
 import it.mat.unical.asde.project2_puzzle.model.Grid;
-import it.mat.unical.asde.project2_puzzle.model.Match;
 import it.mat.unical.asde.project2_puzzle.model.User;
 import it.mat.unical.asde.project2_puzzle.model.services_utility.RunningGame;
 
 @Service
 public class GameService {
 	HashMap<Integer, RunningGame> runningGames = new HashMap<>();
-	HashMap<Integer, Match> matches = new HashMap<>();
+	HashMap<Integer, GameMatch> matches = new HashMap<>();
 
 	@Autowired
 	private UserDAO userDao;
@@ -54,30 +56,20 @@ public class GameService {
 	}
 
 	public void storeMatch(Integer gameId) {
-		Match m = new Match();
-		// TODO RESOLVE EXCEPTION LAZY INIT IN SET USER
-//		User winner = userDao.getUser(runningGames.get(gameId).getWinner());
-//		m.setWinner(winner);
-//		m.addUser(winner);
-//		for (String s : runningGames.get(gameId).getUsersOrdered()) {
-//			m.addUser(userDao.getUser(s));
-//		}
-//		m.setTime(runningGames.get(gameId).getTime());
-//		matchDao.save(m);
-//		matches.put(gameId, m);
-
-		User winner = new User(runningGames.get(gameId).getWinner(), "ciao", "ciao", "avatar_1.png");
+		GameMatch m = new GameMatch();
+		User winner = userDao.getUser(runningGames.get(gameId).getWinner());
 		m.setWinner(winner);
-		// m.addUser(winner);
 		for (String s : runningGames.get(gameId).getUsersOrdered()) {
-			m.addUser(new User(s, s, s, "avatar_1.png"));
+			User user = userDao.getFullUser(s);
+			m.addUser(user);
 		}
 		m.setTime(runningGames.get(gameId).getTime());
 		m.setLobbyName(runningGames.get(gameId).getLobbyName());
 		matches.put(gameId, m);
+		matchDao.save(m);
 	}
 
-	public Match getMatch(Integer gameId) {
+	public GameMatch getMatch(Integer gameId) {
 		return matches.get(gameId);
 	}
 

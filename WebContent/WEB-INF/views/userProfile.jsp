@@ -8,8 +8,8 @@
 	type="text/css" />
 <%@include file="includes/includes.jsp"%>
 <script src="resources/js/userProfile.js"></script>
-
-
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
 
 <meta charset="UTF-8">
 <title>User Profile</title>
@@ -17,6 +17,8 @@
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
 	<div class="container ">
+		<input id=lineChart value="${lineChart}" style="display: none">
+		<input id=donutChart value="${donutChart}" style="display: none">
 		<div class="row" style="margin-bottom: 0%"></div>
 		<div class="row profile">
 			<div class="col-md-2"></div>
@@ -72,16 +74,13 @@
 							</a></li>
 						</ul>
 					</div>
-
-					<!-- 					<div class="profile-usermenu">
+					<div class="profile-usermenu">
 						<ul class="nav">
-							<li class="changeAvatar-button"><a href="#"> <i
-									class="glyphicon glyphicon-cog"></i>Change-Avatar
+							<li id="matchStatistics-button" class="matchStatistics-button"><a
+								href="#"> <i class="glyphicon glyphicon-cog"></i>Show-Statistics
 							</a></li>
 						</ul>
 					</div>
-					 -->
-
 					<!-- END MENU -->
 				</div>
 			</div>
@@ -123,21 +122,7 @@
 							style="border-bottom-style: none;">
 							<h2 style="text-align: center;">Choose Avatar</h2>
 						</div>
-						<div id="imageSection" class="row col-md-12"
-							style="margin-left: -1.9em;">
-							<div class="row" style="padding-left: 0.1em">
-								<div class="avatar_board">
-									<div class="avatar_grid">
-										<c:forEach items="${avatars}" var="avatar">
-											<p class="box_avatar">
-												<img onclick="selectAvatar(this)" id="${avatar}"
-													class="avatar" src="resources/images/avatars/${avatar}" />
-											</p>
-										</c:forEach>
-									</div>
-								</div>
-							</div>
-						</div>
+						<%@include file="template/avatarSection.jsp"%>
 						<div class="profile-usermenu">
 							<ul class="nav">
 								<li id="overview-button" class="active"><a href="#"
@@ -148,8 +133,24 @@
 							</ul>
 						</div>
 					</div>
-
 					<!-- Image selection  on user creation-->
+					<div id="matchStatistics-div" class="hidden">
+						<div class="box-title main-title"
+							style="border-bottom-style: none;">
+							<h2 style="text-align: center;">Statistics</h2>
+						</div>
+						<c:choose>
+							<c:when test="${not empty user.matches}">
+								<div id="charts-div">
+									<%@include file="template/charts.jsp"%>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<h2 style="text-align: center; font-size: 20px;">No
+									statistics found</h2>
+							</c:otherwise>
+						</c:choose>
+					</div>
 				</div>
 			</div>
 			<div class="col-md-2"></div>

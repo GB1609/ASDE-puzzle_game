@@ -43,6 +43,7 @@ public class UserController {
 
 		if (accountService.loginAccepted(username, password)) {
 			session.setAttribute("username", username);
+			session.setAttribute("avatar", accountService.getAvatarUser(username));
 			return goToProfileSettings(session, model);
 		}
 
@@ -57,6 +58,7 @@ public class UserController {
 
 		if (accountService.accountCreated(firstName, lastName, username, password, avatar)) {
 			session.setAttribute("username", username);
+			session.setAttribute("avatar", accountService.getAvatarUser(username));
 			return "redirect:/";
 		}
 		model.addAttribute("creationFailed", "Username already used.");
@@ -85,9 +87,10 @@ public class UserController {
 		String username = (String) session.getAttribute("username");
 
 		try {
-			if (accountService.updateUserInformation(firstname, lastname, password, username, avatar))
+			if (accountService.updateUserInformation(firstname, lastname, password, username, avatar)) {
 				json.append("status", "success");
-			else
+				session.setAttribute("avatar", accountService.getAvatarUser(username));
+			} else
 				json.append("status", "error");
 
 			response.getWriter().write(json.toString());

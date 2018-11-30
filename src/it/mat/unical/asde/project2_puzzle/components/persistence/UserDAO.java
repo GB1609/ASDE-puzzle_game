@@ -9,7 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import it.mat.unical.asde.project2_puzzle.model.Match;
+import it.mat.unical.asde.project2_puzzle.model.GameMatch;
 import it.mat.unical.asde.project2_puzzle.model.User;
 
 @Repository
@@ -41,7 +41,7 @@ public class UserDAO {
 				.setParameter("u", username);
 		User user = query.uniqueResult();
 
-		for (Match match : user.getMatches()) {
+		for (GameMatch match : user.getMatches()) {
 			for (User user2 : match.getUsers()) {
 				user2.getUsername();
 			}

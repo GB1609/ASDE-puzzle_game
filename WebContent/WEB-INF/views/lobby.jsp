@@ -14,14 +14,13 @@
 
 		<body class="wsmenucontainer">
 			<%@include file="includes/navbar.jsp"%>
-				<div align="center">
+				<div>
 					<div class="row center-content-row">
-						<div class="dropdown col-sm-6 row">
-							<div class="col">
-								<button type="button" class="btn btn-warning btn-lg button-in-row" onclick="getLobbies('true')">Refresh</button>
-							</div>
-
-							<button type="button" class="btn btn-warning btn-lg button-in-row" data-toggle="modal" data-target="#create-modal">Create</button>
+						<div class="col-md-auto col-sm-2 col-auto">
+							<button type="button" class="btn btn-warning button-in-row" onclick="getLobbies('true')">Refresh</button>
+						</div>
+						<div class="col-md-auto col-sm-2 col-auto">
+							<button type="button" class="btn btn-warning button-in-row" data-toggle="modal" data-target="#create-modal">Create</button>
 							<div class="modal fade" id="create-modal">
 								<div class="modal-dialog">
 									<div class="modal-content">
@@ -45,34 +44,10 @@
 									</div>
 								</div>
 							</div>
-							
-							<!-- MODAL FOR LEAVE LOBBY -->
-							<div class="modal fade" id="alert-modal">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h4 class="modal-title">INFO</h4>
-											<button type="button" class="close" data-dismiss="modal">&times;</button>
-										</div>
-											<div class="modal-header center-content-row">
-													The Lobby's owner leaved it!<br> Now you are the new owner
-											</div>
-											<div class="modal-footer center-content-row">
-												<button type="button" onclick="toggleModal()" class="btn btn-warning btn-sm">OK</button>
-											</div>
-
-									</div>
-								</div>
-							</div>
-							
-							
-							<!-- END MODAL FOR LEAVE LOBBY -->
-							
-							
-							
-
-							<div class="dropdown col">
-								<button type="button" class="btn btn-warning btn-lg dropdown-toggle button-in-row" aria-haspopup="true" data-toggle="dropdown">Search Lobby</button>
+						</div>
+						<div class="col-md-auto col-sm-2 col-auto">
+							<div class="dropdown">
+								<button type="button" class="btn btn-warning dropdown-toggle button-in-row" aria-haspopup="true" data-toggle="dropdown">Search</button>
 								<div class="dropdown-menu dropdown-content">
 									<form>
 										<div class="form-group">
@@ -90,17 +65,13 @@
 						</div>
 					</div>
 					<div class="row center-content-row">
-						<div class="row col-md-10 lobbyesBox">
+						<div class="row col-10 lobbyesBox">
 							<div id="lobbies_div" class=" card scrollbar-ripe-malinka">
 								<div class="card-body" id="id_lobbies_list_div">
 									<ul class="list-group" id="id_lobbies_list_ul">
-
 									</ul>
 								</div>
 							</div>
-						</div>
-						<div class="row col-1">
-							<button type="submit" onclick="changeTypeList()" class="btn btn-warning btn-sm col" style="margin-right: 0.5rem">change</button>
 						</div>
 					</div>
 				</div>
