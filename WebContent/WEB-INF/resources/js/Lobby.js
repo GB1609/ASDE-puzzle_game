@@ -378,7 +378,7 @@ function buildLobbyRow(id, name, owner, guest, username, avatarOwner, avatarGues
 	if (guest != "") {
 		//alert("GUEST != \"\"");
 		newLobby += "<span>" + guest + "</span>"
-		+ "<img src=\"resources/images/avatars/"+avatarOwner+"\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">";
+		+ "<img src=\"resources/images/avatars/"+avatarGuest+"\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">";
 	} else {
 		//alert("GUEST == \"\"");
 //		if (username !== owner){
