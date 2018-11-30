@@ -370,10 +370,10 @@ function buildLobbyRow(id, name, owner, guest, username, avatarOwner, avatarGues
 		newLobby += "<img src=\"resources/images/avatars/"+avatarOwner+"\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">"
 		+ "<span>" + owner + "</span>";
 	} else {
-		newLobby +=  "<img src=\"resources/images/avatar.svg\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">"
+		newLobby +=  "<img src=\"resources/images/avatars/avatar.svg\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">"
 		+ "<span>EMPTY</span>";
 	}
-	newLobby += "<img style=\"max-height: 1cm; max-width: 1cm; margin-left: 0%;\" src=\"resources/images/vs.png\">";
+	newLobby += "<img style=\"max-height: 1cm; max-width: 1cm; margin-left: 0%;\" src=\"resources/images/icons/vs.png\">";
 	//alert("GUEST ========= "+guest);
 	if (guest != "") {
 		//alert("GUEST != \"\"");
@@ -386,7 +386,7 @@ function buildLobbyRow(id, name, owner, guest, username, avatarOwner, avatarGues
 //		}
 //		else{
 			newLobby += "<span id=\"empty_slot\">EMPTY</span>"
-			+ "<img src=\"resources/images/avatar.svg\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">";
+			+ "<img src=\"resources/images/avatars/avatar.svg\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">";
 //		}
 	}
 	if (username != owner) {
