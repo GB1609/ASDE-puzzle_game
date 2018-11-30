@@ -1,9 +1,13 @@
 package it.mat.unical.asde.project2_puzzle.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
+
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,11 +22,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.lang.NonNull;
+
 @Entity
 @Table
 public class GameMatch {
-	Map<User, String> times = new HashMap<>();
-	Map<User, Integer> progresses = new HashMap<>();
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
@@ -34,15 +39,39 @@ public class GameMatch {
 	@Transient
 	private String lobbyName;
 
-	public GameMatch() {
-		super();
+	public String getTime() {
+		return time;
 	}
 
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	@Column
+	private String time;
+
+	@Column(nullable = false)
+	private LocalDateTime date;
+
+	public GameMatch() {
+		super();
+		date = LocalDateTime.now();
+		DateTimeFormatter.ofPattern("dd/mm/yyyy", Locale.ITALIAN).format(date);
+
+	}
+
+	public LocalDateTime getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDateTime date) {
+		DateTimeFormatter.ofPattern("dd/mm/yyyy", Locale.ITALIAN).format(date);
+		this.date = date;
+	}
 
 	@Override
 	public String toString() {
-		
-		return ""; //TODO
+		return date.getDayOfMonth() + "/" + date.getMonthValue();
 	}
 
 	public void setId(long id) {
@@ -57,10 +86,6 @@ public class GameMatch {
 		return id;
 	}
 
-
-	public void setTime(User user, String time) {
-		times.put(user, time);
-	}
 
 	public Set<User> getUsers() {
 		return users;
@@ -97,16 +122,9 @@ public class GameMatch {
 		return this.lobbyName;
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
 		return super.equals(obj);
-	}
-
-
-	public void setProgress(User user, Integer progress) {
-		progresses.put(user, progress);
 	}
 
 }

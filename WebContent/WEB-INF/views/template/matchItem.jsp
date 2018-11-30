@@ -6,14 +6,14 @@
 		<div class="form-group col-md-12"
 			style="margin-bottom: 0%; margin-top: 0%">
 			<label class="col-md-3 control-label" for="firstname-field"
-				style="margin-left: 6%;"> 
-				<c:forEach items="${match.users}" var="user" varStatus="loop">
+				style="margin-left: 6%;"> <c:forEach items="${match.users}"
+					var="user" varStatus="loop">
 					<c:if test="${loop.index=='0'}">${user.username}</c:if>
 				</c:forEach>
 			</label>
 			<div class="col-md-1" style="display: inline;">
 				<img style="max-height: 1cm; max-width: 1cm; margin-left: 0%;"
-					src="resources/img/vs.png">
+					src="resources/images/vs.png">
 			</div>
 			<label class="col-md-3 control-label" for="firstname-field">
 				<c:forEach items="${match.users}" var="user" varStatus="loop">
@@ -41,8 +41,7 @@
 			<label class="col-md-6 control-label" for="firstname-field"
 				style="color: #e0a800; padding-right: 0%; margin-right: -7%; margin-left: -3%">
 				Match's time:</label> <label class="col-md-4 control-label"
-				for="firstname-field" style="padding-left: 0%">${fn:substringBefore(match.time div 60,'.')}
-				m : ${match.time % 60} s </label>
+				for="firstname-field" style="padding-left: 0%">${match.time }</label>
 
 		</div>
 	</fieldset>

@@ -50,19 +50,15 @@ public class GameService {
 	}
 
 	public void storeMatch(Integer gameId) {
-		HashMap<String, String> returnTime = new HashMap<>(); // TODO return that
-		HashMap<String, Integer> returnProgress = new HashMap<>();
 		GameMatch m = new GameMatch();
 		User winner = userDao.getUser(runningGames.get(gameId).getWinner());
 		m.setWinner(winner);
 		for (String s : runningGames.get(gameId).getUsersOrdered()) {
 			User user = userDao.getFullUser(s);
 			m.addUser(user);
-			m.setTime(user, returnTime.get(s));
-			m.setProgress(user, returnProgress.get(s));
+			m.setTime(runningGames.get(gameId).getTime());
 		}
 		m.setLobbyName(runningGames.get(gameId).getLobbyName());
-		matchDao.save(m);
 		matches.put(gameId, m);
 	}
 

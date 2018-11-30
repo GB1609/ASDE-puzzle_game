@@ -28,7 +28,6 @@ public class DispatcherConfiguration implements WebMvcConfigurer {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://asde2018project2.chozlfc5zlbk.us-east-1.rds.amazonaws.com:3306/puzzle2018");
-//        jdbc:mysql://localhost:3306/TestDB
 		dataSource.setUsername("puzzle2018");
 		dataSource.setPassword("ASDE-puzzle2018");
 		return dataSource;
