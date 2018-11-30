@@ -33,7 +33,7 @@
 
 			<input id=failed value="${creationFailed}" style="display: none">
 			<input id=failedLogin value="${loginFailed}" style="display: none">
-			<div id="cd-login" style="background: rgba(0, 0, 0, 0.45);">
+			<div id="cd-login" class="login-class">
 				<!-- log in form -->
 
 				<form id="login-form" class="cd-form" action="login" method="post"
@@ -150,9 +150,6 @@
 		<!-- cd-user-modal-container -->
 	</div>
 	<!-- cd-user-modal -->
-
-
-
 
 </body>
 </html>
