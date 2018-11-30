@@ -1,6 +1,8 @@
 package it.mat.unical.asde.project2_puzzle.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,41 +16,33 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table
 public class GameMatch {
-
+	Map<User, String> times = new HashMap<>();
+	Map<User, Integer> progresses = new HashMap<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-
 	@ManyToMany(mappedBy = "matches")
 	private Set<User> users = new HashSet<User>();
-
 	@ManyToOne
 	@JoinColumn(name = "winner", foreignKey = @ForeignKey(name = "USER_FK"))
 	private User winner;
-
-	@Column(nullable = false)
-	private int time;
-	
-
+	@Transient
+	private String lobbyName;
 
 	public GameMatch() {
 		super();
 	}
 
-	public GameMatch(int time) {
-		super();
-		this.time = time;
-	}
 
 	@Override
 	public String toString() {
-		//TODO
-		//gg/mm  vinto  perso 
-		return "03/02";
+		
+		return ""; //TODO
 	}
 
 	public void setId(long id) {
@@ -63,12 +57,9 @@ public class GameMatch {
 		return id;
 	}
 
-	public int getTime() {
-		return time;
-	}
 
-	public void setTime(int time) {
-		this.time = time;
+	public void setTime(User user, String time) {
+		times.put(user, time);
 	}
 
 	public Set<User> getUsers() {
@@ -80,8 +71,7 @@ public class GameMatch {
 	}
 
 	public void addUser(User user) {
-		if(!users.contains(user))
-		{
+		if (!users.contains(user)) {
 			users.add(user);
 			user.addMatch(this);
 		}
@@ -99,16 +89,24 @@ public class GameMatch {
 		users.remove(user);
 	}
 
+	public void setLobbyName(String lobby_name) {
+		this.lobbyName = lobby_name;
+	}
+
+	public String getLobbyName() {
+		return this.lobbyName;
+	}
+
+
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		GameMatch match = (GameMatch) o;
-		return Objects.equals(time, match.time);
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return super.equals(obj);
+	}
+
+
+	public void setProgress(User user, Integer progress) {
+		progresses.put(user, progress);
 	}
 
 }

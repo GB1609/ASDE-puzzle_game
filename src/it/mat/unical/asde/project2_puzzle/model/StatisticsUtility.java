@@ -11,7 +11,7 @@ public class StatisticsUtility {
 		matches = "";
 		HashMap<String, Integer> matchesWin = new HashMap<>();
 		HashMap<String, Integer> matchesLose = new HashMap<>();
-		for (Match match : user.getMatches()) {
+		for (GameMatch match : user.getMatches()) {
 			if (match.getWinner().equals(user))
 				matchesWin.put(match.toString(),
 						(matchesWin.get(match.toString()) != null ? matchesWin.get(match.toString()) : 0) + 1);
@@ -36,7 +36,7 @@ public class StatisticsUtility {
 		int win = 0;
 		int lose = 1;
 
-		for (Match match : user.getMatches()) {
+		for (GameMatch match : user.getMatches()) {
 			if (match.getWinner().equals(user))
 				matches[win]++;
 			else

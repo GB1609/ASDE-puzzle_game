@@ -1,10 +1,14 @@
 package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -13,19 +17,23 @@ import org.springframework.stereotype.Service;
 public class EventsService {
 	private Map<String, BlockingQueue<String>> events = new HashMap<>();
 	private Map<String, BlockingQueue<String>> join = new HashMap<>();
+	private Map<Integer, Set<String>> leaved = new HashMap<>();
+
 	private MessageMaker maker = new MessageMaker();
 
 	/////////////////////////////////// ADD
 	/////////////////////////////////// EVENTS//////////////////////////////////////////////
-	private void addEvent(String progress, String key) throws InterruptedException {
-		if (!events.containsKey(key))
-			events.put(key, new LinkedBlockingQueue<>());
-		events.get(key).put(progress);
+	private void addEvent(String progress, String key, Integer gameId) throws InterruptedException {
+		if (!(leaved.containsKey(gameId) && leaved.get(gameId).contains(key))) {
+			if (!events.containsKey(key))
+				events.put(key, new LinkedBlockingQueue<>());
+			events.get(key).put(progress);
+		}
 	}
 
 	private void addGeneralEventLobby(String key, String message_type) throws InterruptedException {
 		if (!join.containsKey(key))
-			throw new RuntimeException("No join found for this lobby");
+			throw new RuntimeException("No join found for this lobby" + key);
 		join.get(key).put(maker.makeMessage(message_type));
 	}
 
@@ -37,26 +45,60 @@ public class EventsService {
 	}
 
 	////////////////////////// EVENT IN GAME/////////////////////////
-	public void addEventFor(Integer gameID, String player, String progress) throws InterruptedException {
-		String key = gameID + (player.equals("player1") ? "player2" : "player1");
-		addEvent(maker.makeMessage(MessageMaker.UPDATE_MESSAGE, MessageMaker.PROGRESS_MESSAGE, progress), key);
+	public void addEventFor(Integer gameID, Integer player, Integer currentPlayers, String progress)
+			throws InterruptedException {
+		// add message for other players
+		for (int i = 1; i <= currentPlayers; i++) {
+			String key = gameID + "player" + i;
+			if (i != player)
+				addEvent(maker.makeMessage(MessageMaker.UPDATE_MESSAGE, MessageMaker.PROGRESS_MESSAGE, progress), key,
+						gameID);
+
+		}
+
 	}
 
-	public void addMessageFor(Integer gameId, String player, String message) throws InterruptedException {
-		String key = gameId + (player.equals("player1") ? "player2" : "player1");
-		addEvent(maker.makeMessage(MessageMaker.CHAT_MESSAGE, MessageMaker.TEXT_MESSAGE, message), key);
+	public void addMessageFor(Integer gameId, Integer player, Integer currentPlayers, String message)
+			throws InterruptedException {
+
+		for (int i = 1; i <= currentPlayers; i++) {
+			String key = gameId + "player" + i;
+			if (i != player)
+				addEvent(maker.makeMessage(MessageMaker.CHAT_MESSAGE, MessageMaker.TEXT_MESSAGE, message), key, gameId);
+
+		}
 	}
 
-	public void addEventEndGame(Integer gameId) throws InterruptedException {
+	public void addEventEndGame(Integer gameId, Integer currentPlayers) throws InterruptedException {
 		String event = "END-GAME";
-		addEvent(event, gameId + "player1");
-		addEvent(event, gameId + "player2");
+		for (int i = 1; i <= currentPlayers; i++) {
+			String key = gameId + "player" + i;
+			addEvent(event, key, gameId);
+		}
+
 	}
 
-	public void addEventLeaveGameBy(Integer gameID, String player) throws InterruptedException {
-		String key = gameID + (player.equals("player1") ? "player2" : "player1");
-		addEvent("END-GAME", key);
+	public void addEventLeaveGameBy(Integer gameID, Integer player, Integer currentPlayers)
+			throws InterruptedException {
+		Set<String> alreadyLeaved = leaved.get(gameID);
+		if (currentPlayers == 2 || (alreadyLeaved != null && (alreadyLeaved.size() - currentPlayers) == 2))
+			for (int i = 1; i <= currentPlayers; i++) {
+				String key = gameID + "player" + i;
+				if (i != player) {
+					System.out.println("Send end game for" + gameID + "player" + player);
 
+					addEvent("END-GAME", key, gameID);
+				}
+			}
+		else
+			addLeaved(gameID, player);
+	}
+
+	private void addLeaved(Integer gameID, Integer player) {
+
+		if (!leaved.containsKey(gameID))
+			leaved.put(gameID, new HashSet<>());
+		leaved.get(gameID).add(gameID + "player" + player);
 	}
 
 	////////////////////////// EVENT BEFORE GAME/////////////////////////
@@ -66,12 +108,27 @@ public class EventsService {
 	}
 
 	public void addEventJoin(String lobbyName, String username) throws InterruptedException {
-
 		addGeneralEventLobby(lobbyName.toLowerCase(), MessageMaker.JOIN_MESSAGE, MessageMaker.WHO_JOIN, username);
 	}
 
 	public void addEventLeaveJoin(String previousJoined) throws InterruptedException {
-		addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);
+		Pattern p = Pattern.compile("(.+)player2$");// TODO transorm to N
+		Matcher meMatcher = p.matcher(previousJoined);
+		if (meMatcher.matches()) {
+			String s = meMatcher.group(1);
+			System.out.println("GROUP1: " + s);
+			addGeneralEventLobby(s, MessageMaker.LEAVE_MESSAGE, MessageMaker.WHO_LEAVE, MessageMaker.OWNER);
+			if (join.containsKey(previousJoined))
+				addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);// TODO FIND A WAY TO DELETE THIS KEY,
+			// rimane sporca la chiave lobby+player2 perchè come riceve la risposta inizia
+			// ad ascoltare sulla chiave lobby name.
+//			join.remove(s);
+		} else {
+			System.out.println("A JOINER has leave");
+			join.remove(previousJoined + "player2");
+			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);
+
+		}
 	}
 
 	public void attachListenerToJoin(String lobby_name) {
@@ -103,15 +160,15 @@ public class EventsService {
 		join.remove(lobby_name.toLowerCase());
 	}
 
-	public void detachListenerInGame(Integer gameId, String player) {
-		String key = gameId + player;
+	public void detachListenerInGame(Integer gameId, Integer player) {
+		String key = gameId + "player" + player;
 		events.remove(key);
 	}
 
 	/////////////////////////////////// GET
 	/////////////////////////////////// EVENTS//////////////////////////////////////////////
-	public String nextGameEventFor(Integer gameId, String player) throws InterruptedException {
-		String key = gameId + player;
+	public String nextGameEventFor(Integer gameId, Integer player) throws InterruptedException {
+		String key = gameId + "player" + player;
 		if (!events.containsKey(key))
 			events.put(key, new LinkedBlockingQueue<>());
 		return events.get(key).poll(29, TimeUnit.SECONDS);
@@ -158,6 +215,8 @@ public class EventsService {
 	}
 
 	private class MessageMaker {
+		public static final String OWNER = "owner";
+		public static final String WHO_LEAVE = "by";
 		public final static String JOIN_MESSAGE = "join";
 		public final static String START_MESSAGE = "start";
 		public final static String LEAVE_MESSAGE = "leave";

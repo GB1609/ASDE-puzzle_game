@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import it.mat.unical.asde.project2_puzzle.components.services.EventsService;
+import it.mat.unical.asde.project2_puzzle.components.services.GameService;
 import it.mat.unical.asde.project2_puzzle.components.services.LobbyService;
 import it.mat.unical.asde.project2_puzzle.components.services.PlayerType;
 import it.mat.unical.asde.project2_puzzle.components.services.SearchBy;
@@ -27,6 +28,8 @@ public class LobbyController {
 	LobbyService lobbyService;
 	@Autowired
 	EventsService eventService;
+	@Autowired
+	GameService gameService;
 
 	@GetMapping("lobby")
 	public String showLobbies(Model model) {
@@ -57,7 +60,7 @@ public class LobbyController {
 			return this.initJSOONResponse(username).put("error", true).toString();
 		}
 		session.setAttribute("gameId", lobbyID);
-		session.setAttribute("player", "player2");
+		// session.setAttribute("player", "player2");
 		try {
 			this.eventService.addEventJoin(lobby_name, username);
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
@@ -136,7 +139,8 @@ public class LobbyController {
 			throw new RuntimeException("no lobby found");
 		}
 		session.setAttribute("gameId", lobbyID);
-		session.setAttribute("player", "player1");
+		gameService.initNewGame(lobbyID, lobby_name);
+		// session.setAttribute("player", "player1");
 		this.eventService.detachListenerForJoin(lobby_name);
 		try {
 			this.eventService.addEventStartGame(lobby_name);

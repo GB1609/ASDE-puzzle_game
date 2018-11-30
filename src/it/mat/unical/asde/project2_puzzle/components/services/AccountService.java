@@ -2,8 +2,7 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
-
+      
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
@@ -11,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import it.mat.unical.asde.project2_puzzle.components.persistence.CredentialsDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.MatchDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
-import it.mat.unical.asde.project2_puzzle.components.persistence.CredentialsDAO;
 import it.mat.unical.asde.project2_puzzle.model.Credentials;
-import it.mat.unical.asde.project2_puzzle.model.Match;
+import it.mat.unical.asde.project2_puzzle.model.GameMatch;
 import it.mat.unical.asde.project2_puzzle.model.StatisticsUtility;
 import it.mat.unical.asde.project2_puzzle.model.User;
 
@@ -39,41 +38,11 @@ public class AccountService {
 	@PostConstruct
 	public void init() {
 
-		credentialsDAO.save(new Credentials("Ciccio", "ciccio"));
-		credentialsDAO.save(new Credentials("Giovanni", "giovanni"));
-
-		User ciccio = new User("Ciccio", "Francesco", "Pasticcio", "avatar.svg");
-		User giovanni = new User("Giovanni", "giovanni", "giovanni", "avatar_1.png");
-
-		userDAO.save(ciccio);
-		userDAO.save(giovanni);
-
-		Match match = new Match(132);
-		match.addUser(giovanni);
-		match.addUser(ciccio);
-		match.setWinner(ciccio);
-
-		matchDAO.save(match);
-
-		Match match1 = new Match(132);
-		match1.addUser(giovanni);
-		match1.addUser(ciccio);
-		match1.setWinner(giovanni);
-
-		matchDAO.save(match1);
-
-		Match match2 = new Match(80);
-		match2.addUser(giovanni);
-		match2.addUser(ciccio);
-		match2.setWinner(ciccio);
-
-		matchDAO.save(match2);
-
-		System.out.println(StatisticsUtility.createMatchesInfoLineChart(ciccio));
-		System.out.println(StatisticsUtility.createMatchesInfoForDonutChart(ciccio));
-
-		Date date = new Date();
-		System.out.println(date.getTime());
+//		System.out.println(StatisticsUtility.createMatchesInfoLineChart(ciccio));
+//		System.out.println(StatisticsUtility.createMatchesInfoForDonutChart(ciccio));
+//
+//		Date date = new Date();
+//		System.out.println(date.getTime());
 
 	}
 
@@ -88,11 +57,11 @@ public class AccountService {
 		return value;
 	}
 
-	public ArrayList<Match> getMatches(String username) {
+	public ArrayList<GameMatch> getMatches(String username) {
 		return matchDAO.getMatches(username);
 	}
 
-	public void addMatch(Match match) {
+	public void addMatch(GameMatch match) {
 		matchDAO.save(match);
 	}
 
@@ -147,5 +116,9 @@ public class AccountService {
 			}
 		}
 		return avatars;
+	}
+
+	public String getAvatarUser(String username) {
+		return AvatarsFolder + userDAO.getUser(username).getAvatar();
 	}
 }
