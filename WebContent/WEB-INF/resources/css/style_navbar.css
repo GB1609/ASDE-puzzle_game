@@ -16,6 +16,7 @@
 
 .wsmenucontainer {
   overflow: auto;
+  overflow-y: auto;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;

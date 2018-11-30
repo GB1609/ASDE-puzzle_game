@@ -283,6 +283,7 @@ xsigin/signup popup
 .cd-user-modal.is-visible {
 	visibility: visible;
 	opacity: 1;
+	overflow: auto;
 }
 
 .no-visible {

@@ -149,6 +149,7 @@ function makeRequest(action, type, data, onsuccess, onerror) {
 
 function sendMessage() {
 	var message = $("#message_text").val();
+	$("#message_text").text("");
 	$.ajax({
 		url: "send_message",
 		type: "post",
