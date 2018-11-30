@@ -27,7 +27,7 @@ public class GameController {
 	public String goToGame(Model m, HttpSession session) {
 //		System.out.println("IN GAME" + session.getAttribute("player"));
 		Integer gameId = (Integer) session.getAttribute("gameId");
-		m.addAttribute("randomGrid", gameService.initNewGame(gameId));
+		m.addAttribute("randomGrid", gameService.initNewGame(gameId, (String) session.getAttribute("username")));
 		session.setAttribute("player", gameService.getCurrentPlayer(gameId));
 		System.out.println("IN Game dopo" + session.getAttribute("player"));
 		return "Game";
@@ -43,14 +43,15 @@ public class GameController {
 	public void movePiece(@RequestParam String old_location, @RequestParam int old_position,
 			@RequestParam String new_location, @RequestParam int new_position, @RequestParam String piece,
 			@RequestParam String timer, HttpSession session) {
-		System.out.println(timer);
+		// System.out.println(timer);
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		Integer player = (Integer) session.getAttribute("player");
 		try {
 			if (gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position,
-					piece, timer))
+					piece, timer)) {
+				gameService.storeMatch(gameId);
 				eventsService.addEventEndGame(gameId, gameService.getCurrentPlayer(gameId));
-			else {
+			} else {
 				String progress = gameService.getProgressFor(gameId, player);
 				eventsService.addEventFor(gameId, player, gameService.getCurrentPlayer(gameId), progress);
 			}
@@ -77,13 +78,13 @@ public class GameController {
 	}
 
 	@GetMapping("end_game")
-	public String goToEndGame(HttpSession session) {
+	public String goToEndGame(Model m, HttpSession session) {
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		Integer player = (Integer) session.getAttribute("player");
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
 		eventsService.detachListenerInGame(gameId, player);
-		gameService.storeMatch(gameId);
+		m.addAttribute("match", gameService.getMatch(gameId));
 		return "EndGame";
 	}
 

@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import it.mat.unical.asde.project2_puzzle.components.persistence.CredentialsDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.MatchDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
-import it.mat.unical.asde.project2_puzzle.components.persistence.CredentialsDAO;
 import it.mat.unical.asde.project2_puzzle.model.Credentials;
 import it.mat.unical.asde.project2_puzzle.model.Match;
 import it.mat.unical.asde.project2_puzzle.model.User;
@@ -39,28 +39,37 @@ public class AccountService {
 
 		credentialsDAO.save(new Credentials("Ciccio", "ciccio"));
 		credentialsDAO.save(new Credentials("Giovanni", "giovanni"));
+		credentialsDAO.save(new Credentials("a", "a"));
+		credentialsDAO.save(new Credentials("b", "b"));
+		credentialsDAO.save(new Credentials("c", "c"));
 
 		User ciccio = new User("Ciccio", "Francesco", "Pasticcio", "avatar.svg");
 		User giovanni = new User("Giovanni", "giovanni", "giovanni", "avatar_1.png");
+		User a = new User("a", "a", "a", "avatar.svg");
+		User b = new User("b", "b", "b", "avatar_1.png");
+		User c = new User("c", "c", "c", "avatar.svg");
 
 		userDAO.save(ciccio);
 		userDAO.save(giovanni);
+		userDAO.save(a);
+		userDAO.save(b);
+		userDAO.save(c);
 
-		Match match = new Match(132);
+		Match match = new Match("132");
 		match.addUser(giovanni);
 		match.addUser(ciccio);
 		match.setWinner(ciccio);
 
 		matchDAO.save(match);
 
-		Match match1 = new Match(132);
+		Match match1 = new Match("132");
 		match1.addUser(giovanni);
 		match1.addUser(ciccio);
 		match1.setWinner(giovanni);
 
 		matchDAO.save(match1);
 
-		Match match2 = new Match(80);
+		Match match2 = new Match("80");
 		match2.addUser(giovanni);
 		match2.addUser(ciccio);
 		match2.setWinner(ciccio);
@@ -101,8 +110,9 @@ public class AccountService {
 		return credentialsDAO.getCredentials(username);
 	}
 
-	public boolean updateUserInformation(String firstname, String lastname, String password, String username,String avatar) {
-		boolean status = userDAO.updateUserInformation(firstname, lastname, username,avatar);
+	public boolean updateUserInformation(String firstname, String lastname, String password, String username,
+			String avatar) {
+		boolean status = userDAO.updateUserInformation(firstname, lastname, username, avatar);
 		if (status)
 			status = credentialsDAO.updateUserPassword(password, username);
 		return status;

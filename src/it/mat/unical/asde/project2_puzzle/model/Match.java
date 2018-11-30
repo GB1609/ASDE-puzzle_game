@@ -31,13 +31,13 @@ public class Match {
 	private User winner;
 
 	@Column(nullable = false)
-	private int time;
+	private String time;
 
 	public Match() {
 		super();
 	}
 
-	public Match(int time) {
+	public Match(String time) {
 		super();
 		this.time = time;
 	}
@@ -59,11 +59,11 @@ public class Match {
 		return id;
 	}
 
-	public int getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(int time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 
@@ -76,8 +76,7 @@ public class Match {
 	}
 
 	public void addUser(User user) {
-		if(!users.contains(user))
-		{
+		if (!users.contains(user)) {
 			users.add(user);
 			user.addMatch(this);
 		}

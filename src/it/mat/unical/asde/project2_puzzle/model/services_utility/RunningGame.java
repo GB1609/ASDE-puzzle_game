@@ -9,14 +9,14 @@ import it.mat.unical.asde.project2_puzzle.model.Grid;
 public class RunningGame {
 
 	private List<GridToComplete> gamePlayer;
+	private List<GridToComplete> scoresOrder;
+	private int currentPlayer = 0;
 	private Grid initialGrid;
 	private int dim;
-	private String user1;
-	private String user2;
 
 	public RunningGame(int difficulty) {
 		int randomPuzzle = new Random().nextInt(13);
-		initialGrid = new Grid(difficulty, "" + randomPuzzle);
+		initialGrid = new Grid(difficulty, "" + 0/* randomPuzzle */);
 		this.dim = initialGrid.getDim();
 		gamePlayer = new ArrayList<>();
 	}
@@ -45,17 +45,45 @@ public class RunningGame {
 		return gridToComplete.getStatus();
 	}
 
-	public Integer getCurrentPlayer() {
-		return gamePlayer.size();
+	synchronized public Integer getCurrentPlayer() {
+		return ++currentPlayer;
 	}
 
-	public void addPlayer() {
-		gamePlayer.add(new GridToComplete(dim));
+	public void addPlayer(String playerToAdd) {
+		gamePlayer.add(new GridToComplete(dim, playerToAdd));
 
 	}
 
 	public Grid getInitialGrid(Integer gameId) {
 		return initialGrid;
+	}
+
+	public String getWinner() {
+		scoresOrder = new ArrayList<>(gamePlayer);
+		scoresOrder.sort((g1, g2) -> {
+			if (g1.getTimer().equals(g2.getTimer())) {
+				Integer statusG1 = g1.getStatus();
+				Integer statusG2 = g2.getStatus();
+
+				if (statusG1 == statusG2)
+					return 0;
+				return statusG1 < statusG2 ? -1 : 1;
+			}
+			return g1.getTimer().before(g2.getTimer()) ? -1 : 1;
+		});
+		return scoresOrder.get(0).getPlayer();
+
+	}
+
+	public ArrayList<String> getUsersOrdered() {
+		ArrayList<String> users = new ArrayList<>(scoresOrder.size());
+		for (GridToComplete g : scoresOrder)
+			users.add(g.getPlayer());
+		return users;
+	}
+
+	public String getTime() {
+		return scoresOrder.get(0).getTimer().toString();
 	}
 
 }
