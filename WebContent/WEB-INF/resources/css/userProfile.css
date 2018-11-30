@@ -17,6 +17,12 @@
 	min-width: 10%;
 }
 
+rect {
+	opacity: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
 .avatar_board {
 	margin-left: 2.1em;
 	padding: 0%;
@@ -40,7 +46,6 @@
 .avatar {
 	padding: 23%;
 	max-width: 100%;
-	max-height: 100%;
 	min-width: 30%;
 }
 
@@ -90,7 +95,6 @@
 	-o-transform: rotate(-20deg);
 	-ms-transform: rotate(-20deg);
 	transform: rotate(-20deg);
-	
 }
 
 .profile-usertitle {
@@ -173,6 +177,18 @@
 	width: 100%;
 	padding-left: 23% !important;
 	padding-right: 22% !important;
+	padding-top: 3%;
+	padding-bottom: 3%;
+}
+
+.matchStatistics-button a {
+	color: #93a3b5;
+	font-size: 16px;
+	font-weight: 339;
+	border-radius: 251px;
+	width: 100%;
+	padding-left: 21% !important;
+	padding-right: 20% !important;
 	padding-top: 3%;
 	padding-bottom: 3%;
 }

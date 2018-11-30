@@ -2,6 +2,7 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -15,6 +16,7 @@ import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.CredentialsDAO;
 import it.mat.unical.asde.project2_puzzle.model.Credentials;
 import it.mat.unical.asde.project2_puzzle.model.Match;
+import it.mat.unical.asde.project2_puzzle.model.StatisticsUtility;
 import it.mat.unical.asde.project2_puzzle.model.User;
 
 @Service
@@ -66,6 +68,13 @@ public class AccountService {
 		match2.setWinner(ciccio);
 
 		matchDAO.save(match2);
+
+		System.out.println(StatisticsUtility.createMatchesInfoLineChart(ciccio));
+		System.out.println(StatisticsUtility.createMatchesInfoForDonutChart(ciccio));
+
+		Date date = new Date();
+		System.out.println(date.getTime());
+
 	}
 
 	public boolean loginAccepted(String username, String password) {
@@ -101,8 +110,9 @@ public class AccountService {
 		return credentialsDAO.getCredentials(username);
 	}
 
-	public boolean updateUserInformation(String firstname, String lastname, String password, String username,String avatar) {
-		boolean status = userDAO.updateUserInformation(firstname, lastname, username,avatar);
+	public boolean updateUserInformation(String firstname, String lastname, String password, String username,
+			String avatar) {
+		boolean status = userDAO.updateUserInformation(firstname, lastname, username, avatar);
 		if (status)
 			status = credentialsDAO.updateUserPassword(password, username);
 		return status;
@@ -111,9 +121,13 @@ public class AccountService {
 	public void fillUserInformation(String username, Model model) {
 		User user = getFullUser(username);
 		Credentials credentials = getCredentials(username);
+		String lineChart = StatisticsUtility.createMatchesInfoLineChart(user);
+		String donutChart = StatisticsUtility.createMatchesInfoForDonutChart(user);
 		model.addAttribute("user", user);
 		model.addAttribute("password", credentials.getPassword());
 		model.addAttribute("avatars", loadAvatarsList());
+		model.addAttribute("lineChart", lineChart);
+		model.addAttribute("donutChart", donutChart);
 
 	}
 
