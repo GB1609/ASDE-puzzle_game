@@ -86,7 +86,7 @@ public class EventsService {
 			for (int i = 1; i <= currentPlayers; i++) {
 				String key = gameID + "player" + i;
 				if (i != player) {
-					System.out.println("Send end game for" + gameID + "player" + player);
+					System.out.println("Send end game for" + gameID + "player" + i);
 
 					addEvent("END-GAME", key, gameID);
 				}

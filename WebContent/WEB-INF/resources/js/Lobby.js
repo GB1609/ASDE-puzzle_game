@@ -51,7 +51,7 @@ function listenForStartGame(lobby_name) {
 			"lobby_name" : lobby_name
 		}),
 		success : function(result) {
-			if (!$.trim(result))
+			if (!$.trim(result) || (result === "already-started"))
 				listenForStartGame(lobby_name);
 			else {
 				console.log(result);
@@ -182,47 +182,6 @@ function joinLobby(lobby_name) {
 
 function startGame(ev) {
 	$("#ftg_form").submit();
-}
-
-function listenForJoinToLobby(lobby_name) {
-	// console.log("in join")
-	var xhr = $.ajax({
-		url : "check_join",
-		type : "post",
-		data : ({
-			"lobby_name" : lobby_name
-		}),
-		success : function(result) {
-			if ($.trim(result) && !(result === "already-joined")) {
-				var r = JSON.parse(result);
-				if (r.join) {
-					// TODO listen for leave lobby
-					$("#start_button").removeClass("hidden-field");
-					$("#empty_slot").text(r.joiner);
-					$('#join_alert').fadeIn('slow', function() {
-						$('#join_alert').delay(5000).fadeOut();
-					});
-				} else if (r.leave) {
-					$("#start_button").addClass("hidden-field");
-					$('#leave_alert').fadeIn('slow', function() {
-						$('#leave_alert').delay(5000).fadeOut();
-					});
-				}
-				// $("#lobby_name").val(lobby_name);
-				// $("#ftg_form").submit();
-			}
-			listenForJoinToLobby(lobby_name);
-
-		},
-		error : function(e) {
-			console.log(e.responseText);
-			setTimeout(function() {
-				listenForJoinToLobby(lobby_name);
-			}, 5000);
-		}
-	});
-	console.log(xhr);
-
 }
 
 function createLobby(ev) {

@@ -96,6 +96,8 @@ public class GameController {
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
 		System.out.println("in leave game" + gameId + "player" + player);
+		gameService.leaveGameBy(gameId, player);
+		gameService.storeMatch(gameId);
 		try {
 			eventsService.addEventLeaveGameBy(gameId, player, gameService.getPlayerInGame(gameId));
 			eventsService.detachListenerInGame(gameId, player);

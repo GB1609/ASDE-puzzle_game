@@ -80,4 +80,8 @@ public class GameService {
 	public Match getMatch(Integer gameId) {
 		return matches.get(gameId);
 	}
+
+	public void leaveGameBy(Integer gameId, Integer player) {
+		runningGames.get(gameId).userLeaveGame(player);
+	}
 }
