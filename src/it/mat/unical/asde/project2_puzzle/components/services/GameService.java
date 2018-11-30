@@ -2,6 +2,8 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.util.HashMap;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,10 +62,11 @@ public class GameService {
 		for (String s : runningGames.get(gameId).getUsersOrdered()) {
 			User user = userDao.getFullUser(s);
 			m.addUser(user);
-			m.setTime(runningGames.get(gameId).getTime());
 		}
+		m.setTime(runningGames.get(gameId).getTime());
 		m.setLobbyName(runningGames.get(gameId).getLobbyName());
 		matches.put(gameId, m);
+		matchDao.save(m);
 	}
 
 	public GameMatch getMatch(Integer gameId) {

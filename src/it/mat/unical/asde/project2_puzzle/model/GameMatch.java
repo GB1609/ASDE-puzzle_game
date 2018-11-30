@@ -39,16 +39,16 @@ public class GameMatch {
 	@Transient
 	private String lobbyName;
 
+	@Column(nullable=false)
+	private String time;
+	
 	public String getTime() {
 		return time;
 	}
-
+	
 	public void setTime(String time) {
 		this.time = time;
 	}
-
-	@Column
-	private String time;
 
 	@Column(nullable = false)
 	private LocalDateTime date;
@@ -57,8 +57,8 @@ public class GameMatch {
 		super();
 		date = LocalDateTime.now();
 		DateTimeFormatter.ofPattern("dd/mm/yyyy", Locale.ITALIAN).format(date);
-
 	}
+
 
 	public LocalDateTime getDate() {
 		return date;
@@ -85,7 +85,6 @@ public class GameMatch {
 	public long getId() {
 		return id;
 	}
-
 
 	public Set<User> getUsers() {
 		return users;
