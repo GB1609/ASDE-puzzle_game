@@ -12,6 +12,7 @@ public class GridToComplete {
 	private SimpleDateFormat parser = new SimpleDateFormat("HH:mm:ss");
 	private Date timer = new Date();
 	private String player;
+	private boolean leaved;
 	private int access = 0;// TODO remove -> only for testing end game
 
 	public GridToComplete(int dim, String player) {
@@ -37,6 +38,14 @@ public class GridToComplete {
 				a++;
 			}
 		return true;
+	}
+
+	public void setLeaved(boolean leaved) {
+		this.leaved = leaved;
+	}
+
+	public boolean leaved() {
+		return this.leaved;
 	}
 
 	public int getHeight() {

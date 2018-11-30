@@ -50,10 +50,10 @@ public class GameController {
 			if (gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position,
 					piece, timer)) {
 				gameService.storeMatch(gameId);
-				eventsService.addEventEndGame(gameId, gameService.getCurrentPlayer(gameId));
+				eventsService.addEventEndGame(gameId, gameService.getPlayerInGame(gameId));
 			} else {
 				String progress = gameService.getProgressFor(gameId, player);
-				eventsService.addEventFor(gameId, player, gameService.getCurrentPlayer(gameId), progress);
+				eventsService.addEventFor(gameId, player, gameService.getPlayerInGame(gameId), progress);
 			}
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
@@ -95,9 +95,11 @@ public class GameController {
 		Integer player = (Integer) session.getAttribute("player");
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
-		System.out.println("in leave game" + gameId + player);
+		System.out.println("in leave game" + gameId + "player" + player);
+		gameService.leaveGameBy(gameId, player);
+		gameService.storeMatch(gameId);
 		try {
-			eventsService.addEventLeaveGameBy(gameId, player, gameService.getCurrentPlayer(gameId));
+			eventsService.addEventLeaveGameBy(gameId, player, gameService.getPlayerInGame(gameId));
 			eventsService.detachListenerInGame(gameId, player);
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
@@ -111,7 +113,7 @@ public class GameController {
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		Integer player = (Integer) session.getAttribute("player");
 		try {
-			eventsService.addMessageFor(gameId, player, gameService.getCurrentPlayer(gameId), message);
+			eventsService.addMessageFor(gameId, player, gameService.getPlayerInGame(gameId), message);
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
 			e.printStackTrace();

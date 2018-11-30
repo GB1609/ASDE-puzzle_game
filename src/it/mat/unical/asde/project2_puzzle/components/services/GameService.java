@@ -49,6 +49,10 @@ public class GameService {
 		return runningGames.get(gameId).getCurrentPlayer();
 	}
 
+	public Integer getPlayerInGame(Integer gameId) {
+		return runningGames.get(gameId).getPlayerInGame();
+	}
+
 	public void storeMatch(Integer gameId) {
 		GameMatch m = new GameMatch();
 		User winner = userDao.getUser(runningGames.get(gameId).getWinner());
@@ -64,5 +68,9 @@ public class GameService {
 
 	public GameMatch getMatch(Integer gameId) {
 		return matches.get(gameId);
+	}
+
+	public void leaveGameBy(Integer gameId, Integer player) {
+		runningGames.get(gameId).userLeaveGame(player);
 	}
 }

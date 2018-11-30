@@ -56,6 +56,10 @@ public class RunningGame {
 
 	}
 
+	public Integer getPlayerInGame() {
+		return gamePlayer.size();
+	}
+
 	public Grid getInitialGrid(Integer gameId) {
 		return initialGrid;
 	}
@@ -63,6 +67,10 @@ public class RunningGame {
 	public String getWinner() {
 		scoresOrder = new ArrayList<>(gamePlayer);
 		scoresOrder.sort((g1, g2) -> {
+			if (g1.leaved() && !g2.leaved())
+				return 1;
+			if (g2.leaved() && !g1.leaved())
+				return -1;
 			if (g1.getTimer().equals(g2.getTimer())) {
 				Integer statusG1 = g1.getStatus();
 				Integer statusG2 = g2.getStatus();
@@ -90,6 +98,11 @@ public class RunningGame {
 
 	public String getLobbyName() {
 		return this.lobbyName;
+	}
+
+	public void userLeaveGame(Integer player) {
+		System.out.println("set leave from" + (player - 1));
+		gamePlayer.get(player - 1).setLeaved(true);
 	}
 
 }
