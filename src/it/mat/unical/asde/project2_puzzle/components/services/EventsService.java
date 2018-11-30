@@ -81,6 +81,7 @@ public class EventsService {
 	public void addEventLeaveGameBy(Integer gameID, Integer player, Integer currentPlayers)
 			throws InterruptedException {
 		Set<String> alreadyLeaved = leaved.get(gameID);
+
 		if (currentPlayers == 2 || (alreadyLeaved != null && (alreadyLeaved.size() - currentPlayers) == 2))
 			for (int i = 1; i <= currentPlayers; i++) {
 				String key = gameID + "player" + i;

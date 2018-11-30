@@ -49,6 +49,10 @@ public class GameService {
 		return runningGames.get(gameId).getCurrentPlayer();
 	}
 
+	public Integer getPlayerInGame(Integer gameId) {
+		return runningGames.get(gameId).getPlayerInGame();
+	}
+
 	public void storeMatch(Integer gameId) {
 		Match m = new Match();
 		// TODO RESOLVE EXCEPTION LAZY INIT IN SET USER

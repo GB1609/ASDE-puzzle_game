@@ -56,6 +56,10 @@ public class RunningGame {
 
 	}
 
+	public Integer getPlayerInGame() {
+		return gamePlayer.size();
+	}
+
 	public Grid getInitialGrid(Integer gameId) {
 		return initialGrid;
 	}
