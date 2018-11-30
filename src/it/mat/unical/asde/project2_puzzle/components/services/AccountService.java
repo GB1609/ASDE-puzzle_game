@@ -2,6 +2,7 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -14,7 +15,8 @@ import it.mat.unical.asde.project2_puzzle.components.persistence.MatchDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.CredentialsDAO;
 import it.mat.unical.asde.project2_puzzle.model.Credentials;
-import it.mat.unical.asde.project2_puzzle.model.GameMatch;
+import it.mat.unical.asde.project2_puzzle.model.Match;
+import it.mat.unical.asde.project2_puzzle.model.StatisticsUtility;
 import it.mat.unical.asde.project2_puzzle.model.User;
 
 @Service
@@ -34,6 +36,47 @@ public class AccountService {
 	@Autowired
 	private ServletContext servletContext;
 
+	@PostConstruct
+	public void init() {
+
+		credentialsDAO.save(new Credentials("Ciccio", "ciccio"));
+		credentialsDAO.save(new Credentials("Giovanni", "giovanni"));
+
+		User ciccio = new User("Ciccio", "Francesco", "Pasticcio", "avatar.svg");
+		User giovanni = new User("Giovanni", "giovanni", "giovanni", "avatar_1.png");
+
+		userDAO.save(ciccio);
+		userDAO.save(giovanni);
+
+		Match match = new Match(132);
+		match.addUser(giovanni);
+		match.addUser(ciccio);
+		match.setWinner(ciccio);
+
+		matchDAO.save(match);
+
+		Match match1 = new Match(132);
+		match1.addUser(giovanni);
+		match1.addUser(ciccio);
+		match1.setWinner(giovanni);
+
+		matchDAO.save(match1);
+
+		Match match2 = new Match(80);
+		match2.addUser(giovanni);
+		match2.addUser(ciccio);
+		match2.setWinner(ciccio);
+
+		matchDAO.save(match2);
+
+		System.out.println(StatisticsUtility.createMatchesInfoLineChart(ciccio));
+		System.out.println(StatisticsUtility.createMatchesInfoForDonutChart(ciccio));
+
+		Date date = new Date();
+		System.out.println(date.getTime());
+
+	}
+
 	public boolean loginAccepted(String username, String password) {
 		return credentialsDAO.exists(new Credentials(username, password));
 	}
@@ -45,21 +88,17 @@ public class AccountService {
 		return value;
 	}
 
-	public ArrayList<GameMatch> getMatches(String username) {
+	public ArrayList<Match> getMatches(String username) {
 		return matchDAO.getMatches(username);
 	}
 
-	public void addMatch(GameMatch match) {
+	public void addMatch(Match match) {
 		matchDAO.save(match);
 	}
 
 	public User getUser(String username) {
 		return userDAO.getUser(username);
 
-	}
-
-	public String getAvatarUser(String username) {
-		return AvatarsFolder + userDAO.getUser(username).getAvatar();
 	}
 
 	public User getFullUser(String username) {
@@ -82,9 +121,13 @@ public class AccountService {
 	public void fillUserInformation(String username, Model model) {
 		User user = getFullUser(username);
 		Credentials credentials = getCredentials(username);
+		String lineChart = StatisticsUtility.createMatchesInfoLineChart(user);
+		String donutChart = StatisticsUtility.createMatchesInfoForDonutChart(user);
 		model.addAttribute("user", user);
 		model.addAttribute("password", credentials.getPassword());
 		model.addAttribute("avatars", loadAvatarsList());
+		model.addAttribute("lineChart", lineChart);
+		model.addAttribute("donutChart", donutChart);
 
 	}
 

@@ -32,6 +32,8 @@ public class GameMatch {
 
 	@Column(nullable = false)
 	private int time;
+	
+
 
 	public GameMatch() {
 		super();
@@ -44,7 +46,9 @@ public class GameMatch {
 
 	@Override
 	public String toString() {
-		return "Match [id=" + id + ", users=" + users + ", winner=" + winner + ", time=" + time + "]";
+		//TODO
+		//gg/mm  vinto  perso 
+		return "03/02";
 	}
 
 	public void setId(long id) {
