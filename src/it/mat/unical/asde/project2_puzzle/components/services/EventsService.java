@@ -18,6 +18,7 @@ public class EventsService {
 	private Map<String, BlockingQueue<String>> events = new HashMap<>();
 	private Map<String, BlockingQueue<String>> join = new HashMap<>();
 	private Map<Integer, Set<String>> leaved = new HashMap<>();
+	private Map<String, String> listeningFor = new HashMap<>();
 
 	private MessageMaker maker = new MessageMaker();
 
@@ -106,13 +107,14 @@ public class EventsService {
 	public void addEventStartGame(String lobby_name) throws InterruptedException {
 		String key = lobby_name.toLowerCase() + "player2";
 		addGeneralEventLobby(key, MessageMaker.START_MESSAGE);
+		addGeneralEventLobby(key, MessageMaker.START_MESSAGE);
 	}
 
 	public void addEventJoin(String lobbyName, String username) throws InterruptedException {
 		addGeneralEventLobby(lobbyName.toLowerCase(), MessageMaker.JOIN_MESSAGE, MessageMaker.WHO_JOIN, username);
 	}
 
-	public void addEventLeaveJoin(String previousJoined) throws InterruptedException {
+	public void addEventLeaveJoin(String previousJoined, String username) throws InterruptedException {
 		Pattern p = Pattern.compile("(.+)player2$");// TODO transorm to N
 		Matcher meMatcher = p.matcher(previousJoined);
 		if (meMatcher.matches()) {
@@ -126,13 +128,13 @@ public class EventsService {
 //			join.remove(s);
 		} else {
 			System.out.println("A JOINER has leave");
-			join.remove(previousJoined + "player2");
+			detachListenerForStart(previousJoined, username, 2);// TODO REMOVE STATIC 2
 			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);
 
 		}
 	}
 
-	public void attachListenerToJoin(String lobby_name) {
+	public void attachListenerToJoin(String lobby_name, String username) {
 
 		if (join.containsKey(lobby_name))
 			/* throw new RuntimeException */System.out
@@ -140,11 +142,13 @@ public class EventsService {
 		else {
 			System.out.println("listener attached for lobby" + lobby_name);
 			join.put(lobby_name, new LinkedBlockingQueue<>());
+			listeningFor.put(username,
+					maker.makeMessage(MessageMaker.JOIN_MESSAGE, MessageMaker.LOBBY_NAME, lobby_name));
 			System.out.println(join.containsKey(lobby_name));
 		}
 	}
 
-	public void attachListenerToStart(String lobby_name) {
+	public void attachListenerToStart(String lobby_name, String username) {
 		String key = lobby_name.toLowerCase() + "player2";
 
 		if (join.containsKey(key))
@@ -153,17 +157,34 @@ public class EventsService {
 		else {
 			System.out.println("listener attached for start" + lobby_name);
 			join.put(key, new LinkedBlockingQueue<>());
+			listeningFor.put(username,
+					maker.makeMessage(MessageMaker.START_MESSAGE, MessageMaker.LOBBY_NAME, lobby_name));
 			System.out.println(join.containsKey(key));
 		}
 	}
 
-	public void detachListenerForJoin(String lobby_name) {
+	public void detachListenerForJoin(String lobby_name, String username) {
 		join.remove(lobby_name.toLowerCase());
+		listeningFor.remove(username);
+	}
+
+	public void detachListenerForStart(String lobby_name, String username, Integer player) {
+		System.out.println("detach listener for start" + lobby_name + "username" + username + player);
+		join.remove(lobby_name.toLowerCase() + "player" + player);
+		listeningFor.remove(username);
 	}
 
 	public void detachListenerInGame(Integer gameId, Integer player) {
 		String key = gameId + "player" + player;
 		events.remove(key);
+	}
+
+	public void detachListenerForStart(String username, Integer player) {
+		String listenFor = listeningFor.get(username);
+		if (listenFor != null) {
+			JSONObject jo = new JSONObject(listenFor);
+			detachListenerForStart(jo.getString(MessageMaker.LOBBY_NAME), username, player);
+		}
 	}
 
 	/////////////////////////////////// GET
@@ -184,16 +205,8 @@ public class EventsService {
 			System.out.println("No listener attached for this lobby" + lobbyName);
 //			return null;
 		}
-		String b = join.get(lobbyName).poll(29, TimeUnit.SECONDS);
-		if (b != null) {// TODO problem, now this listener is used also for the leave join, so find
-						// another solution for this. Now when a player leave the lobby already joined
-						// is put
-			if (b.equals("already-joined"))
-				join.remove(lobbyName);
-			else
-				join.get(lobbyName).put("already-joined");
-		}
-		return b;
+
+		return join.get(lobbyName).poll(29, TimeUnit.SECONDS);
 	}
 
 	public String getEventStartGame(String lobbyName) throws InterruptedException {
@@ -204,18 +217,16 @@ public class EventsService {
 			System.out.println("No listener attached for this lobby" + lobbyName);
 //			return null;
 		}
-		String b = join.get(key).poll(29, TimeUnit.SECONDS);
-		if (b != null) {
-			// only for reload problem
-			if (b.equals("already-started"))
-				join.remove(key);
-			else
-				join.get(key).put("already-started");
-		}
-		return b;
+		return join.get(key).poll(29, TimeUnit.SECONDS);
+	}
+
+	public String getListenerOfUser(String username) {
+		System.out.println("checkFor" + username + " listener " + listeningFor.get(username));
+		return listeningFor.get(username);
 	}
 
 	private class MessageMaker {
+		public static final String LOBBY_NAME = "lobby_name";
 		public static final String OWNER = "owner";
 		public static final String WHO_LEAVE = "by";
 		public final static String JOIN_MESSAGE = "join";
@@ -236,4 +247,5 @@ public class EventsService {
 		}
 
 	}
+
 }
