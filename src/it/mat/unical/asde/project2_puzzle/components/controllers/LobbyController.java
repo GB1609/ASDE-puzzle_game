@@ -89,12 +89,12 @@ public class LobbyController {
 		session.setAttribute("gameId", lobbyID);
 		try {
 			// add the event of join that will be notified to lobby's owner
-			this.eventService.addEventJoin(lobby_name, username);
+			this.eventService.addEventJoin(lobby_name, username, false);
 			// if the joiner was connected to another lobby then add this event that will be
 			// notified to the other player in lobby
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
 			if (previousJoined != null) {
-				this.eventService.addEventLeaveJoin(previousJoined, username);
+				this.eventService.addEventLeaveJoin(previousJoined, username, false);
 			}
 		} catch (Exception e) {
 			System.out.println("I can't join to lobby" + lobby_name);
@@ -114,7 +114,7 @@ public class LobbyController {
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
 			if (previousJoined != null) {
 				try {
-					this.eventService.addEventLeaveJoin(previousJoined, username);
+					this.eventService.addEventLeaveJoin(previousJoined, username, false);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

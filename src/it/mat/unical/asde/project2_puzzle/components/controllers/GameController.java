@@ -72,7 +72,8 @@ public class GameController {
 		DeferredResult<String> outputProgress = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
-				outputProgress.setResult(eventsService.nextGameEventFor(gameId, player));
+				outputProgress
+						.setResult(eventsService.nextGameEventFor(gameId, player, gameService.getPlayerInGame(gameId)));
 			} catch (InterruptedException e) {
 				outputProgress.setResult(-1000 + "");
 			}
@@ -102,7 +103,7 @@ public class GameController {
 		gameService.leaveGameBy(gameId, player);
 		gameService.storeMatch(gameId);
 		try {
-			eventsService.addEventLeaveGameBy(gameId, player, gameService.getPlayerInGame(gameId));
+			eventsService.addEventLeaveGameBy(gameId, player, gameService.getPlayerInGame(gameId), false);
 			eventsService.detachListenerInGame(gameId, player);
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");

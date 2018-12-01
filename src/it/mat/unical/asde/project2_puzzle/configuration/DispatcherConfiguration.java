@@ -2,13 +2,16 @@ package it.mat.unical.asde.project2_puzzle.configuration;
 
 import java.io.IOException;
 import java.util.Properties;
+
 import javax.sql.DataSource;
+
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,6 +19,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
+@EnableScheduling
 @ComponentScan("it.mat.unical.asde.project2_puzzle.components")
 public class DispatcherConfiguration implements WebMvcConfigurer {
 	@Override
@@ -26,10 +30,10 @@ public class DispatcherConfiguration implements WebMvcConfigurer {
 	@Bean
 	public DataSource getDataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://asde2018project2.chozlfc5zlbk.us-east-1.rds.amazonaws.com:3306/puzzle2018");
-		dataSource.setUsername("puzzle2018");
-		dataSource.setPassword("ASDE-puzzle2018");
+		dataSource.setDriverClassName("org.h2.Driver");
+		dataSource.setUrl("jdbc:h2:mem:MyDB");
+		dataSource.setUsername("sa");
+		dataSource.setPassword("sa");
 		return dataSource;
 	}
 
@@ -54,10 +58,10 @@ public class DispatcherConfiguration implements WebMvcConfigurer {
 
 	private Properties getHibernateProperties() {
 		Properties prop = new Properties();
-		prop.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		prop.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
 		prop.put("hibernate.show_sql", true);
 		prop.put("hibernate.format_sql", true);
-//		prop.put("hibernate.hbm2ddl.auto", "create");
+		prop.put("hibernate.hbm2ddl.auto", "create");
 		return prop;
 	}
 }

@@ -34,7 +34,7 @@ function checkIfListening() {
 				if (r.start) {
 					listenForStartGame(r.lobby_name);
 				} else if (r.join) {
-					listenForJoinToLobby(r.lobby_name);
+					listenForJoinToLobby(r.lobby_name, false);
 				}
 			}
 		},
@@ -68,7 +68,7 @@ function listenForStartGame(lobby_name) {
 			"lobby_name" : lobby_name
 		}),
 		success : function(result) {
-			if (!$.trim(result) || (result === "already-started"))
+			if (!$.trim(result))
 				listenForStartGame(lobby_name);
 			else {
 				console.log(result);
@@ -77,7 +77,7 @@ function listenForStartGame(lobby_name) {
 					window.location.href = "/ASDE-puzzle_game/game";
 				} else if (r.leave) {
 					toggleModal();
-					listenForJoinToLobby(lobby_name);
+					listenForJoinToLobby(lobby_name, false);
 					console.log("Lobby destruct"); // TODO make alert
 				}
 			}
@@ -94,7 +94,7 @@ function listenForStartGame(lobby_name) {
 
 }
 
-function listenForJoinToLobby(lobby_name) {
+function listenForJoinToLobby(lobby_name, showAlertLeave) {
 	// console.log("in join")
 	console.log("listenForJoinToLobby" + lobby_name);
 
@@ -105,33 +105,37 @@ function listenForJoinToLobby(lobby_name) {
 			"lobby_name" : lobby_name
 		}),
 		success : function(result) {
-			if ($.trim(result) && !(result === "already-joined")) {
+			if ($.trim(result)) {
 				var r = JSON.parse(result);
 				if (r.join) {
-					// TODO listen for leave lobby
 					$("#start_button").removeClass("hidden-field");
 					$("#empty_slot").text(r.joiner);
 					$('#join_alert').fadeIn('slow', function() {
 						$('#join_alert').delay(5000).fadeOut();
 					});
 				} else if (r.leave) {
-					if (r.by === "owner")
+					if (r.by === "owner") {
+						getLobbies(true);
 						return;
-					$("#start_button").addClass("hidden-field");
-					$('#leave_alert').fadeIn('slow', function() {
-						$('#leave_alert').delay(5000).fadeOut();
-					});
+					}
+					if (!showAlertLeave) {
+						$("#start_button").addClass("hidden-field");
+						$('#leave_alert').fadeIn('slow', function() {
+							$('#leave_alert').delay(5000).fadeOut();
+						});
+						showAlertLeave = true;
+					} else {
+						showAlertLeave = false;
+					}
 				}
-				// $("#lobby_name").val(lobby_name);
-				// $("#ftg_form").submit();
 			}
-			listenForJoinToLobby(lobby_name);
+			listenForJoinToLobby(lobby_name, showAlertLeave);
 
 		},
 		error : function(e) {
 			console.log(e.responseText);
 			setTimeout(function() {
-				listenForJoinToLobby(lobby_name);
+				listenForJoinToLobby(lobby_name, showAlertLeave);
 			}, 5000);
 		}
 	});
@@ -218,7 +222,7 @@ function createLobby(ev) {
 			} else {
 				getLobbies(true);
 				$('#create-modal').modal("toggle");
-				listenForJoinToLobby(lobby_name);
+				listenForJoinToLobby(lobby_name, false);
 			}
 		},
 		error : function(e) {
