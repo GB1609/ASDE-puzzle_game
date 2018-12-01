@@ -2,43 +2,43 @@ var listElm;
 var user;
 var currentlyShowed;
 $(document)
-		.ready(
-				function() {
-					listElm = document.querySelector('#lobbies_div');
-					listElm
-							.addEventListener(
-									'scroll',
-									function() {
-										if (listElm.scrollTop
-												+ listElm.clientHeight >= (listElm.scrollHeight - 1)) {
-											getLobbies(false);
-										}
-									});
-					checkIfListening();
-					currentlyShowed = 0;
-					getLobbies(true);
-					// $('#base').addClass($('#base').attr('value'));
-				});
+	.ready(
+		function () {
+			listElm = document.querySelector('#lobbies_div');
+			listElm
+				.addEventListener(
+					'scroll',
+					function () {
+						if (listElm.scrollTop +
+							listElm.clientHeight >= (listElm.scrollHeight - 1)) {
+							getLobbies(false);
+						}
+					});
+			checkIfListening();
+			currentlyShowed = 0;
+			getLobbies(true);
+			// $('#base').addClass($('#base').attr('value'));
+		});
 
 var grid = false;
 
 function checkIfListening() {
 	$.ajax({
-		url : "check_is_listening_for",
-		type : "post",
-		data : ({}),
-		success : function(result) {
+		url: "check_is_listening_for",
+		type: "post",
+		data: ({}),
+		success: function (result) {
 			if ($.trim(result)) {
 				console.log(result);
 				var r = JSON.parse(result);
 				if (r.start) {
 					listenForStartGame(r.lobby_name);
 				} else if (r.join) {
-					listenForJoinToLobby(r.lobby_name);
+					listenForJoinToLobby(r.lobby_name, false);
 				}
 			}
 		},
-		error : function(e) {
+		error: function (e) {
 			console.log(e.responseText);
 		}
 	});
@@ -62,13 +62,13 @@ function toggleModal() {
 function listenForStartGame(lobby_name) {
 	console.log("listenStartfor" + lobby_name);
 	var xhr = $.ajax({
-		url : "check_start",
-		type : "post",
-		data : ({
-			"lobby_name" : lobby_name
+		url: "check_start",
+		type: "post",
+		data: ({
+			"lobby_name": lobby_name
 		}),
-		success : function(result) {
-			if (!$.trim(result) || (result === "already-started"))
+		success: function (result) {
+			if (!$.trim(result))
 				listenForStartGame(lobby_name);
 			else {
 				console.log(result);
@@ -77,14 +77,14 @@ function listenForStartGame(lobby_name) {
 					window.location.href = "/ASDE-puzzle_game/game";
 				} else if (r.leave) {
 					toggleModal();
-					listenForJoinToLobby(lobby_name);
+					listenForJoinToLobby(lobby_name, false);
 					console.log("Lobby destruct"); // TODO make alert
 				}
 			}
 		},
-		error : function(e) {
+		error: function (e) {
 			console.log(e.responseText);
-			setTimeout(function() {
+			setTimeout(function () {
 				listenForStartGame(lobby_name);
 			}, 5000);
 		}
@@ -94,44 +94,48 @@ function listenForStartGame(lobby_name) {
 
 }
 
-function listenForJoinToLobby(lobby_name) {
+function listenForJoinToLobby(lobby_name, showAlertLeave) {
 	// console.log("in join")
 	console.log("listenForJoinToLobby" + lobby_name);
 
 	var xhr = $.ajax({
-		url : "check_join",
-		type : "post",
-		data : ({
-			"lobby_name" : lobby_name
+		url: "check_join",
+		type: "post",
+		data: ({
+			"lobby_name": lobby_name
 		}),
-		success : function(result) {
-			if ($.trim(result) && !(result === "already-joined")) {
+		success: function (result) {
+			if ($.trim(result)) {
 				var r = JSON.parse(result);
 				if (r.join) {
-					// TODO listen for leave lobby
 					$("#start_button").removeClass("hidden-field");
 					$("#empty_slot").text(r.joiner);
-					$('#join_alert').fadeIn('slow', function() {
+					$('#join_alert').fadeIn('slow', function () {
 						$('#join_alert').delay(5000).fadeOut();
 					});
 				} else if (r.leave) {
-					if (r.by === "owner")
+					if (r.by === "owner") {
+						getLobbies(true);
 						return;
-					$("#start_button").addClass("hidden-field");
-					$('#leave_alert').fadeIn('slow', function() {
-						$('#leave_alert').delay(5000).fadeOut();
-					});
+					}
+					if (!showAlertLeave) {
+						$("#start_button").addClass("hidden-field");
+						$('#leave_alert').fadeIn('slow', function () {
+							$('#leave_alert').delay(5000).fadeOut();
+						});
+						showAlertLeave = true;
+					} else {
+						showAlertLeave = false;
+					}
 				}
-				// $("#lobby_name").val(lobby_name);
-				// $("#ftg_form").submit();
 			}
-			listenForJoinToLobby(lobby_name);
+			listenForJoinToLobby(lobby_name, showAlertLeave);
 
 		},
-		error : function(e) {
+		error: function (e) {
 			console.log(e.responseText);
-			setTimeout(function() {
-				listenForJoinToLobby(lobby_name);
+			setTimeout(function () {
+				listenForJoinToLobby(lobby_name, showAlertLeave);
 			}, 5000);
 		}
 	});
@@ -145,12 +149,12 @@ function getLobbies(reset) {
 	}
 	console.log("currentlyShowed : " + currentlyShowed);
 	$.ajax({
-		url : "get_lobbies",
-		type : "POST",
-		data : ({
-			"currently_showed" : currentlyShowed
+		url: "get_lobbies",
+		type: "POST",
+		data: ({
+			"currently_showed": currentlyShowed
 		}),
-		success : function(resultData) {
+		success: function (resultData) {
 			console.log("refresh ok: " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
@@ -163,7 +167,7 @@ function getLobbies(reset) {
 				reloadList(reset, r.lobbies, r.lobbies_guest, r.lobbies_owner);
 			}
 		},
-		error : function(e) {
+		error: function (e) {
 			console.log(e.responseText);
 			console.log("REFRESH ERROR: ", e);
 		}
@@ -174,12 +178,12 @@ function joinLobby(lobby_name) {
 	// var lobby_name = $("#" + id_lobby).children('#lobby_name_div').text();
 	console.log("in join lobby");
 	$.ajax({
-		url : "join_lobby",
-		type : "POST",
-		data : ({
-			"lobby_name" : lobby_name
+		url: "join_lobby",
+		type: "POST",
+		data: ({
+			"lobby_name": lobby_name
 		}),
-		success : function(resultData) {
+		success: function (resultData) {
 			console.log("join ok"); // : " + resultData);
 
 			var r = JSON.parse(resultData);
@@ -190,7 +194,7 @@ function joinLobby(lobby_name) {
 				listenForStartGame(lobby_name);
 			}
 		},
-		error : function(e) {
+		error: function (e) {
 			console.log(e.responseText);
 			console.log("JOIN ERROR: ", e);
 		}
@@ -205,25 +209,25 @@ function startGame(ev) {
 function createLobby(ev) {
 	var lobby_name = $('#id_lobby_name').val();
 	$.ajax({
-		url : "create_lobby",
-		type : "POST",
-		data : ({
-			"lobby_name" : lobby_name
+		url: "create_lobby",
+		type: "POST",
+		data: ({
+			"lobby_name": lobby_name
 		}),
-		success : function(resultData) {
+		success: function (resultData) {
 			console.log("lobby create ok"); // : " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
-				swal("Sorry","There was an error","error");
+				console.log("ERROR: " + r.err_msg);
 			} else {
 				getLobbies(true);
 				$('#create-modal').modal("toggle");
-				listenForJoinToLobby(lobby_name);
-				swal("Good job","Lobby created","success");
+				listenForJoinToLobby(lobby_name, false);
 			}
 		},
-		error : function(e) {
-				swal("Sorry","There was an error","error");
+		error: function (e) {
+			console.log(e.responseText);
+			console.log("LOBBY CREATE ERROR: ", e);
 		}
 	});
 }
@@ -232,37 +236,37 @@ function searchLobby(ev, searchBy) {
 	var name = $('#id_search_txt').val();
 	ev.preventDefault();
 	$.ajax({
-		url : "search_lobby",
-		type : "POST",
-		data : ({
-			"search_txt" : name,
-			"search_by" : searchBy
+		url: "search_lobby",
+		type: "POST",
+		data: ({
+			"search_txt": name,
+			"search_by": searchBy
 		}),
-		success : function(resultData) {
+		success: function (resultData) {
 			console.log("lobby search ok"); // : " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
 				console.log("ERROR: " + r.err_msg);
 			} else {
-				var jsonArray = [ r.lobby_searched ];
+				var jsonArray = [r.lobby_searched];
 				putLobbyOnTop(jsonArray);
 			}
 		},
-		error : function(e) {
+		error: function (e) {
 			console.log(e.responseText);
 			console.log("LOBBY SEARCH ERROR: ", e);
 		}
 	});
 }
 
-var reloadList = function(reset, lobbies, lobbies_guest, lobbies_owner) {
+var reloadList = function (reset, lobbies, lobbies_guest, lobbies_owner) {
 	if (reset) {
 		clearLobbiesList();
 	}
 	loadMore(lobbies, lobbies_guest, lobbies_owner);
 }
 
-var clearLobbiesList = function() {
+var clearLobbiesList = function () {
 	var list = document.getElementById("id_lobbies_list_ul");
 	while (list.firstChild) {
 		list.removeChild(list.firstChild);
@@ -270,18 +274,18 @@ var clearLobbiesList = function() {
 
 }
 
-var loadMore = function(lobbies, lobbies_guest, lobbies_owner) {
+var loadMore = function (lobbies, lobbies_guest, lobbies_owner) {
 	var list = document.getElementById("id_lobbies_list_ul");
 	console.log("ENTERED ON loadMore"); // :"+lobbies);
-	for ( var i in lobbies) {
+	for (var i in lobbies) {
 		var lobby = lobbies[i];
 		var id = lobby.id;
 		var name = lobby.name;
 		var owner = lobby.owner;
 		var guest = lobby.guest;
 		var newLobby = buildLobbyRow(id, name, owner, guest, user);
-		if (conteinedIn(lobby, lobbies_guest) === false
-				&& conteinedIn(lobby, lobbies_owner) === false) {
+		if (conteinedIn(lobby, lobbies_guest) === false &&
+			conteinedIn(lobby, lobbies_owner) === false) {
 			list.append(htmlToElement(newLobby));
 		}
 	}
@@ -291,7 +295,7 @@ var loadMore = function(lobbies, lobbies_guest, lobbies_owner) {
 }
 
 function conteinedIn(lobby, list) {
-	for ( var i in list) {
+	for (var i in list) {
 		var tmp = list[i];
 		if (lobby.name === tmp.name) {
 			console.log("conteinedIn lobbies[i]:" + tmp.name);
@@ -303,7 +307,7 @@ function conteinedIn(lobby, list) {
 
 function putLobbyOnTop(lobbies) {
 	var list = document.getElementById("id_lobbies_list_ul");
-	for ( var i in lobbies) {
+	for (var i in lobbies) {
 		var lobby = lobbies[i];
 		var id = lobby.id;
 		var name = lobby.name;
@@ -321,14 +325,14 @@ function putLobbyOnTop(lobbies) {
 
 function buildLobbyRow(id, name, owner, guest, username) {
 	var newLobby = "";
-	newLobby += "<li class=\"list-group-item card-with-shadow lobby_row\" id=\"id_lobby_"
-			+ name
-			+ "\" >"
-			+ "<div class=\"text-center\" id=\"lobby_name_div\">"
-			+ name
-			+ "</div>"
-			+ "<div class=\" text-center\">"
-			+ "<img src=\"resources/images/avatar.svg\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">";
+	newLobby += "<li class=\"list-group-item card-with-shadow lobby_row\" id=\"id_lobby_" +
+		name +
+		"\" >" +
+		"<div class=\"text-center\" id=\"lobby_name_div\">" +
+		name +
+		"</div>" +
+		"<div class=\" text-center\">" +
+		"<img src=\"resources/images/avatar.svg\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">";
 	if (owner != "") {
 		newLobby += "<span>" + owner + "</span>";
 	} else {
@@ -346,11 +350,11 @@ function buildLobbyRow(id, name, owner, guest, username) {
 	newLobby += "<img src=\"resources/images/avatar.svg\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">"
 	if (username != owner) {
 		if (guest === "")
-			newLobby += "<button id=\"join_btn_lobby_"
-					+ name
-					+ "\" type=\"button\" onclick=\"joinLobby('"
-					+ name
-					+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
+			newLobby += "<button id=\"join_btn_lobby_" +
+			name +
+			"\" type=\"button\" onclick=\"joinLobby('" +
+			name +
+			"')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
 	} else {
 
 		newLobby += "<input id=\"created_lobby\" type=\"hidden\" value=\"created\" />";
@@ -361,8 +365,8 @@ function buildLobbyRow(id, name, owner, guest, username) {
 		newLobby += "<div id=\"join_alert\" class=\"alert alert-info hidden-field\" role=\"alert\">A player joined to lobby</div>";
 		newLobby += "<div id=\"leave_alert\" class=\"alert alert-danger hidden-field\" role=\"alert\">The player leaved the lobby</div>";
 		newLobby += "<form style=\"display: hidden\" action=\"forward_to_game\"	method=\"post\" id=\"ftg_form\">";
-		newLobby += "<input type=\"hidden\" id=\"lobby_name\" name=\"lobby_name\" value=\""
-				+ name + "\" />";
+		newLobby += "<input type=\"hidden\" id=\"lobby_name\" name=\"lobby_name\" value=\"" +
+			name + "\" />";
 		newLobby += "</form>";
 	}
 	newLobby += "</div>" + "</li>";
@@ -375,4 +379,3 @@ function htmlToElement(html) {
 	template.innerHTML = html;
 	return template.content.firstChild;
 }
-// 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

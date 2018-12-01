@@ -18,7 +18,7 @@
 <script src="resources/js/main.js"></script>
 <!-- Gem jQuery -->
 </head>
-
+<%@include file="template/info_lobby.jsp"%>
 <body class="wsmenucontainer">
 	<div class="cd-user-modal">
 		<!-- this is the entire modal form, including the background -->

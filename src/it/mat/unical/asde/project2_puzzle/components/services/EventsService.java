@@ -1,7 +1,9 @@
 package it.mat.unical.asde.project2_puzzle.components.services;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -11,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.JSONObject;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,29 +22,47 @@ public class EventsService {
 	private Map<String, BlockingQueue<String>> join = new HashMap<>();
 	private Map<Integer, Set<String>> leaved = new HashMap<>();
 	private Map<String, String> listeningFor = new HashMap<>();
-
 	private MessageMaker maker = new MessageMaker();
+
+	/////////////////////// CLIENT MONITORING
+	/////////////////////// STRUCTURES//////////////////////////////////////
+	private HashMap<String, Date> lastRequestOwners = new HashMap<>();
+	private HashMap<String, Date> lastRequestJoiner = new HashMap<>();
+	private HashMap<String, HashMap<String, Object>> lastRequestPlayerInGame = new HashMap<>();
 
 	/////////////////////////////////// ADD
 	/////////////////////////////////// EVENTS//////////////////////////////////////////////
-	private void addEvent(String progress, String key, Integer gameId) throws InterruptedException {
+	private void addEvent(String progress, String key, Integer gameId, Boolean forClear) throws InterruptedException {
 		if (!(leaved.containsKey(gameId) && leaved.get(gameId).contains(key))) {
-			if (!events.containsKey(key))
+			if (!events.containsKey(key)) {
+				if (forClear)
+					return;
 				events.put(key, new LinkedBlockingQueue<>());
+			}
 			events.get(key).put(progress);
 		}
 	}
 
-	private void addGeneralEventLobby(String key, String message_type) throws InterruptedException {
-		if (!join.containsKey(key))
+	private void updateLastRequest(HashMap<String, Date> lastRequests, String requestKey) {
+		lastRequests.put(requestKey, new Date());
+	}
+
+	private void addGeneralEventLobby(String key, String message_type, boolean forClear) throws InterruptedException {
+		if (!join.containsKey(key)) {
+			if (forClear)
+				return;
 			throw new RuntimeException("No join found for this lobby" + key);
+		}
 		join.get(key).put(maker.makeMessage(message_type));
 	}
 
-	private void addGeneralEventLobby(String key, String message_type, String message, String message_content)
-			throws InterruptedException {
-		if (!join.containsKey(key))
+	private void addGeneralEventLobby(String key, String message_type, String message, String message_content,
+			boolean forClear) throws InterruptedException {
+		if (!join.containsKey(key)) {
+			if (forClear)
+				return;
 			throw new RuntimeException("No join found for this lobby");
+		}
 		join.get(key).put(maker.makeMessage(message_type, message, message_content));
 	}
 
@@ -53,7 +74,7 @@ public class EventsService {
 			String key = gameID + "player" + i;
 			if (i != player)
 				addEvent(maker.makeMessage(MessageMaker.UPDATE_MESSAGE, MessageMaker.PROGRESS_MESSAGE, progress), key,
-						gameID);
+						gameID, false);
 
 		}
 
@@ -65,7 +86,8 @@ public class EventsService {
 		for (int i = 1; i <= currentPlayers; i++) {
 			String key = gameId + "player" + i;
 			if (i != player)
-				addEvent(maker.makeMessage(MessageMaker.CHAT_MESSAGE, MessageMaker.TEXT_MESSAGE, message), key, gameId);
+				addEvent(maker.makeMessage(MessageMaker.CHAT_MESSAGE, MessageMaker.TEXT_MESSAGE, message), key, gameId,
+						false);
 
 		}
 	}
@@ -74,12 +96,12 @@ public class EventsService {
 		String event = "END-GAME";
 		for (int i = 1; i <= currentPlayers; i++) {
 			String key = gameId + "player" + i;
-			addEvent(event, key, gameId);
+			addEvent(event, key, gameId, false);
 		}
 
 	}
 
-	public void addEventLeaveGameBy(Integer gameID, Integer player, Integer currentPlayers)
+	public void addEventLeaveGameBy(Integer gameID, Integer player, Integer currentPlayers, boolean forClear)
 			throws InterruptedException {
 		Set<String> alreadyLeaved = leaved.get(gameID);
 
@@ -89,7 +111,7 @@ public class EventsService {
 				if (i != player) {
 					System.out.println("Send end game for" + gameID + "player" + i);
 
-					addEvent("END-GAME", key, gameID);
+					addEvent("END-GAME", key, gameID, forClear);
 				}
 			}
 		else
@@ -106,31 +128,31 @@ public class EventsService {
 	////////////////////////// EVENT BEFORE GAME/////////////////////////
 	public void addEventStartGame(String lobby_name) throws InterruptedException {
 		String key = lobby_name.toLowerCase() + "player2";
-		addGeneralEventLobby(key, MessageMaker.START_MESSAGE);
-		addGeneralEventLobby(key, MessageMaker.START_MESSAGE);
+		addGeneralEventLobby(key, MessageMaker.START_MESSAGE, false);
+		addGeneralEventLobby(key, MessageMaker.START_MESSAGE, false);
 	}
 
-	public void addEventJoin(String lobbyName, String username) throws InterruptedException {
-		addGeneralEventLobby(lobbyName.toLowerCase(), MessageMaker.JOIN_MESSAGE, MessageMaker.WHO_JOIN, username);
+	public void addEventJoin(String lobbyName, String username, boolean forClear) throws InterruptedException {
+		addGeneralEventLobby(lobbyName.toLowerCase(), MessageMaker.JOIN_MESSAGE, MessageMaker.WHO_JOIN, username,
+				forClear);
 	}
 
-	public void addEventLeaveJoin(String previousJoined, String username) throws InterruptedException {
+	public void addEventLeaveJoin(String previousJoined, String username, boolean fromClear)
+			throws InterruptedException {
 		Pattern p = Pattern.compile("(.+)player2$");// TODO transorm to N
 		Matcher meMatcher = p.matcher(previousJoined);
 		if (meMatcher.matches()) {
 			String s = meMatcher.group(1);
 			System.out.println("GROUP1: " + s);
-			addGeneralEventLobby(s, MessageMaker.LEAVE_MESSAGE, MessageMaker.WHO_LEAVE, MessageMaker.OWNER);
+			addGeneralEventLobby(s, MessageMaker.LEAVE_MESSAGE, MessageMaker.WHO_LEAVE, MessageMaker.OWNER, fromClear);
 			if (join.containsKey(previousJoined))
-				addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);// TODO FIND A WAY TO DELETE THIS KEY,
-			// rimane sporca la chiave lobby+player2 perchè come riceve la risposta inizia
-			// ad ascoltare sulla chiave lobby name.
-//			join.remove(s);
+				addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, fromClear);
 		} else {
 			System.out.println("A JOINER has leave");
-			detachListenerForStart(previousJoined, username, 2);// TODO REMOVE STATIC 2
-			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE);
-
+			if (!fromClear)
+				detachListenerForStart(previousJoined, username, 2);// TODO REMOVE STATIC 2
+			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, fromClear);
+			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, fromClear);
 		}
 	}
 
@@ -189,10 +211,18 @@ public class EventsService {
 
 	/////////////////////////////////// GET
 	/////////////////////////////////// EVENTS//////////////////////////////////////////////
-	public String nextGameEventFor(Integer gameId, Integer player) throws InterruptedException {
+	public String nextGameEventFor(Integer gameId, Integer player, Integer playersInGame) throws InterruptedException {
 		String key = gameId + "player" + player;
-		if (!events.containsKey(key))
+		if (!events.containsKey(key)) {
 			events.put(key, new LinkedBlockingQueue<>());
+			HashMap<String, Object> toPut = new HashMap<>();
+			toPut.put("gameId", gameId);
+			toPut.put("player", player);
+			toPut.put("playerInGame", playersInGame);
+			lastRequestPlayerInGame.put(key, toPut);
+		}
+		System.out.println("update for player in game request " + gameId + " player" + player);
+		lastRequestPlayerInGame.get(key).put("requestIn", new Date());
 		return events.get(key).poll(29, TimeUnit.SECONDS);
 	}
 
@@ -205,7 +235,8 @@ public class EventsService {
 			System.out.println("No listener attached for this lobby" + lobbyName);
 //			return null;
 		}
-
+		System.out.println("update for OWNER lobby name " + lobbyName);
+		updateLastRequest(lastRequestOwners, lobbyName);
 		return join.get(lobbyName).poll(29, TimeUnit.SECONDS);
 	}
 
@@ -217,12 +248,28 @@ public class EventsService {
 			System.out.println("No listener attached for this lobby" + lobbyName);
 //			return null;
 		}
+		System.out.println("update for Joiner lobby name " + lobbyName);
+		updateLastRequest(lastRequestJoiner, key);
 		return join.get(key).poll(29, TimeUnit.SECONDS);
 	}
 
 	public String getListenerOfUser(String username) {
 		System.out.println("checkFor" + username + " listener " + listeningFor.get(username));
-		return listeningFor.get(username);
+
+		String listenFor = listeningFor.get(username);
+		if (listenFor != null) {
+			JSONObject jo = new JSONObject(listenFor);
+			if (jo.has(MessageMaker.JOIN_MESSAGE)) {
+				System.out.println("update for OWNER lobby name " + jo.getString(MessageMaker.LOBBY_NAME));
+
+				updateLastRequest(lastRequestOwners, jo.getString(MessageMaker.LOBBY_NAME));
+			} else {
+				System.out.println("update for Joiner lobby name " + jo.getString(MessageMaker.LOBBY_NAME));
+
+				updateLastRequest(lastRequestJoiner, jo.getString(MessageMaker.LOBBY_NAME) + "player2");
+			}
+		}
+		return listenFor;
 	}
 
 	private class MessageMaker {
@@ -246,6 +293,93 @@ public class EventsService {
 			return (new JSONObject().put(message_type, true).put(message, message_content)).toString();
 		}
 
+	}
+
+	@Scheduled(fixedDelay = 35000)
+	public void clearJoinerAndNotifyOwner() {
+
+		Date now = new Date();
+		System.out.println("In schedule for clear joiner" + now);
+		Iterator<Map.Entry<String, Date>> iter = lastRequestJoiner.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, Date> entry = iter.next();
+			long diffInMillies = now.getTime() - entry.getValue().getTime();
+			diffInMillies = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+			if (diffInMillies > 30) {
+				System.out.println("remove " + entry.getKey() + "from join listener, becouse offline since"
+						+ diffInMillies + " seconds");
+				Pattern p = Pattern.compile("(.+)player2$");// TODO transorm to N
+				Matcher meMatcher = p.matcher(entry.getKey());
+				if (meMatcher.matches()) {
+					String s = meMatcher.group(1);
+					try {
+						addEventLeaveJoin(s, null, true);
+					} catch (InterruptedException e) {
+						// do nothings
+					}
+				}
+				iter.remove();
+			}
+		}
+		System.out.println("In schedule for clear joiner" + now);
+
+		// something that should execute periodically
+	}
+
+	@Scheduled(fixedDelay = 35000)
+	public void clearOwnerAndNotifyJoiner() {
+
+		Date now = new Date();
+		System.out.println("In schedule for clear owner" + now);
+
+		Iterator<Map.Entry<String, Date>> iter = lastRequestOwners.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, Date> entry = iter.next();
+			long diffInMillies = now.getTime() - entry.getValue().getTime();
+			diffInMillies = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+			if (diffInMillies > 30) {
+				System.out.println("remove " + entry.getKey() + "from owners listener, because offline since"
+						+ diffInMillies + " seconds");
+				try {
+					addEventLeaveJoin(entry.getKey(), null, true);
+				} catch (InterruptedException e) {
+					// do nothings
+				}
+
+				iter.remove();
+			}
+		}
+		System.out.println("End In schedule for clear owner");
+
+		// something that should execute periodically
+	}
+
+	@Scheduled(fixedDelay = 35000)
+	public void clearPlayerInGame() {
+		Date now = new Date();
+		System.out.println("In schedule for clear players" + now);
+
+		Iterator<Map.Entry<String, HashMap<String, Object>>> iter = lastRequestPlayerInGame.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, HashMap<String, Object>> entry = iter.next();
+			HashMap<String, Object> values = entry.getValue();
+			long diffInMillies = now.getTime() - ((Date) values.get("requestIn")).getTime();
+			diffInMillies = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+			if (diffInMillies > 30) {
+				System.out.println("remove " + entry.getKey() + "from game listener, because offline since"
+						+ diffInMillies + " seconds");
+				try {
+					addEventLeaveGameBy((Integer) values.get("gameId"), (Integer) values.get("player"),
+							(Integer) values.get("playerInGame"), true);
+				} catch (InterruptedException e) {
+					// do nothings
+				}
+
+				iter.remove();
+			}
+		}
+		System.out.println("End In schedule for clear players");
+		// something that should execute periodically
 	}
 
 }

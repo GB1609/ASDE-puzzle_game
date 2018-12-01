@@ -13,6 +13,7 @@
 		</head>
 
 		<body class="wsmenucontainer">
+
 			<%@include file="includes/navbar.jsp"%>
 				<div>
 					<div class="row center-content-row">
