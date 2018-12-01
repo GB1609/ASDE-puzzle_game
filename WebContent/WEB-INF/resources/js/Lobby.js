@@ -198,16 +198,16 @@ function createLobby(ev) {
 			console.log("lobby create ok"); // : " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
-				console.log("ERROR: " + r.err_msg);
+				swal("Sorry", "There was an error", "success");
 			} else {
 				getLobbies(true);
 				$('#create-modal').modal("toggle");
 				listenForJoinToLobby(lobby_name);
+				swal("Good job!", "Lobby Created", "success");
 			}
 		},
 		error: function (e) {
-			console.log(e.responseText);
-			console.log("LOBBY CREATE ERROR: ", e);
+			swal("Sorry", "There was an error", "success");
 		}
 	});
 }
@@ -226,15 +226,14 @@ function searchLobby(ev, searchBy) {
 			console.log("lobby search ok"); // : " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
-				console.log("ERROR: " + r.err_msg);
+				swal("Sorry", "There was an error", "success");
 			} else {
 				var jsonArray = [r.lobby_searched];
 				putLobbyOnTop(jsonArray);
 			}
 		},
 		error: function (e) {
-			console.log(e.responseText);
-			console.log("LOBBY SEARCH ERROR: ", e);
+			swal("Sorry", "There was an error", "success");
 		}
 	});
 }
