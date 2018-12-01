@@ -26,9 +26,12 @@ public class GameController {
 	@GetMapping("/game")
 	public String goToGame(Model m, HttpSession session) {
 //		System.out.println("IN GAME" + session.getAttribute("player"));
+		String username = (String) session.getAttribute("username");
 		Integer gameId = (Integer) session.getAttribute("gameId");
-		m.addAttribute("randomGrid", gameService.getGameForPlayer(gameId, (String) session.getAttribute("username")));
-		session.setAttribute("player", gameService.getCurrentPlayer(gameId));
+		m.addAttribute("randomGrid", gameService.getGameForPlayer(gameId, username));
+		Integer currentPlayer = gameService.getCurrentPlayer(gameId);
+		session.setAttribute("player", currentPlayer);
+		eventsService.detachListenerForStart(username, currentPlayer);
 		System.out.println("IN Game dopo" + session.getAttribute("player"));
 		return "Game";
 	}

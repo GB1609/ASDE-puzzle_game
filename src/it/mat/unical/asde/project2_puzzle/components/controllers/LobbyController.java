@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +31,7 @@ public class LobbyController {
 	EventsService eventService;
 	@Autowired
 	GameService gameService;
-	
+
 	@Autowired
 	AccountService accountService;
 
@@ -81,23 +80,27 @@ public class LobbyController {
 	@ResponseBody
 	public String joinLobby(HttpSession session, @RequestParam String lobby_name) {
 		String username = (String) session.getAttribute("username");
+		// try to add the player to the lobby
 		Integer lobbyID = this.lobbyService.joinToLobby(lobby_name, username);
 		if (lobbyID == -1) {
+			// if no lobby "lobby_name" is present then return an error
 			return new JSONObject().put("error", true).toString();
 		}
 		session.setAttribute("gameId", lobbyID);
-		// session.setAttribute("player", "player2");
 		try {
+			// add the event of join that will be notified to lobby's owner
 			this.eventService.addEventJoin(lobby_name, username);
+			// if the joiner was connected to another lobby then add this event that will be
+			// notified to the other player in lobby
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
 			if (previousJoined != null) {
-				this.eventService.addEventLeaveJoin(previousJoined);
+				this.eventService.addEventLeaveJoin(previousJoined, username);
 			}
 		} catch (Exception e) {
 			System.out.println("I can't join to lobby" + lobby_name);
 		}
 		System.out.println("User: " + username + " join to Lobby: " + lobby_name);
-		this.eventService.attachListenerToStart(lobby_name);
+		this.eventService.attachListenerToStart(lobby_name, username);
 		return new JSONObject().put("error", false).toString();
 	}
 
@@ -107,7 +110,16 @@ public class LobbyController {
 		String username = (String) session.getAttribute("username");
 		boolean added = false;
 		if (added = this.lobbyService.addLobby(new Lobby(lobby_name, username), username)) {
-			this.eventService.attachListenerToStart(lobby_name);
+			this.eventService.attachListenerToJoin(lobby_name, username);
+			String previousJoined = this.lobbyService.checkPreviousLobby(username);
+			if (previousJoined != null) {
+				try {
+					this.eventService.addEventLeaveJoin(previousJoined, username);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		return new JSONObject().put("error", !added).toString();
 	}
@@ -124,7 +136,9 @@ public class LobbyController {
 	public String deleteLobbyByName(HttpSession session, @RequestParam String lobby_name) {
 		boolean deleted = this.lobbyService.removeLobbyByName(lobby_name);
 		if (deleted) {
-			this.eventService.detachListenerForJoin(lobby_name);
+			// TODO NOTIFY TO GUEST THAT THE LOBBY WAS DELETED
+			// TODO create function for leave lobby (request by button)
+//			this.eventService.detachListenerForStart(lobby_name, (String) session.getAttribute("username"));
 		}
 
 		return new JSONObject().put("error", !deleted).toString();
@@ -167,7 +181,7 @@ public class LobbyController {
 		session.setAttribute("gameId", lobbyID);
 		gameService.initNewGame(lobbyID, lobby_name);
 		// session.setAttribute("player", "player1");
-		this.eventService.detachListenerForJoin(lobby_name);
+		this.eventService.detachListenerForJoin(lobby_name, (String) session.getAttribute("username"));
 		try {
 			this.eventService.addEventStartGame(lobby_name);
 		} catch (InterruptedException e) {
@@ -175,5 +189,11 @@ public class LobbyController {
 			e.printStackTrace();
 		}
 		return "redirect:game";
+	}
+
+	@PostMapping("check_is_listening_for")
+	@ResponseBody
+	public String checkIsListeningFor(HttpSession session) {
+		return eventService.getListenerOfUser((String) session.getAttribute("username"));
 	}
 }
