@@ -150,7 +150,10 @@ public class LobbyController {
 		DeferredResult<String> joins = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
-				joins.setResult(this.eventService.getEventJoin(lobby_name));
+				String result;
+				joins.setResult((result = this.eventService.getEventJoin(lobby_name)));
+				lobbyService.cleanIfOffline(result, lobby_name, true);
+
 			} catch (InterruptedException e) {
 				joins.setResult(null);
 			}
@@ -161,15 +164,19 @@ public class LobbyController {
 	@PostMapping("check_start")
 	@ResponseBody
 	public DeferredResult<String> checkStart(@RequestParam String lobby_name) {
+
 		DeferredResult<String> joins = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
-				joins.setResult(this.eventService.getEventStartGame(lobby_name));
+				String result;
+				joins.setResult((result = this.eventService.getEventStartGame(lobby_name)));
+				lobbyService.cleanIfOffline(result, lobby_name, true);
 			} catch (InterruptedException e) {
 				joins.setResult(null);
 			}
 		});
 		return joins;
+
 	}
 
 	@PostMapping("forward_to_game")

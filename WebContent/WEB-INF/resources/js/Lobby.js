@@ -77,6 +77,7 @@ function listenForStartGame(lobby_name) {
 					window.location.href = "/ASDE-puzzle_game/game";
 				} else if (r.leave) {
 					toggleModal();
+					getLobbies(true);
 					listenForJoinToLobby(lobby_name, false);
 					console.log("Lobby destruct"); // TODO make alert
 				}

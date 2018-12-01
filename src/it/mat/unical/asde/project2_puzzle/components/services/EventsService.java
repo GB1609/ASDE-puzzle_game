@@ -53,6 +53,8 @@ public class EventsService {
 				return;
 			throw new RuntimeException("No join found for this lobby" + key);
 		}
+		if (forClear)
+			System.out.println("leave to" + key);
 		join.get(key).put(maker.makeMessage(message_type));
 	}
 
@@ -144,9 +146,13 @@ public class EventsService {
 		if (meMatcher.matches()) {
 			String s = meMatcher.group(1);
 			System.out.println("GROUP1: " + s);
+			System.out.println("add event leave to owner");
 			addGeneralEventLobby(s, MessageMaker.LEAVE_MESSAGE, MessageMaker.WHO_LEAVE, MessageMaker.OWNER, fromClear);
-			if (join.containsKey(previousJoined))
+			if (join.containsKey(previousJoined)) {
 				addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, fromClear);
+				System.out.println("add event leave by owner for " + previousJoined);
+
+			}
 		} else {
 			System.out.println("A JOINER has leave");
 			if (!fromClear)
@@ -285,17 +291,17 @@ public class EventsService {
 		public final static String TEXT_MESSAGE = "message_text";
 		public final static String WHO_JOIN = "joiner";
 
-		public String makeMessage(String message_type) {
+		String makeMessage(String message_type) {
 			return (new JSONObject().put(message_type, true)).toString();
 		}
 
-		public String makeMessage(String message_type, String message, String message_content) {
+		String makeMessage(String message_type, String message, String message_content) {
 			return (new JSONObject().put(message_type, true).put(message, message_content)).toString();
 		}
 
 	}
 
-	@Scheduled(fixedDelay = 35000)
+	@Scheduled(fixedDelay = 31000)
 	public void clearJoinerAndNotifyOwner() {
 
 		Date now = new Date();
@@ -326,7 +332,7 @@ public class EventsService {
 		// something that should execute periodically
 	}
 
-	@Scheduled(fixedDelay = 35000)
+	@Scheduled(fixedDelay = 31000)
 	public void clearOwnerAndNotifyJoiner() {
 
 		Date now = new Date();
@@ -341,7 +347,7 @@ public class EventsService {
 				System.out.println("remove " + entry.getKey() + "from owners listener, because offline since"
 						+ diffInMillies + " seconds");
 				try {
-					addEventLeaveJoin(entry.getKey(), null, true);
+					addEventLeaveJoin(entry.getKey() + "player2", null, true);
 				} catch (InterruptedException e) {
 					// do nothings
 				}
