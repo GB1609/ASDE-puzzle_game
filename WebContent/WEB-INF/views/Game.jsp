@@ -13,10 +13,9 @@
 				<script src="resources/js/EasyTimer/dist/easytimer.min.js"></script>
 				<title>Game Page</title>
 		</head>
-
 		<body class="wsmenucontainer">
 			<%@include file="includes/navbar.jsp"%>
-
+			<embed src="resources/music/music.mp3" autostart="true" loop="true" width="0" height="0">
 				<div class="row col-12">
 					<div class="col-lg-9 col-md-12 col-sm-12 col-12">
 						<div class="row minimal-row">

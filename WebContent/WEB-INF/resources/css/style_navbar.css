@@ -1,7 +1,7 @@
 .wsmenucontainer {
   background-size: cover;
   background-image: url(../images/bg01-2.jpg);
-  overflow: auto;
+  overflow: hidden;
   -webkit-background-attachment: fixed !important;
   -moz-background-attachment: fixed !important;
   background-attachment: fixed !important;
@@ -15,8 +15,7 @@
 }
 
 .wsmenucontainer {
-  overflow: auto;
-  overflow-y: auto;
+  overflow: hidden;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
@@ -25,10 +24,6 @@
   -o-transition: all 0.4s ease-in-out;
   -ms-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
-}
-
-.wsmenucontainer {
-  overflow: auto;
   display: block;
 }
 
