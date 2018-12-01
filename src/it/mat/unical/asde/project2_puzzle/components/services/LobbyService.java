@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
@@ -15,15 +16,14 @@ import it.mat.unical.asde.project2_puzzle.model.services_utility.SearchBy;
 @Service
 public class LobbyService {
 	private List<Lobby> lobbies;
+	private HashMap<String, Lobby> lobbyMapping;
 	HashMap<String, String> previousLobby;
 
 	@PostConstruct
 	public void init() {
 		this.lobbies = new LinkedList<>();
 		this.previousLobby = new HashMap<>();
-//		for (int i = 0; i <= 10; i++) {
-//			this.lobbies.add(new Lobby("Lobby" + (i + 1), "user" + (int) (Math.random() * 100), ""));
-//		}
+		lobbyMapping = new HashMap<>();
 	}
 
 	public List<Lobby> getLobbies() {
@@ -33,10 +33,11 @@ public class LobbyService {
 	public Integer joinToLobby(String lobby_name, String username) {
 		lobby_name = lobby_name.toLowerCase();
 		this.leaveIfInOtherLobby(username);
-		Lobby lobbyToJoin = this.getLobby(lobby_name, SearchBy.LOBBY_NAME);
+//		Lobby lobbyToJoin = this.getLobby(lobby_name, SearchBy.LOBBY_NAME);
+		Lobby lobbyToJoin = lobbyMapping.get(lobby_name);
 		if (lobbyToJoin.getGuest().isEmpty()) {
 			lobbyToJoin.setGuest(username);
-			// System.out.println("join to lobby: " + lobbyToJoin);
+			System.out.println("join to lobby: " + lobbyMapping.get(lobby_name).getGuest());
 			return lobbyToJoin.getLobbyID();
 		}
 		return -1;
@@ -68,34 +69,44 @@ public class LobbyService {
 		}
 	}
 
+	public void cleanIfOffline(String event, String lobby_name, boolean b) {
+		JSONObject j = new JSONObject(event);
+		if (!j.has("leave"))
+			return;
+		Lobby lobby = lobbyMapping.get(lobby_name);
+		if (b) {
+			String guest = lobby.getGuest();
+			System.out.println("GUEST: ->" + guest);
+			if (!guest.isEmpty()) {
+				lobby.setOwner(guest);
+				lobby.setGuest("");
+			} else {
+				this.lobbies.remove(lobbyMapping.remove(lobby_name));
+			}
+		} else {
+			lobby.setGuest("");
+		}
+
+	}
+
 	public String checkPreviousLobby(String username) {
 		return this.previousLobby.remove(username);
 	}
 
-	public boolean removeLobby(Lobby lobby) {
-		return this.lobbies.remove(lobby);
-	}
-
 	public boolean removeLobbyByName(String lobby_name) {
 		lobby_name = lobby_name.toLowerCase();
-		for (Lobby lobby : this.lobbies) {
-			if (lobby.getName().equals(lobby_name)) {
-				return this.lobbies.remove(lobby);
-			}
-		}
-		return false;
+		return this.lobbies.remove(lobbyMapping.get(lobby_name));
 	}
 
 	public Integer destrucLobby(String lobby_name) {
 		lobby_name = lobby_name.toLowerCase();
-		for (Lobby lobby : this.lobbies) {
-			if (lobby.getName().equals(lobby_name)) {
-				Integer lobbyId = lobby.getLobbyID();
-				this.lobbies.remove(lobby);
-				return lobbyId;
-			}
+		Lobby l = lobbyMapping.remove(lobby_name);
+		Integer lobbyId = -1;
+		if (l != null) {
+			lobbyId = l.getLobbyID();
+			this.lobbies.remove(l);
 		}
-		return -1;
+		return lobbyId;
 	}
 
 	public boolean addLobby(Lobby newLobby, String username) {
@@ -103,8 +114,9 @@ public class LobbyService {
 		// TODO can't add lobby with name with spaces
 		boolean added = false;
 
-		if (!this.lobbies.contains(newLobby)) {
+		if (!this.lobbyMapping.containsKey(newLobby.getName())) {
 			this.lobbies.add(newLobby);
+			this.lobbyMapping.put(newLobby.getName(), newLobby);
 			added = true;
 		}
 
@@ -113,12 +125,12 @@ public class LobbyService {
 
 	// Return the lobby with the given name, null otherwise
 	public Lobby getLobby(String name, SearchBy typeOfSearch) {
+		if (typeOfSearch.equals(SearchBy.LOBBY_NAME))
+			return lobbyMapping.get(name);
 		for (int i = 0; i < this.lobbies.size(); i++) {
 			Lobby lobby = this.lobbies.get(i);
 			boolean condition = false;
-			if (typeOfSearch.equals(SearchBy.LOBBY_NAME)) {
-				condition = lobby.getName().equals(name);
-			} else if (typeOfSearch.equals(SearchBy.USERNAME)) {
+			if (typeOfSearch.equals(SearchBy.USERNAME)) {
 				condition = lobby.getOwner().equals(name) || lobby.getGuest().equals(name);
 			}
 			if (condition) {
