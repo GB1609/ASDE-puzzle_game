@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.json.JSONArray;
 import org.springframework.stereotype.Service;
 
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
@@ -21,9 +22,6 @@ public class LobbyService {
 	public void init() {
 		this.lobbies = new LinkedList<>();
 		this.previousLobby = new HashMap<>();
-//		for (int i = 0; i <= 10; i++) {
-//			this.lobbies.add(new Lobby("Lobby" + (i + 1), "user" + (int) (Math.random() * 100), ""));
-//		}
 	}
 
 	public List<Lobby> getLobbies() {
@@ -44,28 +42,44 @@ public class LobbyService {
 
 	// user with "username" leave the lobby where it is
 	public void leaveIfInOtherLobby(String username) {
-		for (int i = 0; i < this.lobbies.size(); i++) {
-			Lobby lobby = this.lobbies.get(i);
+		for (Lobby lobby : this.lobbies) {
+			if (this.leaveIfInLobby(lobby, username)) {
+				return;
+			}
+		}
+	}
+
+	public boolean leaveLobby(String username, String lobbyname) {
+		return this.leaveIfInLobby(this.getLobbyByName(lobbyname), username);
+	}
+
+	public boolean leaveIfInLobby(Lobby lobby, String username) {
+		if (lobby != null) {
+			String owner = lobby.getOwner();
 			String guest = lobby.getGuest();
-			if (lobby.getOwner().equals(username)) {
+			if (owner.equals(username)) {
 				if (!guest.isEmpty()) {
 					lobby.setOwner(guest);
 					lobby.setGuest("");
 					System.out.println("LEAVE LOBBY: " + lobby);
 					this.previousLobby.put(username, lobby.getName() + "player2");
+					return true;
 				} else {
-					this.lobbies.remove(i);
-					System.out.println("REMOVE LOBBY: " + lobby);
 					this.previousLobby.put(username, lobby.getName() + "player2");
+					System.out.println("REMOVE LOBBYA: " + lobby);
+					this.lobbies.remove(lobby);
+					return true;
 				}
 			} else if (!guest.isEmpty()) {
 				if (guest.equals(username)) {
 					System.out.println("LEAVE LOBBY: " + lobby);
 					lobby.setGuest("");
 					this.previousLobby.put(username, lobby.getName());
+					return true;
 				}
 			}
 		}
+		return false;
 	}
 
 	public String checkPreviousLobby(String username) {
@@ -132,8 +146,7 @@ public class LobbyService {
 		List<Lobby> fromTo = new LinkedList<>();
 		int toIndex = currentlyShowed + m;
 		try {
-			// System.out.println("TRY get from:" + currentlyShowed + " to:" +
-			// toIndex);
+			System.out.println("TRY get from:" + currentlyShowed + " to:" + toIndex);
 			fromTo = this.lobbies.subList(currentlyShowed, toIndex);
 			currentlyShowed += m;
 //			for (Lobby lobby : fromTo) {
@@ -152,7 +165,7 @@ public class LobbyService {
 				toIndex = this.lobbies.size();
 			}
 			fromTo = this.lobbies.subList(currentlyShowed, toIndex);
-//			System.out.println("CATCH get from:" + currentlyShowed + " to:" + toIndex);
+			System.out.println("CATCH get from:" + currentlyShowed + " to:" + toIndex);
 			for (Lobby lobby : fromTo) {
 				System.out.println(lobby);
 			}
@@ -173,5 +186,20 @@ public class LobbyService {
 			}
 		}
 		return tmp;
+	}
+
+	public Lobby getLobbyByName(String lobbyName) {
+		for (Lobby lobby : this.lobbies) {
+			if (lobby.getName().equals(lobbyName)) {
+				return lobby;
+			}
+		}
+		return null;
+	}
+
+	public boolean hasTheListChanges(String lobbies) {
+		JSONArray actual = new JSONArray(this.lobbies);
+		System.out.println("HAS CHANGED?actual:" + actual.toString() + "|||old:" + lobbies + "|||FINE");
+		return !actual.toString().equals(lobbies);
 	}
 }

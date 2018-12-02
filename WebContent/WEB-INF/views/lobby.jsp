@@ -94,6 +94,7 @@
 				<div id="lobbies_div" class=" card scrollbar-ripe-malinka">
 					<div class="card-body" id="id_lobbies_list_div">
 						<ul class="list-group" id="id_lobbies_list_ul">
+							<%@include file="template/lobby_item.jsp"%>
 						</ul>
 					</div>
 				</div>
@@ -106,46 +107,3 @@
 	</div>
 </body>
 </html>
-
-<!-- <li class="list-group-item card-with-shadow lobby_row" id="id_lobby_""name" >
-	<div class="text-center" id="lobby_name_div">"name" </div>
-	<div class=" text-center">
-	if (owner != "") {
-		<img src="resources/images/avatars/"+"avatarOwner" class="img-circle" height="64" width="64" alt="Avatar">
-		<span> "owner" </span>
-	} else {
-		<img src="resources/images/avatars/avatar.svg\" class="img-circle" height="64" width="64" alt="Avatar">
-		<span>EMPTY</span>
-	}
-	<img style="max-height: 1cm; max-width: 1cm; margin-left: 0%;" src="resources/images/icons/vs.png">
-	if (guest != "") {
-		<span>"guest"</span>"
-		<img src="resources/images/avatars/"+"avatarGuest" class="img-circle"	height="64" width="64" alt="Avatar">
-	} else {
-//		if (username !== owner){
-//			<span>EMPTY</span>
-//		}
-//		else{
-			<span id="empty_slot">EMPTY</span>
-			<img src="resources/images/avatars/avatar.svg" class="img-circle"	height="64" width="64" alt="Avatar">
-//		}
-	}
-	if (username != owner) {
-		if (guest === "")
-			<button id="join_btn_lobby_"+ name type="button" onclick="joinLobby('"+ name+ "')" class="btn btn-warning btn-lg float-right">Join</button>
-	} else {
-
-		<input id="created_lobby" type="hidden" value="created" />
-		<button id="start_button" type="button" onclick="startGame()" class="btn btn-warning btn-lg float-right "
-		if (guest === ""){
-			+ hidden-field"
-		}
-		+"\">Start</button>
-		<div id="join_alert" class="alert alert-info hidden-field" role="alert">A player joined to lobby</div>
-		<div id="leave_alert" class="alert alert-danger hidden-field" role="alert">The player leaved the lobby</div>
-		<form style="display: hidden" action="forward_to_game"	method="post" id="ftg_form">
-		<input type="hidden" id="lobby_name" name="lobby_name" value=""+ name + " >
-	</form>
-	}
-	</div>
-</li>-->

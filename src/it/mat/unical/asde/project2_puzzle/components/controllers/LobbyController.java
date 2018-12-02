@@ -1,5 +1,6 @@
 package it.mat.unical.asde.project2_puzzle.components.controllers;
 
+import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 import javax.servlet.http.HttpSession;
@@ -36,40 +37,140 @@ public class LobbyController {
 		return "lobby";
 	}
 
-	@PostMapping("get_lobbies")
-	@ResponseBody
-	public String getLobbies(HttpSession session, @RequestParam int currently_showed) {
+	public String getLobbiesOrRefresh(HttpSession session, String lobbies, int currently_showed) {
+		JSONObject response = new JSONObject().put("error", false);
+		List<Lobby> l = this.lobbyService.getNextMLobbies(currently_showed, 20);
+		response.put("lobbies_to_add", l);
+
 		String username = (String) session.getAttribute("username");
-		JSONArray avatars = new JSONArray();
-		for (Lobby lobby : this.lobbyService.getNextMLobbies(currently_showed, 20)) {
-			String owner = lobby.getOwner();
-			String guest = lobby.getGuest();
-			if (owner != null) {
-				if (owner != "") {
-					User user = this.accountService.getUser(owner);
-					System.out.println("OWNER:" + user);
-					JSONObject userAvatar = new JSONObject();
-					userAvatar.put("user", owner);
-					userAvatar.put("avatar", user.getAvatar());
-					avatars.put(userAvatar);
+		System.out.println("GET LOBBIES:" + username);
+		if (this.lobbyService.hasTheListChanges(lobbies)) {
+			response.put("lobbies_changed", true);
+			JSONArray avatars = new JSONArray();
+			for (Lobby lobby : l) {
+				String owner = lobby.getOwner();
+				String guest = lobby.getGuest();
+				if (owner != null) {
+					if (owner != "") {
+						User user = this.accountService.getUser(owner);
+						System.out.println("OWNER:" + user);
+						JSONObject userAvatar = new JSONObject();
+						userAvatar.put("user", owner);
+						userAvatar.put("avatar", user.getAvatar());
+						avatars.put(userAvatar);
+					}
+				}
+				if (guest != null) {
+					if (guest != "") {
+						User user = this.accountService.getUser(guest);
+						System.out.println("GUEST:" + user);
+						JSONObject userAvatar = new JSONObject();
+						userAvatar.put("user", guest);
+						userAvatar.put("avatar", user.getAvatar());
+						avatars.put(userAvatar);
+					}
 				}
 			}
-			if (guest != null) {
-				if (guest != "") {
-					User user = this.accountService.getUser(guest);
-					System.out.println("GUEST:" + user);
-					JSONObject userAvatar = new JSONObject();
-					userAvatar.put("user", guest);
-					userAvatar.put("avatar", user.getAvatar());
-					avatars.put(userAvatar);
-				}
-			}
+			return response.put("lobbies", this.lobbyService.getLobbies())
+					.put("lobbies_owner", this.lobbyService.getLobbiesBy(username, PlayerType.OWNER))
+					.put("lobbies_guest", this.lobbyService.getLobbiesBy(username, PlayerType.GUEST))
+					.put("username", username).put("avatars", avatars).toString();
 		}
-		return new JSONObject().put("error", false)
-				.put("lobbies_owner", this.lobbyService.getLobbiesBy(username, PlayerType.OWNER))
-				.put("lobbies_guest", this.lobbyService.getLobbiesBy(username, PlayerType.GUEST))
-				.put("lobbies", this.lobbyService.getNextMLobbies(currently_showed, 20)).put("username", username)
-				.put("avatars", avatars).toString();
+		response.put("lobbies_changed", false);
+		return response.put("username", username).toString();
+	}
+
+	@GetMapping("automatic_refresh")
+	@ResponseBody
+	public String automaticRefresh(HttpSession session, @RequestParam String lobbies,
+			@RequestParam int currently_showed) {
+		return this.getLobbiesOrRefresh(session, lobbies, currently_showed);
+//		JSONObject response = new JSONObject().put("error", false);
+//		List<Lobby> l = this.lobbyService.getNextMLobbies(currently_showed, 20);
+//		response.put("lobbies_to_add", l);
+//
+//		String username = (String) session.getAttribute("username");
+//		System.out.println("GET LOBBIES:" + username);
+//		if (this.lobbyService.hasTheListChanges(lobbies)) {
+//			response.put("lobbies_changed", true);
+//			JSONArray avatars = new JSONArray();
+//			for (Lobby lobby : l) {
+//				String owner = lobby.getOwner();
+//				String guest = lobby.getGuest();
+//				if (owner != null) {
+//					if (owner != "") {
+//						User user = this.accountService.getUser(owner);
+//						System.out.println("OWNER:" + user);
+//						JSONObject userAvatar = new JSONObject();
+//						userAvatar.put("user", owner);
+//						userAvatar.put("avatar", user.getAvatar());
+//						avatars.put(userAvatar);
+//					}
+//				}
+//				if (guest != null) {
+//					if (guest != "") {
+//						User user = this.accountService.getUser(guest);
+//						System.out.println("GUEST:" + user);
+//						JSONObject userAvatar = new JSONObject();
+//						userAvatar.put("user", guest);
+//						userAvatar.put("avatar", user.getAvatar());
+//						avatars.put(userAvatar);
+//					}
+//				}
+//			}
+//			return response.put("lobbies", this.lobbyService.getLobbies())
+//					.put("lobbies_owner", this.lobbyService.getLobbiesBy(username, PlayerType.OWNER))
+//					.put("lobbies_guest", this.lobbyService.getLobbiesBy(username, PlayerType.GUEST))
+//					.put("username", username).put("avatars", avatars).toString();
+//		}
+//		response.put("lobbies_changed", false);
+//		return response.put("username", username).toString();
+	}
+
+	@GetMapping("get_lobbies")
+	@ResponseBody
+	public String getLobbies(HttpSession session, @RequestParam String lobbies, @RequestParam int currently_showed) {
+		return this.getLobbiesOrRefresh(session, lobbies, currently_showed);
+//		JSONObject response = new JSONObject().put("error", false);
+//		List<Lobby> l = this.lobbyService.getNextMLobbies(currently_showed, 20);
+//		response.put("lobbies_to_add", l);
+//
+//		String username = (String) session.getAttribute("username");
+//		System.out.println("GET LOBBIES:" + username);
+//		if (this.lobbyService.hasTheListChanges(lobbies)) {
+//			response.put("lobbies_changed", true);
+//			JSONArray avatars = new JSONArray();
+//			for (Lobby lobby : l) {
+//				String owner = lobby.getOwner();
+//				String guest = lobby.getGuest();
+//				if (owner != null) {
+//					if (owner != "") {
+//						User user = this.accountService.getUser(owner);
+//						System.out.println("OWNER:" + user);
+//						JSONObject userAvatar = new JSONObject();
+//						userAvatar.put("user", owner);
+//						userAvatar.put("avatar", user.getAvatar());
+//						avatars.put(userAvatar);
+//					}
+//				}
+//				if (guest != null) {
+//					if (guest != "") {
+//						User user = this.accountService.getUser(guest);
+//						System.out.println("GUEST:" + user);
+//						JSONObject userAvatar = new JSONObject();
+//						userAvatar.put("user", guest);
+//						userAvatar.put("avatar", user.getAvatar());
+//						avatars.put(userAvatar);
+//					}
+//				}
+//			}
+//			return response.put("lobbies", this.lobbyService.getLobbies())
+//					.put("lobbies_owner", this.lobbyService.getLobbiesBy(username, PlayerType.OWNER))
+//					.put("lobbies_guest", this.lobbyService.getLobbiesBy(username, PlayerType.GUEST))
+//					.put("username", username).put("avatars", avatars).toString();
+//		}
+//		response.put("lobbies_changed", false);
+//		return response.put("username", username).toString();
 	}
 
 	@PostMapping("join_lobby")
@@ -94,6 +195,14 @@ public class LobbyController {
 		System.out.println("User: " + username + " join to Lobby: " + lobby_name);
 		this.eventService.attachListenerToStart(lobby_name);
 		return new JSONObject().put("error", false).toString();
+	}
+
+	@PostMapping("leave_lobby")
+	@ResponseBody
+	public String leaveLobby(HttpSession session, @RequestParam String lobby_name) {
+		String username = (String) session.getAttribute("username");
+		System.out.println("User: " + username + " leave Lobby: " + lobby_name);
+		return new JSONObject().put("error", !this.lobbyService.leaveLobby(username, lobby_name)).toString();
 	}
 
 	@PostMapping("create_lobby")
