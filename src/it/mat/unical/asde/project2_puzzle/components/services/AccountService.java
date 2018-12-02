@@ -67,7 +67,7 @@ public class AccountService {
 //		System.out.println("-----------------------------------------------");
 
 		for (GameMatch gameMatch : getMatches("Test1")) {
-			sys
+			System.out.println(gameMatch.getId());
 
 		}
 	}
