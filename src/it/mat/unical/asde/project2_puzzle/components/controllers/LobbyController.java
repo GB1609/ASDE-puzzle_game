@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import it.mat.unical.asde.project2_puzzle.components.services.AccountService;
-import it.mat.unical.asde.project2_puzzle.components.services.EventsService;
+import it.mat.unical.asde.project2_puzzle.components.services.EventsServiceForLobby;
 import it.mat.unical.asde.project2_puzzle.components.services.GameService;
 import it.mat.unical.asde.project2_puzzle.components.services.LobbyService;
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
@@ -28,7 +28,7 @@ public class LobbyController {
 	@Autowired
 	LobbyService lobbyService;
 	@Autowired
-	EventsService eventService;
+	EventsServiceForLobby eventService;
 	@Autowired
 	GameService gameService;
 
@@ -195,6 +195,12 @@ public class LobbyController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return "redirect:game";
+	}
+
+	@GetMapping("joiner_to_game")
+	public String forwardJoinerToGame(HttpSession session) {
+		eventService.detachListenerForStart((String) session.getAttribute("username"), 2);
 		return "redirect:game";
 	}
 

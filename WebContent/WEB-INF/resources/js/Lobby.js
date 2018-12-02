@@ -74,7 +74,7 @@ function listenForStartGame(lobby_name) {
 				console.log(result);
 				var r = JSON.parse(result);
 				if (r.start) {
-					window.location.href = "/ASDE-puzzle_game/game";
+					window.location.href = "/ASDE-puzzle_game/joiner_to_game";
 				} else if (r.leave) {
 					toggleModal();
 					getLobbies(true);
