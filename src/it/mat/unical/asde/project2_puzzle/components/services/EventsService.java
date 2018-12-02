@@ -154,7 +154,7 @@ public class EventsService {
 			String s = meMatcher.group(1);
 			System.out.println("GROUP1: " + s);
 			System.out.println("add event leave to owner");
-			addGeneralEventLobby(s, MessageMaker.LEAVE_MESSAGE, MessageMaker.WHO_LEAVE, username, fromClear);
+			addGeneralEventLobby(s, MessageMaker.LEAVE_MESSAGE, MessageMaker.OWNER, username, fromClear);
 			if (join.containsKey(previousJoined)) {
 				addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, fromClear);
 				System.out.println("add event leave by owner for " + previousJoined);
@@ -164,8 +164,8 @@ public class EventsService {
 			System.out.println("A JOINER has leave");
 			if (!fromClear)
 				detachListenerForStart(previousJoined, username, 2);// TODO REMOVE STATIC 2
-			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, fromClear);
-			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, fromClear);
+			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, MessageMaker.JOINER, username, fromClear);
+			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, MessageMaker.JOINER, username, fromClear);
 		}
 		System.out.println("remove listen for" + username + "to li " + listeningFor.remove(username));
 
@@ -288,9 +288,10 @@ public class EventsService {
 	}
 
 	private class MessageMaker {
+		public static final String JOINER = "joiner";
 		public static final String LOBBY_NAME = "lobby_name";
+//		public static final String OWNER = "owner";
 		public static final String OWNER = "owner";
-		public static final String WHO_LEAVE = "by";
 		public final static String JOIN_MESSAGE = "join";
 		public final static String START_MESSAGE = "start";
 		public final static String LEAVE_MESSAGE = "leave";

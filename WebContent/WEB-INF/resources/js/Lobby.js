@@ -99,59 +99,65 @@ function listenForJoinToLobby(lobby_name, showAlertLeave, showAlertJoin) {
 	// console.log("in join")
 	console.log("listenForJoinToLobby" + lobby_name);
 
-	var xhr = $.ajax({
-		url : "check_join",
-		type : "post",
-		data : ({
-			"lobby_name" : lobby_name
-		}),
-		success : function(result) {
-			if ($.trim(result)) {
-				var r = JSON.parse(result);
-				if (r.join) {
-					$("#start_button").removeClass("hidden-field");
-					$("#empty_slot").text(r.joiner);
-					if (!showAlertJoin) {
-						$('#join_alert').fadeIn('slow', function() {
-							$('#join_alert').delay(5000).fadeOut();
-						});
-						showAlertJoin = true
-					} else {
-						showAlertJoin = false;
-					}
-				} else if (r.leave) {
-					if (r.by != null) {
-						console.log($("#user").val() + r.by + "valid condition"
-								+ (r.by === $("#user").val()));
-						if (r.by === $("#user").val()) {
-							getLobbies(true);
-							return;
+	var xhr = $
+			.ajax({
+				url : "check_join",
+				type : "post",
+				data : ({
+					"lobby_name" : lobby_name
+				}),
+				success : function(result) {
+					if ($.trim(result)) {
+						var r = JSON.parse(result);
+						if (r.join) {
+							$("#start_button").removeClass("hidden-field");
+							$("#empty_slot").text(r.joiner);
+							if (!showAlertJoin) {
+								$('#join_alert').fadeIn('slow', function() {
+									$('#join_alert').delay(5000).fadeOut();
+								});
+								showAlertJoin = true
+							} else {
+								showAlertJoin = false;
+							}
+						} else if (r.leave) {
+							if (r.owner != null) {
+								console.log($("#user").val() + r.owner
+										+ "valid condition"
+										+ (r.owner === $("#user").val()));
+								if (r.owner === $("#user").val()) {
+									getLobbies(true);
+									return;
+								}
+							} else {
+								if (!showAlertLeave
+										&& !(r.joiner === $("#user").val())) {
+									$("#start_button").addClass("hidden-field");
+									$('#leave_alert').fadeIn(
+											'slow',
+											function() {
+												$('#leave_alert').delay(5000)
+														.fadeOut();
+											});
+									showAlertLeave = true;
+								} else {
+									showAlertLeave = false;
+								}
+							}
 						}
-					} else {
-						if (!showAlertLeave) {
-							$("#start_button").addClass("hidden-field");
-							$('#leave_alert').fadeIn('slow', function() {
-								$('#leave_alert').delay(5000).fadeOut();
-							});
-							showAlertLeave = true;
-						} else {
-							showAlertLeave = false;
-						}
 					}
-				}
-			}
-			listenForJoinToLobby(lobby_name, showAlertLeave, showAlertJoin);
+					listenForJoinToLobby(lobby_name, showAlertLeave,
+							showAlertJoin);
 
-		},
-		error : function(e) {
-			console.log(e.responseText);
-			setTimeout(
-					function() {
+				},
+				error : function(e) {
+					console.log(e.responseText);
+					setTimeout(function() {
 						listenForJoinToLobby(lobby_name, showAlertLeave,
 								showAlertJoin);
 					}, 5000);
-		}
-	});
+				}
+			});
 	console.log(xhr);
 
 }
