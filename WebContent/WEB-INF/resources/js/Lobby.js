@@ -8,76 +8,93 @@ var lobbies_owner = "[]";
 var lobbies_guest = "[]";
 var avatars = "[]";
 
-function automaticRefreshLobbiesList() {
-	getLobbiesFromServer("automatic_refresh");
-//	$.ajax({
-//		url : "automatic_refresh",
-//		type : "get",
-//		data : ({
-//			"lobbies" : JSON.stringify(lobbies_saved),
-//			"currently_showed" : currentlyShowed
-//		}),
-//		success : function(resultData) {
-//			console.log("refresh ok: " + resultData);
-//			var r = JSON.parse(resultData);
-//			if (r.error) {
-//				console.log("ERROR: " + r.err_msg);
-//			} else {
-//				user = r.username;
-//				if (Object.keys(r.lobbies_to_add).length) {
-//					currentlyShowed += Object.keys(r.lobbies_to_add).length;
-////					 alert(currentlyShowed+ "r.lobbies_to_add:"+JSON.stringify(r.lobbies_to_add));
-//				}
-//				if (r.lobbies_changed) {
-//					lobbies_saved = r.lobbies;
-////					alert("AUTOMATIC CHANGED");
-//					lobbies_owner = r.lobbies_owner;
-//					lobbies_guest = r.lobbies_guest;
-//					avatars = r.avatars;
-//					reloadList(true, lobbies_saved, lobbies_guest,
-//							lobbies_owner, avatars);
-//				} else {
-////					alert("AUTOMATIC NOT CHANGED");
-//				}
-//				setTimeout(function() {
-//					automaticRefreshLobbiesList();
-//				}, 3000);
-//			}
-//		},
-//		error : function(e) {
-//			console.log(e.responseText);
-//			console.log("REFRESH ERROR: ", e);
-//			setTimeout(function() {
-//				automaticRefreshLobbiesList();
-//			}, 5000);
-//		}
-//	});
+
+function getLobbiesFromServer(server_function_url){
+	$.ajax({
+		url : server_function_url,
+		type : "get",
+		data : ({
+			"lobbies" : JSON.stringify(lobbies_saved),
+			"currently_showed" : currentlyShowed
+		}),
+		success : function(resultData) {
+			console.log("refresh ok: " + resultData);
+			var r = JSON.parse(resultData);
+			if (r.error) {
+				console.log("ERROR: " + r.err_msg);
+			} else {
+				user = r.username;
+				if (Object.keys(r.lobbies_to_add).length) {
+					currentlyShowed += Object.keys(r.lobbies_to_add).length;
+//					 alert(currentlyShowed+ "r.lobbies_to_add:"+JSON.stringify(r.lobbies_to_add));
+				}
+				if (r.lobbies_changed) {
+					lobbies_saved = r.lobbies;
+//					alert("CHANGED");
+					lobbies_owner = r.lobbies_owner;
+					lobbies_guest = r.lobbies_guest;
+					avatars = r.avatars;
+					reloadList(true, lobbies_saved, lobbies_guest,
+							lobbies_owner, avatars);
+				} else {
+//					alert(" NOT CHANGED");
+					reloadList(false, r.lobbies_to_add, lobbies_guest,
+							lobbies_owner, avatars);
+				}
+				if(server_function_url === "automatic_refresh"){
+					setTimeout(function() {
+						automaticRefreshLobbiesList();
+					}, 3000);
+				}
+			}
+		},
+		error : function(e) {
+			console.log(e.responseText);
+			console.log("REFRESH ERROR: ", e);
+			if(server_function_url === "automatic_refresh"){
+				setTimeout(function() {
+					automaticRefreshLobbiesList();
+				}, 3000);
+			}
+		}
+	});
+}
+function getLobbies(reset) {
+	if (reset) {
+		currentlyShowed = 0;
+		lobbies_saved = "[]";
+	}
+	console.log("currentlyShowed : " + currentlyShowed);
+	console.log("lobbies_saved : " + JSON.stringify(lobbies_saved));
+	getLobbiesFromServer("get_lobbies");
 }
 
-$(document)
-		.ready(
-				function() {
-					listElm = document.querySelector('#lobbies_div');
-					listElm
-							.addEventListener(
-									'scroll',
-									function() {
-										if (listElm.scrollTop
-												+ listElm.clientHeight >= (listElm.scrollHeight - 1)) {
-											getLobbies(false);
-										}
-									});
-					var created_lobby = $("#created_lobby");
-					if (performance.navigation.type == 1
-							&& created_lobby.val() === "created") {
-						var lobby_name = $.trim($("#created_lobby").parent()
-								.prev().text());
-						listenForJoinToLobby(lobby_name);
-					}
-					currentlyShowed = 0;
-					automaticRefreshLobbiesList();
-					// $('#base').addClass($('#base').attr('value'));
-				});
+function automaticRefreshLobbiesList() {
+	getLobbiesFromServer("automatic_refresh");
+}
+
+$(document).ready(function() {
+	listElm = document.querySelector('#lobbies_div');
+	listElm
+			.addEventListener(
+					'scroll',
+					function() {
+						if (listElm.scrollTop
+								+ listElm.clientHeight >= (listElm.scrollHeight - 1)) {
+							getLobbies(false);
+						}
+					});
+	var created_lobby = $("#created_lobby");
+	if (performance.navigation.type == 1
+			&& created_lobby.val() === "created") {
+		var lobby_name = $.trim($("#created_lobby").parent()
+				.prev().text());
+		listenForJoinToLobby(lobby_name);
+	}
+	currentlyShowed = 0;
+	automaticRefreshLobbiesList();
+	// $('#base').addClass($('#base').attr('value'));
+});
 
 var grid = false;
 function changeTypeList() {
@@ -170,103 +187,7 @@ function listenForJoinToLobby(lobby_name) {
 
 }
 
-function getLobbiesFromServer(server_function_url){
-	$.ajax({
-		url : server_function_url,
-		type : "get",
-		data : ({
-			"lobbies" : JSON.stringify(lobbies_saved),
-			"currently_showed" : currentlyShowed
-		}),
-		success : function(resultData) {
-			console.log("refresh ok: " + resultData);
-			var r = JSON.parse(resultData);
-			if (r.error) {
-				console.log("ERROR: " + r.err_msg);
-			} else {
-				user = r.username;
-				if (Object.keys(r.lobbies_to_add).length) {
-					currentlyShowed += Object.keys(r.lobbies_to_add).length;
-//					 alert(currentlyShowed+ "r.lobbies_to_add:"+JSON.stringify(r.lobbies_to_add));
-				}
-				if (r.lobbies_changed) {
-					lobbies_saved = r.lobbies;
-//					alert("CHANGED");
-					lobbies_owner = r.lobbies_owner;
-					lobbies_guest = r.lobbies_guest;
-					avatars = r.avatars;
-					reloadList(true, lobbies_saved, lobbies_guest,
-							lobbies_owner, avatars);
-				} else {
-//					alert(" NOT CHANGED");
-					reloadList(false, r.lobbies_to_add, lobbies_guest,
-							lobbies_owner, avatars);
-				}
-				if(server_function_url === "automatic_refresh"){
-					setTimeout(function() {
-						automaticRefreshLobbiesList();
-					}, 3000);
-				}
-			}
-		},
-		error : function(e) {
-			console.log(e.responseText);
-			console.log("REFRESH ERROR: ", e);
-			if(server_function_url === "automatic_refresh"){
-				setTimeout(function() {
-					automaticRefreshLobbiesList();
-				}, 3000);
-			}
-		}
-	});
-}
-function getLobbies(reset) {
-	if (reset) {
-		currentlyShowed = 0;
-		lobbies_saved = "[]";
-	}
-	console.log("currentlyShowed : " + currentlyShowed);
-	console.log("lobbies_saved : " + JSON.stringify(lobbies_saved));
-	getLobbiesFromServer("get_lobbies");
-//	$.ajax({
-//		url : "get_lobbies",
-//		type : "get",
-//		data : ({
-//			"lobbies" : JSON.stringify(lobbies_saved),
-//			"currently_showed" : currentlyShowed
-//		}),
-//		success : function(resultData) {
-//			console.log("refresh ok: " + resultData);
-//			var r = JSON.parse(resultData);
-//			if (r.error) {
-//				console.log("ERROR: " + r.err_msg);
-//			} else {
-//				user = r.username;
-//				if (Object.keys(r.lobbies_to_add).length) {
-//					currentlyShowed += Object.keys(r.lobbies_to_add).length;
-////					 alert(currentlyShowed+ "r.lobbies_to_add:"+JSON.stringify(r.lobbies_to_add));
-//				}
-//				if (r.lobbies_changed) {
-//					lobbies_saved = r.lobbies;
-////					alert("CHANGED");
-//					lobbies_owner = r.lobbies_owner;
-//					lobbies_guest = r.lobbies_guest;
-//					avatars = r.avatars;
-//					reloadList(true, lobbies_saved, lobbies_guest,
-//							lobbies_owner, avatars);
-//				} else {
-////					alert(" NOT CHANGED");
-//					reloadList(false, r.lobbies_to_add, lobbies_guest,
-//							lobbies_owner, avatars);
-//				}
-//			}
-//		},
-//		error : function(e) {
-//			console.log(e.responseText);
-//			console.log("REFRESH ERROR: ", e);
-//		}
-//	});
-}
+
 
 function joinLobby(lobby_name) {
 	// var lobby_name = $("#" + id_lobby).children('#lobby_name_div').text();
@@ -484,26 +405,9 @@ function addLobbiesToList(list, mode, lobbies, avatars){
 var loadMore = function(lobbies, lobbies_guest, lobbies_owner, avatars) {
 	var list = document.getElementById("id_lobbies_list_ul");
 	console.log("ENTERED ON loadMore");// :"+lobbies);
-//	for ( var i in lobbies) {
-//		var lobby = lobbies[i];
-//		var id = lobby.id;
-//		var name = lobby.name;
-//		var owner = lobby.owner;
-//		var guest = lobby.guest;
-//		var avatarOwner = getAvatar(owner, avatars);
-//		var avatarGuest = getAvatar(guest, avatars);
-//		var newLobby = buildLobbyRow(id, name, owner, guest, user,
-//				avatarOwner, avatarGuest);
-//		if (conteinedIn(lobby, lobbies_guest) === false
-//				&& conteinedIn(lobby, lobbies_owner) === false) {
-//			list.append(newLobby[0]);
-//		}
-//	}
 	addLobbiesToList(list, 'append', lobbies, avatars);
 	addLobbiesToList(list, 'prepend', lobbies_guest, avatars);
 	addLobbiesToList(list, 'prepend', lobbies_owner, avatars);
-//	putLobbyOnTop(lobbies_guest, avatars);
-//	putLobbyOnTop(lobbies_owner, avatars);
 
 }
 function conteinedIn(lobby, list) {
@@ -516,27 +420,6 @@ function conteinedIn(lobby, list) {
 	}
 	return false;
 }
-
-//function putLobbyOnTop(lobbies, avatars) {
-//	var list = document.getElementById("id_lobbies_list_ul");
-//	for ( var i in lobbies) {
-//		var lobby = lobbies[i];
-//		var id = lobby.id;
-//		var name = lobby.name;
-//		var owner = lobby.owner;
-//		var guest = lobby.guest;
-//		var avatarOwner = getAvatar(owner, avatars);
-//		var avatarGuest = getAvatar(guest, avatars);
-//		var newLobby = buildLobbyRow(id, name, owner, guest, user,
-//				avatarOwner, avatarGuest);
-//		if ($("#id_lobby_" + name) !== undefined) {
-//			$("#id_lobby_" + name).remove();
-//			console.log("loadputLobbyOnTop...removed:" + name);
-//		}
-//		console.log("loadputLobbyOnTop:" + name);
-//		list.prepend(newLobby[0]);
-//	}
-//}
 
 function buildLobbyRow(id, name, owner, guest, username, avatarOwner,
 		avatarGuest) {
@@ -620,75 +503,3 @@ function buildLobbyRow(id, name, owner, guest, username, avatarOwner,
 }
 
 // 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-
-//function buildLobbyRow(id, name, owner, guest, username, avatarOwner,
-//		avatarGuest) {
-//	// alert("name:"+name+"__Owner:"+avatarOwner+"___Guest:"+avatarGuest);
-//	var newLobby = "";
-//	newLobby += "<li class=\"list-group-item card-with-shadow lobby_row\" id=\"id_lobby_"
-//			+ name
-//			+ "\" >"
-//			+ "<div class=\"text-center\" id=\"lobby_name_div\">"
-//			+ name
-//			+ "</div>" + "<div class=\" text-center\">";
-//	if (owner != "") {
-//		newLobby += "<img src=\"resources/images/avatars/"
-//				+ avatarOwner
-//				+ "\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">"
-//				+ "<span>" + owner + "</span>";
-//	} else {
-//		newLobby += "<img src=\"resources/images/avatars/avatar.svg\" class=\"img-circle\" height=\"64\" width=\"64\" alt=\"Avatar\">"
-//				+ "<span>EMPTY</span>";
-//	}
-//	newLobby += "<img style=\"max-height: 1cm; max-width: 1cm; margin-left: 0%;\" src=\"resources/images/icons/vs.png\">";
-//	// alert("GUEST ========= "+guest);
-//	if (guest != "") {
-//		// alert("GUEST != \"\"");
-//		newLobby += "<span>"
-//				+ guest
-//				+ "</span>"
-//				+ "<img src=\"resources/images/avatars/"
-//				+ avatarGuest
-//				+ "\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">";
-//	} else {
-//		// alert("GUEST == \"\"");
-//		// if (username !== owner){
-//		// newLobby += "<span>EMPTY</span>"
-//		// }
-//		// else{
-//		newLobby += "<span id=\"empty_slot\">EMPTY</span>"
-//				+ "<img src=\"resources/images/avatars/avatar.svg\" class=\"img-circle\"	height=\"64\" width=\"64\" alt=\"Avatar\">";
-//		// }
-//	}
-//	if (username != owner) {
-//		if (guest === "")
-//			newLobby += "<button id=\"join_btn_lobby_"
-//					+ name
-//					+ "\" type=\"button\" onclick=\"joinLobby('"
-//					+ name
-//					+ "')\" class=\"btn btn-warning btn-lg float-right\">Join</button>";
-//	} else {
-//
-//		newLobby += "<input id=\"created_lobby\" type=\"hidden\" value=\"created\" />"
-//				+ "<button id=\"start_button\" type=\"button\" onclick=\"startGame()\" class=\"btn btn-warning btn-lg float-right ";
-//		if (guest === "") {
-//			newLobby += "hidden-field";
-//		}
-//		newLobby += "\">Start</button>";
-//		newLobby += "<div id=\"join_alert\" class=\"alert alert-info hidden-field\" role=\"alert\">A player joined to lobby</div>";
-//		newLobby += "<div id=\"leave_alert\" class=\"alert alert-danger hidden-field\" role=\"alert\">The player leaved the lobby</div>";
-//		newLobby += "<form style=\"display: hidden\" action=\"forward_to_game\"	method=\"post\" id=\"ftg_form\">";
-//		newLobby += "<input type=\"hidden\" id=\"lobby_name\" name=\"lobby_name\" value=\""
-//				+ name + "\" />";
-//		newLobby += "</form>";
-//	}
-//	newLobby += "</div>" + "</li>";
-//	return newLobby;
-//}
-
-//function htmlToElement(html) {
-//	var template = document.createElement('template');
-//	html = html.trim(); // Never return a text node of whitespace as the result
-//	template.innerHTML = html;
-//	return template.content.firstChild;
-//}
