@@ -71,6 +71,7 @@ public class LobbyService {
 
 	public void cleanIfOffline(String event, String lobby_name, boolean b) {
 		JSONObject j = new JSONObject(event);
+		System.out.println("IN CLEAR IF OFFLINE" + event + " lobby  " + lobby_name + " Leave by owner " + b);
 		if (!j.has("leave"))
 			return;
 		Lobby lobby = lobbyMapping.get(lobby_name);

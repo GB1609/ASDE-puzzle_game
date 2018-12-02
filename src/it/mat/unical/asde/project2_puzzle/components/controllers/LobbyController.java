@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import it.mat.unical.asde.project2_puzzle.components.services.AccountService;
-import it.mat.unical.asde.project2_puzzle.components.services.EventsService;
+import it.mat.unical.asde.project2_puzzle.components.services.EventsServiceForLobby;
 import it.mat.unical.asde.project2_puzzle.components.services.GameService;
 import it.mat.unical.asde.project2_puzzle.components.services.LobbyService;
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
@@ -28,7 +28,7 @@ public class LobbyController {
 	@Autowired
 	LobbyService lobbyService;
 	@Autowired
-	EventsService eventService;
+	EventsServiceForLobby eventService;
 	@Autowired
 	GameService gameService;
 
@@ -89,7 +89,7 @@ public class LobbyController {
 		session.setAttribute("gameId", lobbyID);
 		try {
 			// add the event of join that will be notified to lobby's owner
-			this.eventService.addEventJoin(lobby_name, username, false);
+			this.eventService.addEventJoin(lobby_name, username);
 			// if the joiner was connected to another lobby then add this event that will be
 			// notified to the other player in lobby
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
@@ -146,14 +146,14 @@ public class LobbyController {
 
 	@PostMapping("check_join")
 	@ResponseBody
-	public DeferredResult<String> checkJoin(@RequestParam String lobby_name) {
+	public DeferredResult<String> checkJoin(@RequestParam String lobby_name, HttpSession session) {
+		String username = (String) session.getAttribute("username");
 		DeferredResult<String> joins = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
 				String result;
-				joins.setResult((result = this.eventService.getEventJoin(lobby_name)));
-				lobbyService.cleanIfOffline(result, lobby_name, true);
-
+				joins.setResult((result = this.eventService.getEventJoin(lobby_name, username)));
+				lobbyService.cleanIfOffline(result, lobby_name, false);
 			} catch (InterruptedException e) {
 				joins.setResult(null);
 			}
@@ -163,13 +163,13 @@ public class LobbyController {
 
 	@PostMapping("check_start")
 	@ResponseBody
-	public DeferredResult<String> checkStart(@RequestParam String lobby_name) {
-
+	public DeferredResult<String> checkStart(@RequestParam String lobby_name, HttpSession session) {
+		String username = (String) session.getAttribute("username");
 		DeferredResult<String> joins = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
 				String result;
-				joins.setResult((result = this.eventService.getEventStartGame(lobby_name)));
+				joins.setResult((result = this.eventService.getEventStartGame(lobby_name, username)));
 				lobbyService.cleanIfOffline(result, lobby_name, true);
 			} catch (InterruptedException e) {
 				joins.setResult(null);
@@ -195,6 +195,12 @@ public class LobbyController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return "redirect:game";
+	}
+
+	@GetMapping("joiner_to_game")
+	public String forwardJoinerToGame(HttpSession session) {
+		eventService.detachListenerForStart((String) session.getAttribute("username"), 2);
 		return "redirect:game";
 	}
 
