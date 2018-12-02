@@ -152,7 +152,7 @@ public class LobbyController {
 			try {
 				String result;
 				joins.setResult((result = this.eventService.getEventJoin(lobby_name)));
-				lobbyService.cleanIfOffline(result, lobby_name, true);
+				lobbyService.cleanIfOffline(result, lobby_name, false);
 
 			} catch (InterruptedException e) {
 				joins.setResult(null);
