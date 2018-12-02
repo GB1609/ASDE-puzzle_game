@@ -14,6 +14,7 @@
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
 	<div>
+	<input type="hidden" value="${username }"/>
 		<div class="row center-content-row">
 			<div class="col-md-auto col-sm-2 col-auto">
 				<button type="button" class="btn btn-warning button-in-row"

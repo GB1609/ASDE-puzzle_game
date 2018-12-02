@@ -34,7 +34,7 @@ function checkIfListening() {
 				if (r.start) {
 					listenForStartGame(r.lobby_name);
 				} else if (r.join) {
-					listenForJoinToLobby(r.lobby_name, false);
+					listenForJoinToLobby(r.lobby_name, false, false);
 				}
 			}
 		},
@@ -95,7 +95,7 @@ function listenForStartGame(lobby_name) {
 
 }
 
-function listenForJoinToLobby(lobby_name, showAlertLeave) {
+function listenForJoinToLobby(lobby_name, showAlertLeave, showAlertJoin) {
 	// console.log("in join")
 	console.log("listenForJoinToLobby" + lobby_name);
 
@@ -111,33 +111,45 @@ function listenForJoinToLobby(lobby_name, showAlertLeave) {
 				if (r.join) {
 					$("#start_button").removeClass("hidden-field");
 					$("#empty_slot").text(r.joiner);
-					$('#join_alert').fadeIn('slow', function() {
-						$('#join_alert').delay(5000).fadeOut();
-					});
-				} else if (r.leave) {
-					if (r.by === "owner") {
-						getLobbies(true);
-						return;
-					}
-					if (!showAlertLeave) {
-						$("#start_button").addClass("hidden-field");
-						$('#leave_alert').fadeIn('slow', function() {
-							$('#leave_alert').delay(5000).fadeOut();
+					if (!showAlertJoin) {
+						$('#join_alert').fadeIn('slow', function() {
+							$('#join_alert').delay(5000).fadeOut();
 						});
-						showAlertLeave = true;
+						showAlertJoin = true
 					} else {
-						showAlertLeave = false;
+						showAlertJoin = false;
+					}
+				} else if (r.leave) {
+					if (r.by != null) {
+						console.log($("#user").val() + r.by + "valid condition"
+								+ (r.by === $("#user").val()));
+						if (r.by === $("#user").val()) {
+							getLobbies(true);
+							return;
+						}
+					} else {
+						if (!showAlertLeave) {
+							$("#start_button").addClass("hidden-field");
+							$('#leave_alert').fadeIn('slow', function() {
+								$('#leave_alert').delay(5000).fadeOut();
+							});
+							showAlertLeave = true;
+						} else {
+							showAlertLeave = false;
+						}
 					}
 				}
 			}
-			listenForJoinToLobby(lobby_name, showAlertLeave);
+			listenForJoinToLobby(lobby_name, showAlertLeave, showAlertJoin);
 
 		},
 		error : function(e) {
 			console.log(e.responseText);
-			setTimeout(function() {
-				listenForJoinToLobby(lobby_name, showAlertLeave);
-			}, 5000);
+			setTimeout(
+					function() {
+						listenForJoinToLobby(lobby_name, showAlertLeave,
+								showAlertJoin);
+					}, 5000);
 		}
 	});
 	console.log(xhr);
@@ -223,7 +235,7 @@ function createLobby(ev) {
 			} else {
 				getLobbies(true);
 				$('#create-modal').modal("toggle");
-				listenForJoinToLobby(lobby_name, false);
+				listenForJoinToLobby(lobby_name, false, false);
 			}
 		},
 		error : function(e) {
