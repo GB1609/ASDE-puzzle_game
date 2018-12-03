@@ -46,11 +46,14 @@
 								src="resources/images/avatars/${player.avatar }" width="64"
 								height="64"></li>
 							<li class="list-group-item card-with-shadow">${player.username }</li>
-							<li class="list-group-item card-with-shadow">${match.time }</li>
 						</ul>
 					</div>
 				</c:forEach>
+
 			</div>
+			<ul class="list-group">
+				<li class="list-group-item text-center card-with-shadow ">${match.time }</li>
+			</ul>
 		</div>
 	</div>
 </body>

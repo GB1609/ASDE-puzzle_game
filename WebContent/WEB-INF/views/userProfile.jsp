@@ -16,6 +16,7 @@
 </head>
 <body class="wsmenucontainer">
 	<%@include file="includes/navbar.jsp"%>
+	<%@include file="template/info_lobby.jsp"%>
 	<div class="container ">
 		<input id=lineChart value="${lineChart}" style="display: none">
 		<input id=donutChart value="${donutChart}" style="display: none">

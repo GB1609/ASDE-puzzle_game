@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import it.mat.unical.asde.project2_puzzle.components.services.EventsService;
+import it.mat.unical.asde.project2_puzzle.components.services.EventsServiceForGame;
 import it.mat.unical.asde.project2_puzzle.components.services.GameService;
 
 @Controller
@@ -21,14 +21,16 @@ public class GameController {
 	@Autowired
 	GameService gameService;
 	@Autowired
-	EventsService eventsService;
+	EventsServiceForGame eventsServiceForGame;
 
 	@GetMapping("/game")
 	public String goToGame(Model m, HttpSession session) {
 //		System.out.println("IN GAME" + session.getAttribute("player"));
+		String username = (String) session.getAttribute("username");
 		Integer gameId = (Integer) session.getAttribute("gameId");
-		m.addAttribute("randomGrid", gameService.getGameForPlayer(gameId, (String) session.getAttribute("username")));
-		session.setAttribute("player", gameService.getCurrentPlayer(gameId));
+		m.addAttribute("randomGrid", gameService.getGameForPlayer(gameId, username));
+		Integer currentPlayer = gameService.getCurrentPlayer(gameId);
+		session.setAttribute("player", currentPlayer);
 		System.out.println("IN Game dopo" + session.getAttribute("player"));
 		return "Game";
 	}
@@ -50,10 +52,10 @@ public class GameController {
 			if (gameService.updateStateGame(gameId, player, old_location, old_position, new_location, new_position,
 					piece, timer)) {
 				gameService.storeMatch(gameId);
-				eventsService.addEventEndGame(gameId, gameService.getCurrentPlayer(gameId));
+				eventsServiceForGame.addEventEndGame(gameId, gameService.getPlayerInGame(gameId));
 			} else {
 				String progress = gameService.getProgressFor(gameId, player);
-				eventsService.addEventFor(gameId, player, gameService.getCurrentPlayer(gameId), progress);
+				eventsServiceForGame.addEventFor(gameId, player, gameService.getPlayerInGame(gameId), progress);
 			}
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
@@ -69,7 +71,8 @@ public class GameController {
 		DeferredResult<String> outputProgress = new DeferredResult<>();
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
-				outputProgress.setResult(eventsService.nextGameEventFor(gameId, player));
+				outputProgress.setResult(
+						eventsServiceForGame.nextGameEventFor(gameId, player, gameService.getPlayerInGame(gameId)));
 			} catch (InterruptedException e) {
 				outputProgress.setResult(-1000 + "");
 			}
@@ -83,7 +86,7 @@ public class GameController {
 		Integer player = (Integer) session.getAttribute("player");
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
-		eventsService.detachListenerInGame(gameId, player);
+		eventsServiceForGame.detachListenerInGame(gameId, player);
 		m.addAttribute("match", gameService.getMatch(gameId));
 		return "EndGame";
 	}
@@ -95,10 +98,12 @@ public class GameController {
 		Integer player = (Integer) session.getAttribute("player");
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
-		System.out.println("in leave game" + gameId + player);
+		System.out.println("in leave game" + gameId + "player" + player);
+		gameService.leaveGameBy(gameId, player);
+		gameService.storeMatch(gameId);
 		try {
-			eventsService.addEventLeaveGameBy(gameId, player, gameService.getCurrentPlayer(gameId));
-			eventsService.detachListenerInGame(gameId, player);
+			eventsServiceForGame.addEventLeaveGameBy(gameId, player, gameService.getPlayerInGame(gameId), false);
+			eventsServiceForGame.detachListenerInGame(gameId, player);
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
 			e.printStackTrace();
@@ -111,7 +116,7 @@ public class GameController {
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		Integer player = (Integer) session.getAttribute("player");
 		try {
-			eventsService.addMessageFor(gameId, player, gameService.getCurrentPlayer(gameId), message);
+			eventsServiceForGame.addMessageFor(gameId, player, gameService.getPlayerInGame(gameId), message);
 		} catch (InterruptedException e) {
 			System.out.println("non riesco ad aggiungere");
 			e.printStackTrace();

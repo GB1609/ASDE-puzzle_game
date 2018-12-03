@@ -96,6 +96,8 @@ function appendMessage(message, isSender) {
 		node.style.background = "#C8C8C8";
 	node.style.color = "black";
 	document.getElementById("chat_content").appendChild(node);
+	var pNode=document.getElementById("chat_content").parentNode.parentNode;
+	pNode.scrollTop=pNode.scrollHeight;
 }
 
 function getEventsFromServer() {
@@ -149,6 +151,7 @@ function makeRequest(action, type, data, onsuccess, onerror) {
 
 function sendMessage() {
 	var message = $("#message_text").val();
+	$("#message_text").text("");
 	$.ajax({
 		url: "send_message",
 		type: "post",

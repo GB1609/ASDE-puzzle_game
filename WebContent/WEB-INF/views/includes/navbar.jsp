@@ -9,13 +9,9 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
 		<ul class="navbar-nav">
-			<li class="nav-item"><a class="nav-link" href="#">Home<span
+			<li class="nav-item"><a class="nav-link" href="lobby">Home<span
 					class="sr-only">(current)</span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link" href="lobby">Lobby</a></li>
-			<li class="nav-item"><a class="nav-link" href="game">Game</a></li>
-			<li class="nav-item"><a class="nav-link" href="endgame">EndGame</a>
-			</li>
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#"
 				id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"

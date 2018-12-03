@@ -44,17 +44,25 @@ public class AccountService {
 //		Date date = new Date();
 //		System.out.println(date.getTime());
 //		System.out.println("-----------------------------------------------");
-//		User test1 = userDAO.getFullUser("Test1");
-//		User test2 = userDAO.getFullUser("Test2");
-//
-//		GameMatch gameMatch = new GameMatch();
-//		gameMatch.addUser(test1);
-//		gameMatch.addUser(test2);
-//		gameMatch.setWinner(test2);
-//		gameMatch.setTime("10:00:00");
-//		gameMatch.setLobbyName("TEST");
-//		System.out.println("111111111111111111111111111111111111111111111111");
-//		matchDAO.save(gameMatch);
+		User test1 = userDAO.getFullUser("Test1");
+		User test2 = userDAO.getFullUser("Test2");
+
+		GameMatch gameMatch = new GameMatch();
+		gameMatch.addUser(test1);
+		gameMatch.addUser(test2);
+		gameMatch.setWinner(test2);
+		gameMatch.setTime("10:00:00");
+		gameMatch.setLobbyName("TEST");
+		System.out.println("111111111111111111111111111111111111111111111111");
+		GameMatch gameMatch1 = new GameMatch();
+		gameMatch1.addUser(test1);
+		gameMatch1.addUser(test2);
+		gameMatch1.setWinner(test2);
+		gameMatch1.setTime("10:00:00");
+		gameMatch1.setLobbyName("TEST");
+		System.out.println("111111111111111111111111111111111111111111111111");
+		matchDAO.save(gameMatch);
+		matchDAO.save(gameMatch1);
 //		System.out.println("222222222222222222222222222222222222222222222222");
 //		matchDAO.save(gameMatch);
 //		System.out.println("333333333333333333333333333333333333333333333333");
@@ -66,8 +74,8 @@ public class AccountService {
 //
 //		System.out.println("-----------------------------------------------");
 
-		for (GameMatch gameMatch : getMatches("Test1")) {
-			System.out.println(gameMatch.getId());
+		for (GameMatch gameMatch2 : getMatches("Test1")) {
+			System.out.println(gameMatch2.getId());
 
 		}
 	}

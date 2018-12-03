@@ -13,7 +13,7 @@
 			</label>
 			<div class="col-md-1" style="display: inline;">
 				<img style="max-height: 1cm; max-width: 1cm; margin-left: 0%;"
-					src="resources/images/vs.png">
+					src="resources/images/icons/vs.png">
 			</div>
 			<label class="col-md-3 control-label" for="firstname-field">
 				<c:forEach items="${match.users}" var="user" varStatus="loop">

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
+
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -39,8 +39,16 @@ public class GameMatch {
 	@Transient
 	private String lobbyName;
 
-	@Column
+	@Column(nullable=false)
 	private String time;
+	
+	public String getTime() {
+		return time;
+	}
+	
+	public void setTime(String time) {
+		this.time = time;
+	}
 
 	@Column(nullable = false)
 	private LocalDateTime date;
@@ -49,15 +57,8 @@ public class GameMatch {
 		super();
 		date = LocalDateTime.now();
 		DateTimeFormatter.ofPattern("dd/mm/yyyy", Locale.ITALIAN).format(date);
+	}
 
-	}
-	public String getTime() {
-		return time;
-	}
-	
-	public void setTime(String time) {
-		this.time = time;
-	}
 
 	public LocalDateTime getDate() {
 		return date;
@@ -120,23 +121,9 @@ public class GameMatch {
 		return this.lobbyName;
 	}
 
-//	@Override
-//	public boolean equals(Object o) {
-//		if (this == o) {
-//			return true;
-//		}
-//		if (o == null || getClass() != o.getClass()) {
-//			return false;
-//		}
-//		GameMatch gameMatch = (GameMatch) o;
-//
-//		return Objects.equals(lobbyName, gameMatch.lobbyName) && Objects.equals(time, gameMatch.time);
-//	}
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
+
 }
-
-
-
-
-
-
-
