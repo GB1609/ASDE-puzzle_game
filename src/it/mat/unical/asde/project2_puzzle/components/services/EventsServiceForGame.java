@@ -123,10 +123,9 @@ public class EventsServiceForGame {
 	 * @throws InterruptedException
 	 */
 	public void addEventEndGame(Integer gameId, Integer currentPlayers) throws InterruptedException {
-		String event = "END-GAME";
 		for (int i = 1; i <= currentPlayers; i++) {
 			String key = gameId + "player" + i;
-			addEvent(event, key, gameId, false);
+			addEvent(messageMaker.makeMessage(MessageMaker.END_GAME), key, gameId, false);
 		}
 
 	}
