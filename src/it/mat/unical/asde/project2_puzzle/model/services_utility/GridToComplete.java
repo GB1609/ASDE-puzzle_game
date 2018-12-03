@@ -1,16 +1,25 @@
 package it.mat.unical.asde.project2_puzzle.model.services_utility;
 
 import java.awt.Point;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GridToComplete {
 	private int[][] matrix;
 	private int height;
 	private int width;
+	private SimpleDateFormat parser = new SimpleDateFormat("HH:mm:ss");
+	private Date timer = new Date();
+	private String player;
+	private boolean leaved;
+	// private int access = 0;// TODO remove -> only for testing end game
 
-	public GridToComplete(int dim) {
+	public GridToComplete(int dim, String player) {
 		super();
 		height = dim;
 		width = dim;
+		this.player = player;
 		matrix = new int[width][height];
 		for (int i = 0; i < width; i++)
 			for (int k = 0; k < height; k++)
@@ -18,6 +27,9 @@ public class GridToComplete {
 	}
 
 	public boolean checkPuzzleTermination() {
+//		if (player.equals("a") && access == 5)
+//			return true;
+//		access++;
 		int a = 0;
 		for (int i = 0; i < height; i++)
 			for (int k = 0; k < width; k++) {
@@ -26,6 +38,14 @@ public class GridToComplete {
 				a++;
 			}
 		return true;
+	}
+
+	public void setLeaved(boolean leaved) {
+		this.leaved = leaved;
+	}
+
+	public boolean leaved() {
+		return this.leaved;
 	}
 
 	public int getHeight() {
@@ -89,5 +109,28 @@ public class GridToComplete {
 				a++;
 			}
 		return (progress * 100) / (height * width);
+	}
+
+	public Date getDate() {
+		System.out.println("INGET:" + timer);
+		return this.timer;
+	}
+
+	public String getTimer() {
+		return parser.format(this.timer);
+	}
+
+	public void setTimer(String timer) {
+		try {
+			this.timer = parser.parse(timer);
+			System.out.println("INSET:" + timer);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String getPlayer() {
+		return this.player;
 	}
 }

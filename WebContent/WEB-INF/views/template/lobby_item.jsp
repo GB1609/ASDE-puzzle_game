@@ -1,4 +1,4 @@
-<li class="list-group-item card-with-shadow lobby_row hidden-field" id="template">
+<li class="list-group-item card-with-shadow lobby_row" style="display: none;" id="template">
 	<div class="text-center" id="lobby_name_div"></div>
 	<div id="id_lobby_div" class=" text-center">
 		<img id="id_img_owner" src="" class="img-circle" height="64" width="64" alt="Avatar">
