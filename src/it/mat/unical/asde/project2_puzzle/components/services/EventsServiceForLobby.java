@@ -93,10 +93,14 @@ public class EventsServiceForLobby {
 			}
 		} else {
 			System.out.println("A JOINER has leave");
-			if (!fromClear)
-				detachListenerForStart(previousJoined, username, 2);// TODO REMOVE STATIC 2
+//			if (!fromClear)
+//				detachListenerForStart(previousJoined, username, 2);// TODO REMOVE STATIC 2
 			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, MessageMaker.JOINER, username, fromClear);
 			addGeneralEventLobby(previousJoined, MessageMaker.LEAVE_MESSAGE, MessageMaker.JOINER, username, fromClear);
+			addGeneralEventLobby(previousJoined + "player2", MessageMaker.LEAVE_MESSAGE, MessageMaker.JOINER, username,
+					fromClear);
+			userListeningFor.remove(username);
+
 		}
 		System.out.println("remove listen for" + username + "to li " + userListeningFor.remove(username));
 

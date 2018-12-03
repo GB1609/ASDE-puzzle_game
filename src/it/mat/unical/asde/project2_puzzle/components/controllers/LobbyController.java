@@ -54,6 +54,7 @@ public class LobbyController {
 		return this.getLobbiesOrRefresh(session, lobbies, currently_showed);
 	}
 
+	// TODO move in lobbyservice
 	private String getLobbiesOrRefresh(HttpSession session, String lobbies, int currently_showed) {
 		JSONObject response = new JSONObject().put("error", false);
 		List<Lobby> l = this.lobbyService.getNextMLobbies(currently_showed, 20);
@@ -236,6 +237,18 @@ public class LobbyController {
 	public String leaveLobby(HttpSession session, @RequestParam String lobby_name) {
 		String username = (String) session.getAttribute("username");
 		System.out.println("User: " + username + " leave Lobby: " + lobby_name);
-		return new JSONObject().put("error", !this.lobbyService.leaveLobby(username, lobby_name)).toString();
+		boolean leaved = this.lobbyService.leaveLobby(username, lobby_name);
+		if (leaved) {
+			String previousJoined = this.lobbyService.checkPreviousLobby(username);
+			if (previousJoined != null) {
+				try {
+					this.eventService.addEventLeaveJoin(previousJoined, username, false);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return new JSONObject().put("error", !leaved).toString();
 	}
 }
