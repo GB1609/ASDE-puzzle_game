@@ -62,14 +62,7 @@
 							style="color: black;">
 					</p>
 				</form>
-
-				<!-- <a href="#0" class="cd-close-form">Close</a> -->
 			</div>
-			<!-- cd-login -->
-
-
-
-
 
 			<div id="cd-signup" style="background: rgba(0, 0, 0, 0.45);">
 				<!-- sign up form -->
@@ -128,10 +121,6 @@
 				</form>
 			</div>
 			<!-- cd-signup -->
-
-
-
-			<!--  <a href="#0" class="cd-close-form">Close</a>-->
 		</div>
 		<!-- cd-user-modal-container -->
 	</div>

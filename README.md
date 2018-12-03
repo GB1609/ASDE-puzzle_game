@@ -30,7 +30,7 @@ that provide a comprehensive programming and configuration model.
 <h4> Statistic</h4>
 <img src="document_resources/statistic.png">
 
-* Possibility to create lobby, leave it or possibility of joining an existing one or search one:
+* possibility to create a lobby, join to an existent one, leave it or if there is need search one:
 
 <h4>lobby viewer</h4>
 <img src="document_resources/lobby.png">
@@ -41,21 +41,14 @@ that provide a comprehensive programming and configuration model.
 * Play one on one game with interactive chat and progressive bar (it indicate the progress of enemy). Every player has 3 hint to use.
 <h4>game</h4>
 <img src="document_resources/game.png">
-<h4>game</h4>
-<img src="document_resources/game.png">
 <h4>interaction</h4>
 <img src="document_resources/chat.png">
 <h4>hint</h4>
 <img src="document_resources/hint.png">
 
-
-
-
-
-
 ## Bugs
 * Bug 1
-When a player is owner of a lobby and another joins the owner can start the game. Once the second player leaves the game there are a few seconds in which the owner could start the game but it should not happen. This is due to the fact that the cleaning operations of the structures did not start.
+When the joiner leave the lobby page  there are a few seconds in which the owner could start the game but it should not happen. This is due to the fact that the cleaning operations of the structures did not start yet.
 * Bug 2
 The entire logic of the game is managed for n players. However the lobby side and the respective events are managed for only 2 players.
 
