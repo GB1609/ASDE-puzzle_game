@@ -19,6 +19,7 @@ import it.mat.unical.asde.project2_puzzle.components.services.AccountService;
 import it.mat.unical.asde.project2_puzzle.components.services.EventsServiceForLobby;
 import it.mat.unical.asde.project2_puzzle.components.services.GameService;
 import it.mat.unical.asde.project2_puzzle.components.services.LobbyService;
+import it.mat.unical.asde.project2_puzzle.components.services.utility.MessageMaker;
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
 import it.mat.unical.asde.project2_puzzle.model.User;
 import it.mat.unical.asde.project2_puzzle.model.services_utility.PlayerType;
@@ -32,6 +33,8 @@ public class LobbyController {
 	EventsServiceForLobby eventService;
 	@Autowired
 	GameService gameService;
+	@Autowired
+	MessageMaker messageMaker;
 
 	@Autowired
 	AccountService accountService;
@@ -98,6 +101,9 @@ public class LobbyController {
 		return response.put("username", username).toString();
 	}
 
+	/*
+	 * This method is called when a player wants to join a lobby
+	 */
 	@PostMapping("join_lobby")
 	@ResponseBody
 	public String joinLobby(HttpSession session, @RequestParam String lobby_name) {
@@ -106,26 +112,29 @@ public class LobbyController {
 		Integer lobbyID = this.lobbyService.joinToLobby(lobby_name, username);
 		if (lobbyID == -1) {
 			// if no lobby "lobby_name" is present then return an error
-			return new JSONObject().put("error", true).toString();
+			return messageMaker.makeMessage(MessageMaker.ERROR);
 		}
 		session.setAttribute("gameId", lobbyID);
 		try {
 			// add the event of join that will be notified to lobby's owner
 			this.eventService.addEventJoin(lobby_name, username);
-			// if the joiner was connected to another lobby then add this event that will be
-			// notified to the other player in lobby
+			// if the joiner was connected to another lobby then add the correspondent
+			// event. This event will be notified to the other players in lobby
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
 			if (previousJoined != null) {
 				this.eventService.addEventLeaveJoin(previousJoined, username, false);
 			}
 		} catch (Exception e) {
 			System.out.println("I can't join to lobby" + lobby_name);
+			return messageMaker.makeMessage(MessageMaker.ERROR);
 		}
-		System.out.println("User: " + username + " join to Lobby: " + lobby_name);
 		this.eventService.attachListenerToStart(lobby_name, username);
-		return new JSONObject().put("error", false).toString();
+		return messageMaker.makeMessage(MessageMaker.ERROR, false);
 	}
 
+	/*
+	 * This method is called when a player wants to join a lobby
+	 */
 	@PostMapping("create_lobby")
 	@ResponseBody
 	public String createLobby(HttpSession session, @RequestParam String lobby_name) {
@@ -133,6 +142,8 @@ public class LobbyController {
 		boolean added = false;
 		if (added = this.lobbyService.addLobby(new Lobby(lobby_name, username), username)) {
 			this.eventService.attachListenerToJoin(lobby_name, username);
+			// if the player was joined to a lobby then notify the event to other
+			// components.
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
 			if (previousJoined != null) {
 				try {
@@ -140,10 +151,11 @@ public class LobbyController {
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return messageMaker.makeMessage(MessageMaker.ERROR);
 				}
 			}
 		}
-		return new JSONObject().put("error", !added).toString();
+		return messageMaker.makeMessage(MessageMaker.ERROR, !added);
 	}
 
 	@PostMapping("search_lobby")
@@ -153,19 +165,10 @@ public class LobbyController {
 		return new JSONObject().put("error", newLobby == null).put("lobby_searched", newLobby).toString();
 	}
 
-	@PostMapping("delete_lobby_by_name")
-	@ResponseBody
-	public String deleteLobbyByName(HttpSession session, @RequestParam String lobby_name) {
-		boolean deleted = this.lobbyService.removeLobbyByName(lobby_name);
-		if (deleted) {
-			// TODO NOTIFY TO GUEST THAT THE LOBBY WAS DELETED
-			// TODO create function for leave lobby (request by button)
-//			this.eventService.detachListenerForStart(lobby_name, (String) session.getAttribute("username"));
-		}
-
-		return new JSONObject().put("error", !deleted).toString();
-	}
-
+	/*
+	 * This method is called when a player creates a lobby to check when a player
+	 * join to it
+	 */
 	@PostMapping("check_join")
 	@ResponseBody
 	public DeferredResult<String> checkJoin(@RequestParam String lobby_name, HttpSession session) {
@@ -183,6 +186,10 @@ public class LobbyController {
 		return joins;
 	}
 
+	/*
+	 * This method is called when a player joins to a lobby to check when the owner
+	 * start the game
+	 */
 	@PostMapping("check_start")
 	@ResponseBody
 	public DeferredResult<String> checkStart(@RequestParam String lobby_name, HttpSession session) {
@@ -201,6 +208,10 @@ public class LobbyController {
 
 	}
 
+	/*
+	 * This method is called when a player starts the game in order to initialize
+	 * all the needful structures
+	 */
 	@PostMapping("forward_to_game")
 	public String forwardToGame(@RequestParam String lobby_name, HttpSession session) {
 		Integer lobbyID = this.lobbyService.destructLobby(lobby_name);
@@ -208,32 +219,48 @@ public class LobbyController {
 			throw new RuntimeException("no lobby found");
 		}
 		session.setAttribute("gameId", lobbyID);
+		// init the new game
 		gameService.initNewGame(lobbyID, lobby_name);
-		// session.setAttribute("player", "player1");
 		this.eventService.detachListenerForJoin(lobby_name, (String) session.getAttribute("username"));
 		try {
+			// add the event of start game for the other components in lobby
 			this.eventService.addEventStartGame(lobby_name);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// then redirect it to the game
 		return "redirect:game";
 	}
 
+	/*
+	 * This method is called when a player receives the event of start. It detaches
+	 * the correspondent listener and redirect the player to the game.
+	 */
 	@GetMapping("joiner_to_game")
 	public String forwardJoinerToGame(HttpSession session) {
 		eventService.detachListenerForStart((String) session.getAttribute("username"), 2);
 		return "redirect:game";
 	}
 
+	/*
+	 * This method is called to check if a player is listening for an event. (useful
+	 * in page reload, avoid the lose of listener)
+	 */
 	@PostMapping("check_is_listening_for")
 	@ResponseBody
 	public String checkIsListeningFor(HttpSession session) {
 		return eventService.getListenerOfUser((String) session.getAttribute("username"));
 	}
 
+	/*
+	 * This method is called when a player leave the lobby.
+	 * 
+	 * Delete the user in the correspondent lobby and notify the event to other
+	 * components.
+	 */
 	@PostMapping("leave_lobby")
-	@ResponseBody // TODO add event
+	@ResponseBody
 	public String leaveLobby(HttpSession session, @RequestParam String lobby_name) {
 		String username = (String) session.getAttribute("username");
 		System.out.println("User: " + username + " leave Lobby: " + lobby_name);
@@ -244,11 +271,12 @@ public class LobbyController {
 				try {
 					this.eventService.addEventLeaveJoin(previousJoined, username, false);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return messageMaker.makeMessage(MessageMaker.ERROR);
+
 				}
 			}
 		}
-		return new JSONObject().put("error", !leaved).toString();
+		return messageMaker.makeMessage(MessageMaker.ERROR, !leaved);
 	}
 }

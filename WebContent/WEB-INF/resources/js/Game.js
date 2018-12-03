@@ -62,7 +62,8 @@ function drop(ev) {
 			"timer": timer.getTimeValues().toString()
 		}),
 		success: function (resultData) {
-			console.log("ok" + resultData);
+			if(resultData==="error")
+				swal("Update Error","Sorry, an error was occured","error");
 		},
 		error: function (e) {
 			console.log("old position" + old_position + "\n" +
@@ -159,7 +160,10 @@ function sendMessage() {
 			"message": message
 		}),
 		success: function (result) {
-			appendMessage(message, true);
+			if(result==="error")
+				swal("Error Chat","Sorry, an error was occured","error");
+			else
+				appendMessage(message, true);
 		},
 		error: function (e) {
 			console.log(e.responseText);

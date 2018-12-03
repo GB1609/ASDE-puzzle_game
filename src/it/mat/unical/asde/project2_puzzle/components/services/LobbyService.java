@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.mat.unical.asde.project2_puzzle.components.services.utility.MessageMaker;
@@ -74,6 +73,7 @@ public class LobbyService {
 					this.previousLobby.put(username, lobby.getName() + "player2");
 					System.out.println("REMOVE LOBBYA: " + lobby);
 					this.lobbies.remove(lobby);
+					lobbyMapping.remove(lobby.getName());
 					return true;
 				}
 			} else if (!guest.isEmpty()) {
@@ -90,18 +90,19 @@ public class LobbyService {
 
 	public void cleanIfOffline(String event, String lobby_name) {
 		JSONObject j = new JSONObject(event);
-		System.out.println("IN CLEAR IF OFFLINE" + event + " lobby  " + lobby_name + " Leave by owner " + j.has(MessageMaker.FOR_CLEANING));
+		System.out.println("IN CLEAR IF OFFLINE" + event + " lobby  " + lobby_name + " Leave by owner "
+				+ j.has(MessageMaker.FOR_CLEANING));
 		if (!j.has("leave"))
 			return;
 		Lobby lobby = lobbyMapping.get(lobby_name);
-		if (j.has(MessageMaker.FOR_CLEANING)&& Boolean.parseBoolean(j.getString(MessageMaker.FOR_CLEANING))) {
+		if (j.has(MessageMaker.FOR_CLEANING) && Boolean.parseBoolean(j.getString(MessageMaker.FOR_CLEANING))) {
 			String guest = lobby.getGuest();
 			System.out.println("GUEST: ->" + guest);
 			if (!guest.isEmpty()) {
 				lobby.setOwner(guest);
 				lobby.setGuest("");
 			} else {
-				System.out.println("DELETE LOBY "+ lobby_name+"lobby owner"+lobby.getOwner());
+				System.out.println("DELETE LOBY " + lobby_name + "lobby owner" + lobby.getOwner());
 				this.lobbies.remove(lobbyMapping.remove(lobby_name));
 			}
 		} else {
