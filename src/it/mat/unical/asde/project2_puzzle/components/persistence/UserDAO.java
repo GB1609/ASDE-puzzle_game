@@ -79,14 +79,5 @@ public class UserDAO {
 		return dbManager.update(user);
 	}
 
-	public User getUserMatches(String username) {
-		Session openSession = session.openSession();
-		Query<User> query = openSession.createQuery("from User_Match as um where um.username=:u", User.class)
-				.setParameter("u", username);
 
-		User user = query.uniqueResult();
-		openSession.close();
-
-		return user;
-	}
 }

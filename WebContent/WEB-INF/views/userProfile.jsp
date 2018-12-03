@@ -101,12 +101,14 @@
 						</div>
 						<c:choose>
 							<c:when test="${not empty user.matches}">
+							<div style="overflow: scroll; max-height: 24em;">
 								<ul class="list-group"
-									style="overflow: auto; max-height: 23.8em;">
+									style="overflow: auto;">
 									<c:forEach items="${user.matches}" var="match">
 										<%@include file="template/matchItem.jsp"%>
 									</c:forEach>
 								</ul>
+								</div>
 							</c:when>
 							<c:otherwise>
 								<h2 style="text-align: center; font-size: 20px;">No matches

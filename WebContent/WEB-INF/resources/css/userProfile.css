@@ -204,6 +204,38 @@ rect {
 	padding-bottom: 3%;
 }
 */
+.row {
+	display: flex !important;
+	/* -ms-flex-wrap: wrap; */
+	/* flex-wrap: wrap; */
+	margin-right: 0em !important;
+	margin-left: 0em !important;
+}
+@media screen and (max-width: 800px) {
+	.profile-userpic {
+		max-height: 6em;
+		max-width: 6em;
+		padding-left: 0em;
+		margin-left: 10em;
+	}
+	
+	#charts-div {
+		padding-left: 2em;
+	}
+	#settings-div {
+		height: 24em;
+	}
+	#matchHistory-div {
+		width: 100% !important;
+	}
+	.control-label {
+		width: 0 !important;
+		padding-left: 4.5em !important;
+		padding-right: 4.5em !important;
+		min-width : none;
+		
+	}
+}
 .profile-usermenu ul li a {
 	background-color: rgba(0, 0, 0, 0.45);
 	color: #e0a800;
