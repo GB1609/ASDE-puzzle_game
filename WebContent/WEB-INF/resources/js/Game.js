@@ -160,7 +160,7 @@ function makeRequest(action, type, data, onsuccess, onerror) {
 
 function sendMessage() {
 	var message = $("#message_text").val();
-	$("#message_text").text("");
+	$("#message_text").val("");
 	$.ajax({
 		url: "send_message",
 		type: "post",

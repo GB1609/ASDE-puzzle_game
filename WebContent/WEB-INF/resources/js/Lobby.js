@@ -137,8 +137,8 @@ function listenForStartGame(lobby_name) {
 						"user->" + $("#user").val());
 					if (r.joiner === $("#user").val())
 						return;
-					toggleModal();
-					// swal("info","The previous owner leave the lobby, you are the new owner!!!","info");
+					// toggleModal();
+					swal("info","The previous owner leave the lobby, you are the new owner!!!","info");
 					getLobbies(true, false);
 					listenForJoinToLobby(lobby_name, false);
 					console.log("Lobby destruct"); // TODO make alert
