@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.mat.unical.asde.project2_puzzle.components.services.utility.MessageMaker;
@@ -19,6 +18,7 @@ import it.mat.unical.asde.project2_puzzle.model.services_utility.SearchBy;
 @Service
 public class LobbyService {
 	private List<Lobby> lobbies;
+	// mapping to keep mapping from user to lobby
 	private HashMap<String, Lobby> lobbyMapping;
 	HashMap<String, String> previousLobby;
 
@@ -26,7 +26,7 @@ public class LobbyService {
 	public void init() {
 		this.lobbies = new LinkedList<>();
 		this.previousLobby = new HashMap<>();
-		lobbyMapping = new HashMap<>();
+		this.lobbyMapping = new HashMap<>();
 	}
 
 	public List<Lobby> getLobbies() {
@@ -36,16 +36,15 @@ public class LobbyService {
 	public Integer joinToLobby(String lobby_name, String username) {
 		lobby_name = lobby_name.toLowerCase();
 		this.leaveIfInOtherLobby(username);
-		Lobby lobbyToJoin = lobbyMapping.get(lobby_name);
+		Lobby lobbyToJoin = this.lobbyMapping.get(lobby_name);
 		if (lobbyToJoin.getGuest().isEmpty()) {
 			lobbyToJoin.setGuest(username);
-			System.out.println("join to lobby: " + lobbyMapping.get(lobby_name).getGuest());
+			System.out.println("join to lobby: " + this.lobbyMapping.get(lobby_name).getGuest());
 			return lobbyToJoin.getLobbyID();
 		}
 		return -1;
 	}
 
-	// user with "username" leave the lobby where it is
 	public void leaveIfInOtherLobby(String username) {
 		for (Lobby lobby : this.lobbies) {
 			if (this.leaveIfInLobby(lobby, username)) {
@@ -55,28 +54,28 @@ public class LobbyService {
 	}
 
 	public boolean leaveLobby(String username, String lobbyname) {
-		// TODO add events
-		return this.leaveIfInLobby(lobbyMapping.get(lobbyname), username);
+		return this.leaveIfInLobby(this.lobbyMapping.get(lobbyname), username);
 	}
 
+	// User with name "username" leave the lobby (if he is in a lobby)
 	public boolean leaveIfInLobby(Lobby lobby, String username) {
 		if (lobby != null) {
 			String owner = lobby.getOwner();
 			String guest = lobby.getGuest();
-			if (owner.equals(username)) {
-				if (!guest.isEmpty()) {
+			if (owner.equals(username)) { // if username is the owner and leave the lobby
+				if (!guest.isEmpty()) { // guest become owner
 					lobby.setOwner(guest);
 					lobby.setGuest("");
 					System.out.println("LEAVE LOBBY: " + lobby);
 					this.previousLobby.put(username, lobby.getName() + "player2");
 					return true;
-				} else {
+				} else { // if owner is the only in the lobby, he leave it and lobby will be removed
 					this.previousLobby.put(username, lobby.getName() + "player2");
 					System.out.println("REMOVE LOBBYA: " + lobby);
 					this.lobbies.remove(lobby);
 					return true;
 				}
-			} else if (!guest.isEmpty()) {
+			} else if (!guest.isEmpty()) { // if username is the guest, he simply leave the lobby
 				if (guest.equals(username)) {
 					System.out.println("LEAVE LOBBY: " + lobby);
 					lobby.setGuest("");
@@ -90,19 +89,21 @@ public class LobbyService {
 
 	public void cleanIfOffline(String event, String lobby_name) {
 		JSONObject j = new JSONObject(event);
-		System.out.println("IN CLEAR IF OFFLINE" + event + " lobby  " + lobby_name + " Leave by owner " + j.has(MessageMaker.FOR_CLEANING));
-		if (!j.has("leave"))
+		System.out.println("IN CLEAR IF OFFLINE" + event + " lobby  " + lobby_name + " Leave by owner "
+				+ j.has(MessageMaker.FOR_CLEANING));
+		if (!j.has("leave")) {
 			return;
-		Lobby lobby = lobbyMapping.get(lobby_name);
-		if (j.has(MessageMaker.FOR_CLEANING)&& Boolean.parseBoolean(j.getString(MessageMaker.FOR_CLEANING))) {
+		}
+		Lobby lobby = this.lobbyMapping.get(lobby_name);
+		if (j.has(MessageMaker.FOR_CLEANING) && Boolean.parseBoolean(j.getString(MessageMaker.FOR_CLEANING))) {
 			String guest = lobby.getGuest();
 			System.out.println("GUEST: ->" + guest);
 			if (!guest.isEmpty()) {
 				lobby.setOwner(guest);
 				lobby.setGuest("");
 			} else {
-				System.out.println("DELETE LOBY "+ lobby_name+"lobby owner"+lobby.getOwner());
-				this.lobbies.remove(lobbyMapping.remove(lobby_name));
+				System.out.println("DELETE LOBY " + lobby_name + "lobby owner" + lobby.getOwner());
+				this.lobbies.remove(this.lobbyMapping.remove(lobby_name));
 			}
 		} else {
 			lobby.setGuest("");
@@ -116,12 +117,12 @@ public class LobbyService {
 
 	public boolean removeLobbyByName(String lobby_name) {
 		lobby_name = lobby_name.toLowerCase();
-		return this.lobbies.remove(lobbyMapping.get(lobby_name));
+		return this.lobbies.remove(this.lobbyMapping.get(lobby_name));
 	}
 
 	public Integer destructLobby(String lobby_name) {
 		lobby_name = lobby_name.toLowerCase();
-		Lobby l = lobbyMapping.remove(lobby_name);
+		Lobby l = this.lobbyMapping.remove(lobby_name);
 		Integer lobbyId = -1;
 		if (l != null) {
 			lobbyId = l.getLobbyID();
@@ -130,9 +131,10 @@ public class LobbyService {
 		return lobbyId;
 	}
 
+	// add lobby "newLobby" created by "username". If "username" is in another
+	// lobby, he leave it
 	public boolean addLobby(Lobby newLobby, String username) {
 		this.leaveIfInOtherLobby(username);
-		// TODO can't add lobby with name with spaces
 		boolean added = false;
 
 		if (!this.lobbyMapping.containsKey(newLobby.getName())) {
@@ -146,8 +148,9 @@ public class LobbyService {
 
 	// Return the lobby with the given name, null otherwise
 	public Lobby getLobby(String name, SearchBy typeOfSearch) {
-		if (typeOfSearch.equals(SearchBy.LOBBY_NAME))
-			return lobbyMapping.get(name);
+		if (typeOfSearch.equals(SearchBy.LOBBY_NAME)) {
+			return this.lobbyMapping.get(name);
+		}
 		for (int i = 0; i < this.lobbies.size(); i++) {
 			Lobby lobby = this.lobbies.get(i);
 			boolean condition = false;
@@ -161,6 +164,8 @@ public class LobbyService {
 		return null;
 	}
 
+	// this function is called to apply some kind of lazy load of lobbies.
+	// It returns the "m" next lobbies starting from index "currentlyShowed"
 	public List<Lobby> getNextMLobbies(int currentlyShowed, int m) {
 		List<Lobby> fromTo = new LinkedList<>();
 		int toIndex = currentlyShowed + m;
@@ -196,8 +201,13 @@ public class LobbyService {
 		return tmp;
 	}
 
+	// this function is called when client ask for getting lobbies.
+	// return "true" if lobbies on server are different from those of the client,
+	// "false" otherwise
 	public boolean hasTheListChanges(String lobbies) {
 		JSONArray actual = new JSONArray(this.lobbies);
-		return !actual.toString().equals(lobbies);
+		boolean changed = actual.toString().equals(lobbies);
+		System.out.println("CHANGED:" + !changed + "_old:" + lobbies + "___actual:" + actual);
+		return !changed;
 	}
 }

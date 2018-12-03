@@ -40,7 +40,7 @@ function getLobbiesFromServer(server_function_url) {
 			"currently_showed": currentlyShowed
 		}),
 		success: function (resultData) {
-			console.log("refresh ok: " + resultData);
+			console.log("refresh ok: "+server_function_url+" -- " + resultData);
 			var r = JSON.parse(resultData);
 			if (r.error) {
 				console.log("ERROR: " + r.err_msg);
@@ -56,12 +56,14 @@ function getLobbiesFromServer(server_function_url) {
 					lobbies_owner = r.lobbies_owner;
 					lobbies_guest = r.lobbies_guest;
 					avatars = r.avatars;
-					reloadList(true, lobbies_saved, lobbies_guest,
-						lobbies_owner, avatars);
+//					reloadList(true, lobbies_saved, lobbies_guest,
+//						lobbies_owner, avatars);
 				} else {
 					//     alert(" NOT CHANGED");
-					reloadList(false, r.lobbies_to_add, lobbies_guest,
-						lobbies_owner, avatars);
+//					if(server_function_url === "get_lobbies"){
+						console.log("NOT CHANGED: " + r.err_msg);
+//						reloadList(false, r.lobbies_to_add, lobbies_guest, lobbies_owner, avatars);
+//					}
 				}
 				if (server_function_url === "automatic_refresh") {
 					setTimeout(function () {

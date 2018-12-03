@@ -173,8 +173,8 @@ public class LobbyController {
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
 				String result;
-				joins.setResult((result = this.eventService.getEventJoin(lobby_name, username)));
-				lobbyService.cleanIfOffline(result, lobby_name);
+				joins.setResult(result = this.eventService.getEventJoin(lobby_name, username));
+				this.lobbyService.cleanIfOffline(result, lobby_name);
 			} catch (InterruptedException e) {
 				joins.setResult(null);
 			}
@@ -190,8 +190,8 @@ public class LobbyController {
 		ForkJoinPool.commonPool().submit(() -> {
 			try {
 				String result;
-				joins.setResult((result = this.eventService.getEventStartGame(lobby_name, username)));
-				lobbyService.cleanIfOffline(result, lobby_name);
+				joins.setResult(result = this.eventService.getEventStartGame(lobby_name, username));
+				this.lobbyService.cleanIfOffline(result, lobby_name);
 			} catch (InterruptedException e) {
 				joins.setResult(null);
 			}
@@ -207,7 +207,7 @@ public class LobbyController {
 			throw new RuntimeException("no lobby found");
 		}
 		session.setAttribute("gameId", lobbyID);
-		gameService.initNewGame(lobbyID, lobby_name);
+		this.gameService.initNewGame(lobbyID, lobby_name);
 		// session.setAttribute("player", "player1");
 		this.eventService.detachListenerForJoin(lobby_name, (String) session.getAttribute("username"));
 		try {
@@ -221,14 +221,14 @@ public class LobbyController {
 
 	@GetMapping("joiner_to_game")
 	public String forwardJoinerToGame(HttpSession session) {
-		eventService.detachListenerForStart((String) session.getAttribute("username"), 2);
+		this.eventService.detachListenerForStart((String) session.getAttribute("username"), 2);
 		return "redirect:game";
 	}
 
 	@PostMapping("check_is_listening_for")
 	@ResponseBody
 	public String checkIsListeningFor(HttpSession session) {
-		return eventService.getListenerOfUser((String) session.getAttribute("username"));
+		return this.eventService.getListenerOfUser((String) session.getAttribute("username"));
 	}
 
 	@PostMapping("leave_lobby")

@@ -2,7 +2,9 @@ package it.mat.unical.asde.project2_puzzle.configuration;
 
 import java.io.IOException;
 import java.util.Properties;
+
 import javax.sql.DataSource;
+
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
@@ -36,8 +38,8 @@ public class DispatcherConfiguration implements WebMvcConfigurer {
 	@Bean
 	public SessionFactory sessionFactory() {
 		LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
-		lsfb.setDataSource(getDataSource());
-		lsfb.setHibernateProperties(getHibernateProperties());
+		lsfb.setDataSource(this.getDataSource());
+		lsfb.setHibernateProperties(this.getHibernateProperties());
 		lsfb.setPackagesToScan("it.mat.unical.asde.project2_puzzle.model");
 		try {
 			lsfb.afterPropertiesSet();
