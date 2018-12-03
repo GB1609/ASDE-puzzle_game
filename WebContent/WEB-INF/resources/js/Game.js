@@ -17,7 +17,7 @@ function allowHint() {
 
 
 function allowDrop(ev) {
-	if ( /*!ev.target.hasChildNodes() &&*/
+	if ( /* !ev.target.hasChildNodes() && */
 		ev.target.getAttribute("class") == "box_piece") {
 		ev.preventDefault();
 	}
@@ -63,7 +63,8 @@ function drop(ev) {
 			"timer": timer.getTimeValues().toString()
 		}),
 		success: function (resultData) {
-			console.log("ok" + resultData);
+			if(resultData==="error")
+				swal("Update Error","Sorry, an error was occured","error");
 		},
 		error: function (e) {
 			console.log("old position" + old_position + "\n" +
@@ -117,22 +118,22 @@ function getEventsFromServer() {
 			// "gameId" : gameId
 		}),
 		success: function (result) {
-			if ($.trim(result)) {
-				if (result == "END-GAME") {
-					endGame = true;
-					window.location.href = "/ASDE-puzzle_game/end_game";
-				} else {
+			if ($.trim(result)) {				
 					var r = JSON.parse(result);
+					if(r.end_game){
+						endGame=true;
+						if(r.player_offline)
+							window.location.href = "/ASDE-puzzle_game/end_game?offline="+r.player_offline;
+						else
+							window.location.href = "/ASDE-puzzle_game/end_game";
+					}else
 					if (r.message) {
 						appendMessage(r.message_text, false);
 					} else {
 						value = r.progress;
 						bar.animate(value / 100);
-					}
-
+					}	
 				}
-
-			}
 			getEventsFromServer();
 		},
 		error: function (e) {
@@ -167,7 +168,10 @@ function sendMessage() {
 			"message": message
 		}),
 		success: function (result) {
-			appendMessage(message, true);
+			if(result==="error")
+				swal("Error Chat","Sorry, an error was occured","error");
+			else
+				appendMessage(message, true);
 		},
 		error: function (e) {
 			console.log(e.responseText);

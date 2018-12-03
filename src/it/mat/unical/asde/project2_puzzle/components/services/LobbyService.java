@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.hibernate.dialect.lock.UpdateLockingStrategy;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
 import it.mat.unical.asde.project2_puzzle.components.services.utility.MessageMaker;
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
-import it.mat.unical.asde.project2_puzzle.model.User;
 import it.mat.unical.asde.project2_puzzle.model.services_utility.PlayerType;
 import it.mat.unical.asde.project2_puzzle.model.services_utility.SearchBy;
 
@@ -95,6 +93,7 @@ public class LobbyService {
 					this.previousLobby.put(username, lobby.getName() + "player2");
 					System.out.println("REMOVE LOBBYA: " + lobby);
 					this.lobbies.remove(lobby);
+					lobbyMapping.remove(lobby.getName());
 					return true;
 				}
 			} else if (!guest.isEmpty()) {

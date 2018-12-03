@@ -86,7 +86,12 @@ public class EventsServiceForGame {
 				if (i != player) {
 					System.out.println("Send end game for" + gameID + "player" + i);
 
-					addEvent("END-GAME", key, gameID, forClear);
+//					addEvent("END-GAME", key, gameID, forClear);
+					if (forClear)
+						addEvent(messageMaker.makeMessage(MessageMaker.END_GAME, MessageMaker.CAUSE_OFFLINE,
+								player + ""), key, gameID, forClear);
+					else
+						addEvent(messageMaker.makeMessage(MessageMaker.END_GAME), key, gameID, forClear);
 				}
 			}
 		else
@@ -122,7 +127,7 @@ public class EventsServiceForGame {
 		return eventsInGame.get(key).poll(29, TimeUnit.SECONDS);
 	}
 
-	@Scheduled(fixedDelay = 35000)
+	@Scheduled(fixedDelay = 29000)
 	public void clearPlayerInGame() {
 		Date now = new Date();
 		System.out.println("In schedule for clear players" + now);
@@ -133,7 +138,7 @@ public class EventsServiceForGame {
 			HashMap<String, Object> values = entry.getValue();
 			long diffInMillies = now.getTime() - ((Date) values.get("requestIn")).getTime();
 			diffInMillies = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-			if (diffInMillies > 30) {
+			if (diffInMillies >= 30) {
 				System.out.println("remove " + entry.getKey() + "from game listener, because offline since"
 						+ diffInMillies + " seconds");
 				try {

@@ -17,9 +17,17 @@ public class MessageMaker {
 	public final static String TEXT_MESSAGE = "message_text";
 	public final static String WHO_JOIN = "joiner";
 	public static final String FOR_CLEANING = "for_cleaning";
+	public static final String END_GAME = "end_game";
+	public static final String CAUSE_OFFLINE = "player_offline";
+	public static final String ERROR = "error";
+	public static final String SUCCESS = "success";
 
 	public String makeMessage(String message_type) {
 		return (new JSONObject().put(message_type, true)).toString();
+	}
+
+	public String makeMessage(String message_type, boolean value) {
+		return (new JSONObject().put(message_type, value)).toString();
 	}
 
 	public String makeMessage(String message_type, String message, String message_content) {

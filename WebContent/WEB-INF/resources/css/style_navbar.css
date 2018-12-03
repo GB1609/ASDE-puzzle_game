@@ -34,12 +34,13 @@
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
-.swal-title,.swal-text {
+.swal-title,
+.swal-text {
   color: white;
 }
 
 .wsmenucontainer {
-  overflow: hidden;
+  overflow: auto;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;

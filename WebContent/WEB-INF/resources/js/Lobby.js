@@ -111,16 +111,6 @@ function checkIfListening() {
 	});
 }
 
-function changeTypeList() {
-	var element = document.getElementById("id_lobbies_list_ul");
-	if (grid) {
-		element.classList.remove("grid-list-view");
-		grid = false;
-	} else {
-		element.classList.add("grid-list-view");
-		grid = true;
-	}
-}
 
 function toggleModal() {
 	$("#alert-modal").modal("toggle");
@@ -143,8 +133,12 @@ function listenForStartGame(lobby_name) {
 				if (r.start) {
 					window.location.href = "/ASDE-puzzle_game/joiner_to_game";
 				} else if (r.leave) {
+					console.log("in Leave in listen for start game" + r.joiner +
+						"user->" + $("#user").val());
+					if (r.joiner === $("#user").val())
+						return;
 					toggleModal();
-					swal("info", "You are the new owner. The oldest leave it!", "info");
+					// swal("info","The previous owner leave the lobby, you are the new owner!!!","info");
 					getLobbies(true, false);
 					listenForJoinToLobby(lobby_name, false);
 					console.log("Lobby destruct"); // TODO make alert
@@ -168,89 +162,99 @@ function listenForJoinToLobby(lobby_name, showAlertLeave, showAlertJoin) {
 	console.log("listenForJoinToLobby" + lobby_name);
 
 	var xhr = $
-		.ajax({
-			url: "check_join",
-			type: "post",
-			data: ({
-				"lobby_name": lobby_name
-			}),
-			success: function (result) {
-				if ($.trim(result)) {
-					var r = JSON.parse(result);
-					if (r.join) {
-						$("#start_button").removeClass("hidden-field");
-						$("#empty_slot").text(r.joiner);
-						if (!showAlertJoin) {
-							$('#join_alert').fadeIn('slow', function () {
-								$('#join_alert').delay(5000).fadeOut();
-							});
-							showAlertJoin = true
-						} else {
-							showAlertJoin = false;
-						}
-					} else if (r.leave) {
-						if (r.owner != null) {
-							console.log($("#user").val() + r.owner +
-								"valid condition" +
-								(r.owner === $("#user").val()));
-							if (r.owner === $("#user").val()) {
-								getLobbies(true, false);
+			.ajax({
+				url : "check_join",
+				type : "post",
+				data : ({
+					"lobby_name" : lobby_name
+				}),
+				success : function(result) {
+					if ($.trim(result)) {
+						var r = JSON.parse(result);
+						if (r.join) {
+							console.log("listenForJoinToLobby: r.join"
+									+ r.joiner);
+							if (r.joiner === $("#user").val())
 								return;
-							}
-						} else {
-							if (!showAlertLeave &&
-								!(r.joiner === $("#user").val())) {
-								$("#start_button").addClass("hidden-field");
-								$('#leave_alert').fadeIn(
-									'slow',
-									function () {
-										$('#leave_alert').delay(5000)
-											.fadeOut();
-									});
-								showAlertLeave = true;
+							$("#start_button").removeClass("hidden-field");
+							$("#empty_slot").text(r.joiner);
+							if (!showAlertJoin) {
+								console
+										.log("listenForJoinToLobby: r.join > show alert");
+								$('#join_alert').fadeIn('slow', function() {
+									$('#join_alert').delay(5000).fadeOut();
+								});
+								showAlertJoin = true
 							} else {
-								showAlertLeave = false;
+								showAlertJoin = false;
+							}
+						} else if (r.leave) {
+							if (r.owner != null) {
+								console.log("listenForJoinToLobby: r.leave ow:"
+										+ r.owner);
+								if (r.owner === $("#user").val()) {
+									console
+											.log("listenForJoinToLobby: r.leave user");
+									getLobbies(true,false);
+									return;
+								}
+							} else {
+								console
+										.log("listenForJoinToLobby: r.joiner jo:"
+												+ r.joiner);
+								if (!showAlertLeave
+										&& !(r.joiner === $("#user").val())) {
+									$("#start_button").addClass("hidden-field");
+									$('#leave_alert').fadeIn(
+											'slow',
+											function() {
+												$('#leave_alert').delay(5000)
+														.fadeOut();
+											});
+									showAlertLeave = true;
+								} else {
+									showAlertLeave = false;
+								}
 							}
 						}
 					}
-				}
-				listenForJoinToLobby(lobby_name, showAlertLeave,
-					showAlertJoin);
-
-			},
-			error: function (e) {
-				console.log(e.responseText);
-				setTimeout(function () {
 					listenForJoinToLobby(lobby_name, showAlertLeave,
-						showAlertJoin);
-				}, 5000);
-			}
-		});
+							showAlertJoin);
+
+				},
+				error : function(e) {
+					console.log(e.responseText);
+					setTimeout(function() {
+						listenForJoinToLobby(lobby_name, showAlertLeave,
+								showAlertJoin);
+					}, 5000);
+				}
+			});
 	console.log(xhr);
 
 }
 
 function joinLobby(lobby_name) {
 	// var lobby_name = $("#" + id_lobby).children('#lobby_name_div').text();
-	console.log("in join lobby");
+	// console.log("in join lobby");
 	$.ajax({
-		url: "join_lobby",
-		type: "POST",
-		data: ({
-			"lobby_name": lobby_name
+		url : "join_lobby",
+		type : "POST",
+		data : ({
+			"lobby_name" : lobby_name
 		}),
-		success: function (resultData) {
-			console.log("join ok"); // : " + resultData);
+		success : function(resultData) {
+			// console.log("join ok"); // : " + resultData);
 
 			var r = JSON.parse(resultData);
 			if (r.error) {
 				console.log("ERROR: " + r.err_msg);
 			} else {
-				getLobbies(true, false);
+				getLobbies(true,false);
 				listenForStartGame(lobby_name);
 			}
 		},
-		error: function (e) {
+		error : function(e) {
 			console.log(e.responseText);
 			console.log("JOIN ERROR: ", e);
 		}
