@@ -23,11 +23,11 @@ public class EventsServiceForGame {
 	private MessageMaker messageMaker;
 
 	/*
-	 * map for store the event in game
+	 * map to store the event in game
 	 */
 	private Map<String, BlockingQueue<String>> eventsInGame = new HashMap<>();
 	/*
-	 * Structures for monitoring the requests time. Used for identify the offline
+	 * Structures to monitoring the requests time. Used for identify the offline
 	 * players
 	 */
 	/**
