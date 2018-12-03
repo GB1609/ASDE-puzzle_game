@@ -2,8 +2,7 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.io.File;
 import java.util.ArrayList;
-      
-import javax.annotation.PostConstruct;
+
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,8 @@ import it.mat.unical.asde.project2_puzzle.components.persistence.MatchDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
 import it.mat.unical.asde.project2_puzzle.model.Credentials;
 import it.mat.unical.asde.project2_puzzle.model.GameMatch;
-import it.mat.unical.asde.project2_puzzle.model.StatisticsUtility;
 import it.mat.unical.asde.project2_puzzle.model.User;
+import it.mat.unical.asde.project2_puzzle.model.services_utility.StatisticsUtility;
 
 @Service
 public class AccountService {
@@ -35,16 +34,6 @@ public class AccountService {
 	@Autowired
 	private ServletContext servletContext;
 
-	@PostConstruct
-	public void init() {
-
-//		System.out.println(StatisticsUtility.createMatchesInfoLineChart(ciccio));
-//		System.out.println(StatisticsUtility.createMatchesInfoForDonutChart(ciccio));
-//
-//		Date date = new Date();
-//		System.out.println(date.getTime());
-
-	}
 
 	public boolean loginAccepted(String username, String password) {
 		return credentialsDAO.exists(new Credentials(username, password));
@@ -57,9 +46,6 @@ public class AccountService {
 		return value;
 	}
 
-	public ArrayList<GameMatch> getMatches(String username) {
-		return matchDAO.getMatches(username);
-	}
 
 	public void addMatch(GameMatch match) {
 		matchDAO.save(match);
@@ -97,7 +83,6 @@ public class AccountService {
 		model.addAttribute("avatars", loadAvatarsList());
 		model.addAttribute("lineChart", lineChart);
 		model.addAttribute("donutChart", donutChart);
-
 	}
 
 	public ArrayList<String> getAvatarsList() {

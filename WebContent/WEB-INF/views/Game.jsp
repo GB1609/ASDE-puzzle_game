@@ -16,7 +16,7 @@
 
 		<body class="wsmenucontainer">
 			<%@include file="includes/navbar.jsp"%>
-
+				<embed src="resources/music/music.mp3" autostart="true" loop="true" width="0" height="0">
 				<div class="row col-12">
 					<div class="col-lg-9 col-md-12 col-sm-12 col-12">
 						<div class="row minimal-row">
@@ -79,10 +79,11 @@
 								</div>
 							</div>
 							<div class="col-lg-12 col-md-6 col-sm-6 col-12">
+
 								<div class="chat">
 									<div class="row force-max-heigth">
 										<div class="row chat-list scrollbar scrollbar-primary">
-											<div class=" force-overflow">
+											<div class="force-overflow">
 												<ul class="list-group" id="chat_content">
 
 												</ul>
@@ -90,9 +91,9 @@
 										</div>
 									</div>
 									<div class="row input-chat">
-										<input type="text" class="form-control col-lg-9 col-md-9 col-sm-9 col-9" id="message_text" placeholder="Message to send">
+										<input type="text" onkeypress="sendMessageEnter(event)" class="form-control col-lg-9 col-md-9 col-sm-9 col-9" id="message_text" placeholder="Message to send">
 										<button type="button" onclick="sendMessage()" class="form-control btn btn-warning button-send  col-lg-3 col-md-3 col-sm-3 col-3">
-											<span class="fas fa-comment"></span>
+											<img src="resources/images/icons/send.png" width="3vw" height="3vh" />
 										</button>
 									</div>
 								</div>

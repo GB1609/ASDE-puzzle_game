@@ -1,6 +1,11 @@
-package it.mat.unical.asde.project2_puzzle.model;
+package it.mat.unical.asde.project2_puzzle.model.services_utility;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import it.mat.unical.asde.project2_puzzle.model.GameMatch;
+import it.mat.unical.asde.project2_puzzle.model.User;
 
 public class StatisticsUtility {
 
@@ -20,7 +25,11 @@ public class StatisticsUtility {
 						(matchesLose.get(match.toString()) != null ? matchesLose.get(match.toString()) : 0) + 1);
 		}
 
-		for (String key : matchesWin.keySet()) {
+		Set<String> keys = new HashSet<>();
+		keys.addAll(matchesWin.keySet());
+		keys.addAll(matchesLose.keySet());
+
+		for (String key : keys) {
 			String match = key + "," + matchesWin.get(key) + "," + matchesLose.get(key) + ",";
 			matches += match;
 		}

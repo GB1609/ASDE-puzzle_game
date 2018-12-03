@@ -14,9 +14,33 @@
   transition: none;
 }
 
+.swal-icon--success__hide-corners {
+  background: none;
+}
+
+.swal-icon--success:before,
+.swal-icon--success:after {
+  width: 0;
+  height: 0;
+}
+
+.swal-overlay--show-modal .swal-modal {
+  color: white;
+  background: rgba(33, 37, 40, 0.83);
+  border-width: 5px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.swal-title,
+.swal-text {
+  color: white;
+}
+
 .wsmenucontainer {
   overflow: auto;
-  overflow-y: auto;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
@@ -25,10 +49,6 @@
   -o-transition: all 0.4s ease-in-out;
   -ms-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
-}
-
-.wsmenucontainer {
-  overflow: auto;
   display: block;
 }
 
@@ -99,12 +119,13 @@
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
-.dropdown-item{
-    color: white;
+.dropdown-item {
+  color: white;
 }
 
-.dropdown-item:focus, .dropdown-item:hover {
-    color: black;
-    text-decoration: none;
-    background-color: #DAA520;
+.dropdown-item:focus,
+.dropdown-item:hover {
+  color: black;
+  text-decoration: none;
+  background-color: #DAA520;
 }
