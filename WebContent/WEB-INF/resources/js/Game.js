@@ -16,7 +16,7 @@ function allowHint() {
 
 
 function allowDrop(ev) {
-	if ( /*!ev.target.hasChildNodes() &&*/
+	if ( /* !ev.target.hasChildNodes() && */
 		ev.target.getAttribute("class") == "box_piece") {
 		ev.preventDefault();
 	}
@@ -109,22 +109,22 @@ function getEventsFromServer() {
 			// "gameId" : gameId
 		}),
 		success: function (result) {
-			if ($.trim(result)) {
-				if (result == "END-GAME") {
-					endGame = true;
-					window.location.href = "/ASDE-puzzle_game/end_game";
-				} else {
+			if ($.trim(result)) {				
 					var r = JSON.parse(result);
+					if(r.end_game){
+						endGame=true;
+						if(r.player_offline)
+							window.location.href = "/ASDE-puzzle_game/end_game?offline="+r.player_offline;
+						else
+							window.location.href = "/ASDE-puzzle_game/end_game";
+					}else
 					if (r.message) {
 						appendMessage(r.message_text, false);
 					} else {
 						value = r.progress;
 						bar.animate(value / 100);
-					}
-
+					}	
 				}
-
-			}
 			getEventsFromServer();
 		},
 		error: function (e) {

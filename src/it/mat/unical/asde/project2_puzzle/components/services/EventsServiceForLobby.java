@@ -50,7 +50,7 @@ public class EventsServiceForLobby {
 		}
 		if (forClear)
 			System.out.println("leave to" + key);
-		eventsOfLobbies.get(key).put(messageMaker.makeMessage(message_type,MessageMaker.FOR_CLEANING,forClear+""));
+		eventsOfLobbies.get(key).put(messageMaker.makeMessage(message_type, MessageMaker.FOR_CLEANING, forClear + ""));
 	}
 
 	private void addGeneralEventLobby(String key, String message_type, String message, String message_content,
@@ -201,7 +201,7 @@ public class EventsServiceForLobby {
 		return listenFor;
 	}
 
-	@Scheduled(fixedDelay = 30000)
+	@Scheduled(fixedDelay = 29000)
 	public void clearJoinerAndNotifyOwner() {
 
 		Date now = new Date();
@@ -213,7 +213,7 @@ public class EventsServiceForLobby {
 			long diffInMillies = now.getTime() - ((Date) value.get("requestIn")).getTime();
 			diffInMillies = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 			System.out.println("joiner" + (String) value.get("user") + "noRequest from " + diffInMillies + "sec");
-			if (diffInMillies >= 10) {
+			if (diffInMillies >= 30) {
 				System.out.println("remove " + entry.getKey() + "from join listener, becouse offline since"
 						+ diffInMillies + " seconds");
 				Pattern p = Pattern.compile("(.+)player2$");// TODO transorm to N
@@ -241,7 +241,7 @@ public class EventsServiceForLobby {
 			diffInMillies = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 			System.out.println("owner" + (String) value.get("user") + "noRequest from " + diffInMillies + "sec");
 
-			if (diffInMillies >= 10) {
+			if (diffInMillies >= 30) {
 				System.out.println("remove " + entry.getKey() + "from owners listener, because offline since"
 						+ diffInMillies + " seconds");
 				try {

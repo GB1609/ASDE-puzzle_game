@@ -81,11 +81,15 @@ public class GameController {
 	}
 
 	@GetMapping("end_game")
-	public String goToEndGame(Model m, HttpSession session) {
+	public String goToEndGame(Model m, HttpSession session, Integer offline) {
 		Integer gameId = (Integer) session.getAttribute("gameId");
 		Integer player = (Integer) session.getAttribute("player");
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
+		if (offline != null) {
+			gameService.leaveGameBy(gameId, offline);
+			gameService.storeMatch(gameId);
+		}
 		eventsServiceForGame.detachListenerInGame(gameId, player);
 		m.addAttribute("match", gameService.getMatch(gameId));
 		return "EndGame";
@@ -99,14 +103,16 @@ public class GameController {
 		session.removeAttribute("gameId");
 		session.removeAttribute("player");
 		System.out.println("in leave game" + gameId + "player" + player);
-		gameService.leaveGameBy(gameId, player);
-		gameService.storeMatch(gameId);
-		try {
-			eventsServiceForGame.addEventLeaveGameBy(gameId, player, gameService.getPlayerInGame(gameId), false);
-			eventsServiceForGame.detachListenerInGame(gameId, player);
-		} catch (InterruptedException e) {
-			System.out.println("non riesco ad aggiungere");
-			e.printStackTrace();
+		if (gameId != null && player != null) {
+			gameService.leaveGameBy(gameId, player);
+			gameService.storeMatch(gameId);
+			try {
+				eventsServiceForGame.addEventLeaveGameBy(gameId, player, gameService.getPlayerInGame(gameId), false);
+				eventsServiceForGame.detachListenerInGame(gameId, player);
+			} catch (InterruptedException e) {
+				System.out.println("non riesco ad aggiungere");
+				e.printStackTrace();
+			}
 		}
 	}
 
