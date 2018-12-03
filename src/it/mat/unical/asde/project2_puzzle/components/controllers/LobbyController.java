@@ -1,11 +1,9 @@
 package it.mat.unical.asde.project2_puzzle.components.controllers;
 
-import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +19,6 @@ import it.mat.unical.asde.project2_puzzle.components.services.GameService;
 import it.mat.unical.asde.project2_puzzle.components.services.LobbyService;
 import it.mat.unical.asde.project2_puzzle.components.services.utility.MessageMaker;
 import it.mat.unical.asde.project2_puzzle.model.Lobby;
-import it.mat.unical.asde.project2_puzzle.model.User;
-import it.mat.unical.asde.project2_puzzle.model.services_utility.PlayerType;
 import it.mat.unical.asde.project2_puzzle.model.services_utility.SearchBy;
 
 @Controller
@@ -44,66 +40,13 @@ public class LobbyController {
 		return "lobby";
 	}
 
-	@GetMapping("automatic_refresh")
-	@ResponseBody
-	public String automaticRefresh(HttpSession session, @RequestParam String lobbies,
-			@RequestParam int currently_showed) {
-		return this.getLobbiesOrRefresh(session, lobbies, currently_showed);
-	}
-
 	@GetMapping("get_lobbies")
 	@ResponseBody
 	public String getLobbies(HttpSession session, @RequestParam String lobbies, @RequestParam int currently_showed) {
-		return this.getLobbiesOrRefresh(session, lobbies, currently_showed);
+		return this.lobbyService.getLobbiesOrRefresh(session.getAttribute("username").toString(), lobbies,
+				currently_showed);
 	}
 
-	// TODO move in lobbyservice
-	private String getLobbiesOrRefresh(HttpSession session, String lobbies, int currently_showed) {
-		JSONObject response = new JSONObject().put("error", false);
-		List<Lobby> l = this.lobbyService.getNextMLobbies(currently_showed, 20);
-		response.put("lobbies_to_add", l);
-
-		String username = (String) session.getAttribute("username");
-//		System.out.println("GET LOBBIES:" + username);
-		if (this.lobbyService.hasTheListChanges(lobbies)) {
-			response.put("lobbies_changed", true);
-			JSONArray avatars = new JSONArray();
-			for (Lobby lobby : l) {
-				String owner = lobby.getOwner();
-				String guest = lobby.getGuest();
-				if (owner != null) {
-					if (owner != "") {
-						User user = this.accountService.getUser(owner);
-						System.out.println("OWNER:" + user);
-						JSONObject userAvatar = new JSONObject();
-						userAvatar.put("user", owner);
-						userAvatar.put("avatar", user.getAvatar());
-						avatars.put(userAvatar);
-					}
-				}
-				if (guest != null) {
-					if (guest != "") {
-						User user = this.accountService.getUser(guest);
-						System.out.println("GUEST:" + user);
-						JSONObject userAvatar = new JSONObject();
-						userAvatar.put("user", guest);
-						userAvatar.put("avatar", user.getAvatar());
-						avatars.put(userAvatar);
-					}
-				}
-			}
-			return response.put("lobbies", this.lobbyService.getLobbies())
-					.put("lobbies_owner", this.lobbyService.getLobbiesBy(username, PlayerType.OWNER))
-					.put("lobbies_guest", this.lobbyService.getLobbiesBy(username, PlayerType.GUEST))
-					.put("username", username).put("avatars", avatars).toString();
-		}
-		response.put("lobbies_changed", false);
-		return response.put("username", username).toString();
-	}
-
-	/*
-	 * This method is called when a player wants to join a lobby
-	 */
 	@PostMapping("join_lobby")
 	@ResponseBody
 	public String joinLobby(HttpSession session, @RequestParam String lobby_name) {
@@ -118,8 +61,8 @@ public class LobbyController {
 		try {
 			// add the event of join that will be notified to lobby's owner
 			this.eventService.addEventJoin(lobby_name, username);
-			// if the joiner was connected to another lobby then add the correspondent
-			// event. This event will be notified to the other players in lobby
+			// if the joiner was connected to another lobby then add this event that will be
+			// notified to the other player in lobby
 			String previousJoined = this.lobbyService.checkPreviousLobby(username);
 			if (previousJoined != null) {
 				this.eventService.addEventLeaveJoin(previousJoined, username, false);

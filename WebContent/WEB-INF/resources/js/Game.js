@@ -3,6 +3,7 @@ var bar;
 var value;
 var numHint = 3;
 var timer;
+
 function allowHint() {
 
 	if (numHint > 0) {
@@ -12,6 +13,21 @@ function allowHint() {
 			$('#show-image-button').prop("disabled", true);
 		$("#numHint").text("Hint remains: " + numHint);
 	}
+}
+
+function sendMessageEnter( e) {
+    var charCode;
+
+    if(e && e.which){
+        charCode = e.which;
+    }else if(window.event){
+        e = window.event;
+        charCode = e.keyCode;
+    }
+
+    if(charCode == 13) {
+        sendMessage();
+    }
 }
 
 
@@ -90,15 +106,22 @@ function createMessageNode(message) {
 function appendMessage(message, isSender) {
 	var node = createMessageNode(message);
 	node.className += " col-12";
-	if (isSender){
+	if (isSender) {
 		node.className += " justify-content-end";
-		node.style.background = "#DAA520";}
-	else
+		node.style.background = "#DAA520";
+	} else
 		node.style.background = "#C8C8C8";
 	node.style.color = "black";
 	document.getElementById("chat_content").appendChild(node);
-	var pNode=document.getElementById("chat_content").parentNode.parentNode;
-	pNode.scrollTop=pNode.scrollHeight;
+	var pNode = document.getElementById("chat_content").parentNode.parentNode;
+
+	var numberBefore = $("#chat_content").children().length;
+	var toSum=node.clientHeight;
+	console.log(numberBefore);
+	if (numberBefore > 6)
+		pNode.scrollTop = pNode.scrollHeight;
+	else if (numberBefore >2)
+	    pNode.scrollTop=(numberBefore*toSum)-toSum;
 }
 
 function getEventsFromServer() {
@@ -152,7 +175,7 @@ function makeRequest(action, type, data, onsuccess, onerror) {
 
 function sendMessage() {
 	var message = $("#message_text").val();
-	$("#message_text").text("");
+	$("#message_text").val("");
 	$.ajax({
 		url: "send_message",
 		type: "post",
@@ -231,9 +254,9 @@ $(document).ready(function () {
 	getEventsFromServer();
 	initProgressBar();
 	$("#numHint").text("Hint remains: " + numHint);
-	timer= new Timer();
-	 timer.start();
-	 timer.addEventListener('secondsUpdated', function (e) {
-	 $('#time').html(timer.getTimeValues().toString());
-	 });
+	timer = new Timer();
+	timer.start();
+	timer.addEventListener('secondsUpdated', function (e) {
+		$('#time').html(timer.getTimeValues().toString());
+	});
 });

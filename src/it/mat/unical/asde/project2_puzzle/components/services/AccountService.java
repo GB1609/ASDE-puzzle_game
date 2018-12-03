@@ -2,14 +2,10 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 
 import java.io.File;
 import java.util.ArrayList;
-      
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-
 import it.mat.unical.asde.project2_puzzle.components.persistence.CredentialsDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.MatchDAO;
 import it.mat.unical.asde.project2_puzzle.components.persistence.UserDAO;
@@ -34,17 +30,6 @@ public class AccountService {
 
 	@Autowired
 	private ServletContext servletContext;
-
-	@PostConstruct
-	public void init() {
-
-//		System.out.println(StatisticsUtility.createMatchesInfoLineChart(ciccio));
-//		System.out.println(StatisticsUtility.createMatchesInfoForDonutChart(ciccio));
-//
-//		Date date = new Date();
-//		System.out.println(date.getTime());
-
-	}
 
 	public boolean loginAccepted(String username, String password) {
 		return credentialsDAO.exists(new Credentials(username, password));
