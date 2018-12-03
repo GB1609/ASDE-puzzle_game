@@ -20,20 +20,24 @@ $(document)
 					function () {
 						if (listElm.scrollTop +
 							listElm.clientHeight >= (listElm.scrollHeight - 1)) {
-							getLobbies(false);
+							getLobbies(false, false);
 						}
 					});
 			checkIfListening();
 			currentlyShowed = 0;
-			automaticRefreshLobbiesList();
-			// $('#base').addClass($('#base').attr('value'));
+			getLobbies(true, true);
 		});
 
 
-
-function getLobbiesFromServer(server_function_url) {
+function getLobbies(reset, automatic_refresh) {
+	if (reset) {
+		currentlyShowed = 0;
+		lobbies_saved = "[]";
+	}
+	console.log("currentlyShowed : " + currentlyShowed);
+	console.log("lobbies_saved : " + JSON.stringify(lobbies_saved));
 	$.ajax({
-		url: server_function_url,
+		url: "get_lobbies",
 		type: "get",
 		data: ({
 			"lobbies": JSON.stringify(lobbies_saved),
@@ -46,6 +50,7 @@ function getLobbiesFromServer(server_function_url) {
 				console.log("ERROR: " + r.err_msg);
 			} else {
 				user = r.username;
+				avatars = r.avatars;
 				if (Object.keys(r.lobbies_to_add).length) {
 					currentlyShowed += Object.keys(r.lobbies_to_add).length;
 					//      alert(currentlyShowed+ "r.lobbies_to_add:"+JSON.stringify(r.lobbies_to_add));
@@ -55,50 +60,33 @@ function getLobbiesFromServer(server_function_url) {
 					//     alert("CHANGED");
 					lobbies_owner = r.lobbies_owner;
 					lobbies_guest = r.lobbies_guest;
-					avatars = r.avatars;
 					reloadList(true, lobbies_saved, lobbies_guest,
 						lobbies_owner, avatars);
 				} else {
-					//     alert(" NOT CHANGED");
-					reloadList(false, r.lobbies_to_add, lobbies_guest,
-						lobbies_owner, avatars);
+					if (!automatic_refresh) {
+						reloadList(false, r.lobbies_to_add, lobbies_guest,
+							lobbies_owner, avatars);
+						// automatic_refresh = false;
+					}
 				}
-				if (server_function_url === "automatic_refresh") {
+				if (automatic_refresh) {
 					setTimeout(function () {
-						automaticRefreshLobbiesList();
-					}, 10000);
+						getLobbies(false, automatic_refresh);
+					}, 5000);
 				}
 			}
 		},
 		error: function (e) {
 			console.log(e.responseText);
 			console.log("REFRESH ERROR: ", e);
-			if (server_function_url === "automatic_refresh") {
+			if (automatic_refresh) {
 				setTimeout(function () {
-					automaticRefreshLobbiesList();
+					getLobbies(false, automatic_refresh);
 				}, 10000);
 			}
 		}
 	});
 }
-
-function getLobbies(reset) {
-	if (reset) {
-		currentlyShowed = 0;
-		lobbies_saved = "[]";
-	}
-	console.log("currentlyShowed : " + currentlyShowed);
-	console.log("lobbies_saved : " + JSON.stringify(lobbies_saved));
-	getLobbiesFromServer("get_lobbies");
-}
-
-function automaticRefreshLobbiesList() {
-	getLobbiesFromServer("automatic_refresh");
-}
-
-
-
-
 
 
 function checkIfListening() {
@@ -156,7 +144,8 @@ function listenForStartGame(lobby_name) {
 					window.location.href = "/ASDE-puzzle_game/joiner_to_game";
 				} else if (r.leave) {
 					toggleModal();
-					getLobbies(true);
+					swal("info", "You are the new owner. The oldest leave it!", "info");
+					getLobbies(true, false);
 					listenForJoinToLobby(lobby_name, false);
 					console.log("Lobby destruct"); // TODO make alert
 				}
@@ -205,7 +194,7 @@ function listenForJoinToLobby(lobby_name, showAlertLeave, showAlertJoin) {
 								"valid condition" +
 								(r.owner === $("#user").val()));
 							if (r.owner === $("#user").val()) {
-								getLobbies(true);
+								getLobbies(true, false);
 								return;
 							}
 						} else {
@@ -257,7 +246,7 @@ function joinLobby(lobby_name) {
 			if (r.error) {
 				console.log("ERROR: " + r.err_msg);
 			} else {
-				getLobbies(true);
+				getLobbies(true, false);
 				listenForStartGame(lobby_name);
 			}
 		},
@@ -288,8 +277,8 @@ function leaveLobby(lobby_name) {
 			if (r.error) {
 				console.log("ERROR: " + r.error);
 			} else {
-				getLobbies(true);
-				swal("Lobby leaved","You leaved the lobby", "info");
+				getLobbies(true, false);
+				swal("Lobby leaved", "You leaved the lobby", "info");
 			}
 		},
 		error: function (e) {
@@ -316,10 +305,10 @@ function createLobby() {
 			if (r.error) {
 				console.log("ERROR: " + r.err_msg);
 			} else {
-				getLobbies(true);
+				getLobbies(true, false);
 				$('#create-modal').modal("toggle");
 				listenForJoinToLobby(lobby_name, false, false);
-				swal("CREATED","lobby created", "info");
+				swal("CREATED", "lobby created", "info");
 			}
 		},
 		error: function (e) {
@@ -364,10 +353,6 @@ var reloadList = function (reset, lobbies, lobbies_guest, lobbies_owner, avatars
 }
 
 var clearLobbiesList = function () {
-	// var list = document.getElementById("id_lobbies_list_ul");
-	// while (list.firstChild) {
-	// 	list.removeChild(list.firstChild);
-	// }
 	$('#id_lobbies_list_ul').children()
 		.not(document.getElementById("template")).remove();
 }
