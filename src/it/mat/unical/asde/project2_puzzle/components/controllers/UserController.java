@@ -23,12 +23,9 @@ public class UserController {
 
 	@GetMapping("/")
 	public String index(HttpSession session, Model model) {
-
 		if (checkUserName(session))
-			return goToProfileSettings(session, model);
-
+			return "redirect:lobby";
 		return goToIndex(session, model);
-
 	}
 
 	@GetMapping("logout")
@@ -44,7 +41,7 @@ public class UserController {
 		if (accountService.loginAccepted(username, password)) {
 			session.setAttribute("username", username);
 			session.setAttribute("avatar", accountService.getAvatarUser(username));
-			return goToProfileSettings(session, model);
+			return "redirect:lobby";
 		}
 
 		model.addAttribute("loginFailed", "Username or Password wrong!");

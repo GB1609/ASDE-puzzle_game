@@ -66,7 +66,7 @@ function getLobbiesFromServer(server_function_url) {
 				if (server_function_url === "automatic_refresh") {
 					setTimeout(function () {
 						automaticRefreshLobbiesList();
-					}, 3000);
+					}, 10000);
 				}
 			}
 		},
@@ -76,7 +76,7 @@ function getLobbiesFromServer(server_function_url) {
 			if (server_function_url === "automatic_refresh") {
 				setTimeout(function () {
 					automaticRefreshLobbiesList();
-				}, 3000);
+				}, 10000);
 			}
 		}
 	});
@@ -288,8 +288,8 @@ function leaveLobby(lobby_name) {
 			if (r.error) {
 				console.log("ERROR: " + r.error);
 			} else {
-				// alert("LEAVE LOBBY OK");
 				getLobbies(true);
+				swal("Lobby leaved","You leaved the lobby", "info");
 			}
 		},
 		error: function (e) {
@@ -319,6 +319,7 @@ function createLobby() {
 				getLobbies(true);
 				$('#create-modal').modal("toggle");
 				listenForJoinToLobby(lobby_name, false, false);
+				swal("CREATED","lobby created", "info");
 			}
 		},
 		error: function (e) {

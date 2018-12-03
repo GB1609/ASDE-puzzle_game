@@ -1,7 +1,7 @@
 .wsmenucontainer {
   background-size: cover;
   background-image: url(../images/bg01-2.jpg);
-  overflow: hidden;
+  overflow: auto;
   -webkit-background-attachment: fixed !important;
   -moz-background-attachment: fixed !important;
   background-attachment: fixed !important;
