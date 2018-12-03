@@ -129,8 +129,6 @@ a {
 }
 
 .card-with-shadow {
-	color: white;
-	background: rgba(33,37,40,0.73);
 	width: 100%;
 	border-radius: 10px;
 	display: inline-block;
@@ -140,6 +138,8 @@ a {
 	padding: 1rem;
 	position: relative;
 	/* width: fit-content;*/
+	color: white;
+	background: rgba(33,37,40,0.73);
 	border-width: 5px;
 	border-style: solid;
 	border-color: black;
