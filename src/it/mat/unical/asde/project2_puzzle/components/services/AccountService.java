@@ -3,7 +3,6 @@ package it.mat.unical.asde.project2_puzzle.components.services;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,50 +34,6 @@ public class AccountService {
 	@Autowired
 	private ServletContext servletContext;
 
-	@PostConstruct
-	public void init() {
-
-//		System.out.println(StatisticsUtility.createMatchesInfoLineChart(ciccio));
-//		System.out.println(StatisticsUtility.createMatchesInfoForDonutChart(ciccio));
-//
-//		Date date = new Date();
-//		System.out.println(date.getTime());
-//		System.out.println("-----------------------------------------------");
-		User test1 = userDAO.getFullUser("Test1");
-		User test2 = userDAO.getFullUser("Test2");
-
-		GameMatch gameMatch = new GameMatch();
-		gameMatch.addUser(test1);
-		gameMatch.addUser(test2);
-		gameMatch.setWinner(test2);
-		gameMatch.setTime("10:00:00");
-		gameMatch.setLobbyName("TEST");
-		System.out.println("111111111111111111111111111111111111111111111111");
-		GameMatch gameMatch1 = new GameMatch();
-		gameMatch1.addUser(test1);
-		gameMatch1.addUser(test2);
-		gameMatch1.setWinner(test2);
-		gameMatch1.setTime("10:00:00");
-		gameMatch1.setLobbyName("TEST");
-		System.out.println("111111111111111111111111111111111111111111111111");
-		matchDAO.save(gameMatch);
-		matchDAO.save(gameMatch1);
-//		System.out.println("222222222222222222222222222222222222222222222222");
-//		matchDAO.save(gameMatch);
-//		System.out.println("333333333333333333333333333333333333333333333333");
-//		matchDAO.save(gameMatch);
-//		System.out.println("444444444444444444444444444444444444444444444444");
-//		matchDAO.save(gameMatch);
-//		System.out.println("555555555555555555555555555555555555555555555555");
-//		matchDAO.save(gameMatch);
-//
-//		System.out.println("-----------------------------------------------");
-
-		for (GameMatch gameMatch2 : getMatches("Test1")) {
-			System.out.println(gameMatch2.getId());
-
-		}
-	}
 
 	public boolean loginAccepted(String username, String password) {
 		return credentialsDAO.exists(new Credentials(username, password));
@@ -91,9 +46,6 @@ public class AccountService {
 		return value;
 	}
 
-	public ArrayList<GameMatch> getMatches(String username) {
-		return matchDAO.getMatches(username);
-	}
 
 	public void addMatch(GameMatch match) {
 		matchDAO.save(match);
