@@ -16,6 +16,7 @@ public class MessageMaker {
 	public final static String PROGRESS_MESSAGE = "progress";
 	public final static String TEXT_MESSAGE = "message_text";
 	public final static String WHO_JOIN = "joiner";
+	public static final String FOR_CLEANING = "for_cleaning";
 
 	public String makeMessage(String message_type) {
 		return (new JSONObject().put(message_type, true)).toString();

@@ -50,7 +50,7 @@ public class EventsServiceForLobby {
 		}
 		if (forClear)
 			System.out.println("leave to" + key);
-		eventsOfLobbies.get(key).put(messageMaker.makeMessage(message_type));
+		eventsOfLobbies.get(key).put(messageMaker.makeMessage(message_type,MessageMaker.FOR_CLEANING,forClear+""));
 	}
 
 	private void addGeneralEventLobby(String key, String message_type, String message, String message_content,

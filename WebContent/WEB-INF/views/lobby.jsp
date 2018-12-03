@@ -78,6 +78,7 @@
 				<div id="lobbies_div" class=" card scrollbar-ripe-malinka">
 					<div class="card-body" id="id_lobbies_list_div">
 						<ul class="list-group" id="id_lobbies_list_ul">
+							<%@include file="template/lobby_item.jsp"%>
 						</ul>
 					</div>
 				</div>
