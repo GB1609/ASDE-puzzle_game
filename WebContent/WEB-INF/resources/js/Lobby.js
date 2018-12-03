@@ -293,6 +293,19 @@ function leaveLobby(lobby_name) {
 	// ev.preventDefault();
 }
 
+function createLobbyEnter( e) {
+    var charCode;
+    if(e && e.which){
+        charCode = e.which;
+    }else if(window.event){
+        e = window.event;
+        charCode = e.keyCode;
+    }
+
+    if(charCode == 13) {
+        createLobby();
+    }
+}
 
 
 function createLobby() {

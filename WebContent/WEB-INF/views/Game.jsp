@@ -91,7 +91,7 @@
 										</div>
 									</div>
 									<div class="row input-chat">
-										<input type="text" class="form-control col-lg-9 col-md-9 col-sm-9 col-9" id="message_text" placeholder="Message to send">
+										<input type="text" onkeypress="sendMessageEnter(event)" class="form-control col-lg-9 col-md-9 col-sm-9 col-9" id="message_text" placeholder="Message to send">
 										<button type="button" onclick="sendMessage()" class="form-control btn btn-warning button-send  col-lg-3 col-md-3 col-sm-3 col-3">
 											<img src="resources/images/icons/send.png" width="3vw" height="3vh" />
 										</button>

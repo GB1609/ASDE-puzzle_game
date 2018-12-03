@@ -33,7 +33,7 @@
 											<div class="modal-header center-content-row">
 												<div class="form-group">
 													<label for="lobby_name_text" style="color: white;">Lobby's name: </label>
-													<input type="text" class="form-control" id="id_lobby_name">
+													<input type="text" class="form-control" id="id_lobby_name" onkeypress="createLobbyEnter(event)">
 													<br>
 												</div>
 											</div>

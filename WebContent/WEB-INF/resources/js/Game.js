@@ -15,6 +15,21 @@ function allowHint() {
 	}
 }
 
+function sendMessageEnter( e) {
+    var charCode;
+
+    if(e && e.which){
+        charCode = e.which;
+    }else if(window.event){
+        e = window.event;
+        charCode = e.keyCode;
+    }
+
+    if(charCode == 13) {
+        sendMessage();
+    }
+}
+
 
 function allowDrop(ev) {
 	if ( /* !ev.target.hasChildNodes() && */
