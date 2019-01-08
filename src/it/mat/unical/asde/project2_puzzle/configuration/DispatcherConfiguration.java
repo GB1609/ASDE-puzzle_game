@@ -1,11 +1,11 @@
 package it.mat.unical.asde.project2_puzzle.configuration;
 
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,11 +17,16 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 @Configuration
 @EnableWebMvc
 @EnableScheduling
 @ComponentScan("it.mat.unical.asde.project2_puzzle.components")
 public class DispatcherConfiguration implements WebMvcConfigurer {
+	final static String USERNAME = "YOUR USERNAME";
+	final static String PASSWORD = "YOUR PASSWORD";
+
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
@@ -29,11 +34,15 @@ public class DispatcherConfiguration implements WebMvcConfigurer {
 
 	@Bean
 	public DataSource getDataSource() {
-		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://asde2018project2.chozlfc5zlbk.us-east-1.rds.amazonaws.com:3306/puzzle2018");
-		dataSource.setUsername("puzzle2018");
-		dataSource.setPassword("ASDE-puzzle2018");
+		final ComboPooledDataSource dataSource = new ComboPooledDataSource();
+		try {
+			dataSource.setDriverClass("com.mysql.jdbc.Driver");
+		} catch (final PropertyVetoException e) {
+			e.printStackTrace();
+		}
+		dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/puzzle_game");
+		dataSource.setUser(USERNAME);
+		dataSource.setPassword(PASSWORD);
 		return dataSource;
 	}
 
@@ -58,10 +67,10 @@ public class DispatcherConfiguration implements WebMvcConfigurer {
 
 	private Properties getHibernateProperties() {
 		Properties prop = new Properties();
-		prop.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-//		prop.put("hibernate.show_sql", true);
-//		prop.put("hibernate.format_sql", true);
-//		prop.put("hibernate.hbm2ddl.auto", "create");
+		prop.put("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
+		prop.put("hibernate.show_sql", true);
+		prop.put("hibernate.format_sql", true);
+		prop.put("hibernate.hbm2ddl.auto", "update");
 		return prop;
 	}
 }

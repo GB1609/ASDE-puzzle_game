@@ -213,7 +213,7 @@ public class EventsServiceForGame {
 	 * request for 30 second. If this happens it means that the player closed the
 	 * game so it is considered offline for the game.
 	 */
-	@Scheduled(fixedDelay = 29000)
+	@Scheduled(fixedDelay = 30000)
 	public void clearPlayerInGame() {
 		Date now = new Date();
 		System.out.println("In schedule for clear players" + now);
