@@ -55,7 +55,14 @@ The entire logic of the game is managed for n players. However the lobby side an
 * Bug 3
 The same player can play with itself.
 ## INFO
-The project has been tested mostly on Google Chrome Browser.
+* The project has been tested mostly on Google Chrome Browser. 
+* The project uses a local mysql database, the dump of schema and data is located in the root folder with name "DumpPuzzleGame.sql". 
+In order to execute the Project you must set the fields "USERNAME" and "PASSWORD" of your local db created with the dump above in DispatcherConfiguration class.
+If the connection to database doesn't work please check your mysql driver connector (in pom.xml file) and the mysql dialect (in DispatcherConfiguration.java file).
+* The use of git-lfs is necessary to clone the project from eclipse or others because there is a big audio file. Alternatively, you can download the entire project directly.
+
+
+
 
 ## Authors
 
